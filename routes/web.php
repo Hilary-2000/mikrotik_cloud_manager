@@ -47,8 +47,8 @@ Route::get('/Login', function () {
 // Route::view("/sms","adminsms");
 // Route::view("/Login","login");
 // Special for Hypbits
-Route::view("/Hypbits","login");
-Route::view("/verify","verify");
+Route::view("/Hypbits","Login.login");
+Route::view("/verify","Login.verify");
 // Route::view("/Clients/NewStatic","newClient");
 
 //login controller router
