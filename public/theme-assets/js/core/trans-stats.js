@@ -379,11 +379,7 @@ function displayRecord(start, finish, arrays) {
                     // if the user is active
                     status = "<span class='badge badge-danger'> </span>";
                 }
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder disabled' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
     }else{
@@ -395,11 +391,7 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder disabled' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
         fins = total;

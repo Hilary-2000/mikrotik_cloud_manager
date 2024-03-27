@@ -136,20 +136,12 @@
 
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true"
         data-img="/theme-assets/images/backgrounds/02.jpg">
-<<<<<<< HEAD
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
                         href="/Dashboard">
                         <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
                             src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
-=======
-        <div class="navbar-header">
-            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
-                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand "
-                        href="/Dashboard"><img class="brand-logo w-100 mb-1 " alt="Chameleon admin logo"
-                            src="/theme-assets/images/logo.jpeg" />
->>>>>>> origin/main
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
             </ul>
@@ -212,12 +204,9 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-<<<<<<< HEAD
                                 <a href="/Routers" class="btn btn-infor my-2"><i class="fas fa-arrow-left"></i> Back to
                                     list</a>
                                     <hr>
-=======
->>>>>>> origin/main
                                 <h4 class="card-title">Add Router</h4>
                                 <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                 <div class="heading-elements">
@@ -239,7 +228,6 @@
                                     @if (session('error_router'))
                                         <p class='text-danger'>{{ session('error_router') }}</p>
                                     @endif
-<<<<<<< HEAD
                                     <form action="{{url()->route("newCloudRouter")}}" method="post">
                                         @csrf
                                         <div class="row">
@@ -294,46 +282,6 @@
                                                         value="1982"
                                                     @endif
                                                     >
-=======
-                                    <form action="/addRouter" method="post">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <label for="router_name" class="form-control-label">Router name</label>
-                                                <input type="text" name="router_name" id="router_name"
-                                                    class="form-control rounded-lg p-1" placeholder="Router name"
-                                                    required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="ip_address" class="form-control-label">Router ip
-                                                    Address</label>
-                                                <input type="text" name="ip_address" id="ip_address"
-                                                    class="form-control rounded-lg p-1" placeholder="ex 10.10.10.1"
-                                                    required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 form-group">
-                                                <label for="api_username" class="form-control-label">Router API
-                                                    username</label>
-                                                <input type="text" name="api_username" id="api_username"
-                                                    class="form-control rounded-lg p-1"
-                                                    placeholder="Router API username" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="router_api_password" class="form-control-label">Router API
-                                                    password</label>
-                                                <input type="password" name="router_api_password"
-                                                    id="router_api_password" class="form-control rounded-lg p-1"
-                                                    placeholder="Router API password" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="router_api_port" class="form-control-label">Router API
-                                                    port</label>
-                                                <input type="number" value="8728" name="router_api_port"
-                                                    id="router_api_port" class="form-control rounded-lg p-1"
-                                                    placeholder="Router port number" required>
->>>>>>> origin/main
                                             </div>
                                         </div>
                                         <hr>
@@ -364,11 +312,7 @@
                 class="float-md-left d-block d-md-inline-block"><?php echo date('Y'); ?> &copy; Copyright Hypbits
                 Enterprises</span>
             <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
-<<<<<<< HEAD
                 <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com"
-=======
-                <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com/sims/"
->>>>>>> origin/main
                         target="_blank"> Ladybird Softech Co.</a></li>
             </ul>
         </div>

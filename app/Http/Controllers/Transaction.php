@@ -15,20 +15,15 @@ class Transaction extends Controller
 {
     // get user data
     function getClientName($client_account){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ?",[$client_account]);
-=======
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ?",[$client_account]);
->>>>>>> origin/main
         $client_name = count($client_data) > 0 ? $client_data[0]->client_name : "Null";
         return ucwords(strtolower($client_name));
     }
     function getClientNames($client_account,$client_acc_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -38,25 +33,15 @@ class Transaction extends Controller
             return ucwords(strtolower($client_data[0]->client_name));
         }
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = ?",[$client_acc_id]);
-=======
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ?",[$client_account]);
-        if (count($client_data) > 0) {
-            return ucwords(strtolower($client_data[0]->client_name));
-        }
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = ?",[$client_acc_id]);
->>>>>>> origin/main
         $client_name = count($client_data) > 0 ? $client_data[0]->client_name : "Null";
         return ucwords(strtolower($client_name));
     }
     // generate reports 
     function generateReports(Request $req){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
-=======
->>>>>>> origin/main
         // return $req;
         $transaction_date_option = $req->input('transaction_date_option');
         $from_select_date = $req->input('from_select_date');
@@ -71,67 +56,37 @@ class Transaction extends Controller
         if ($select_user_option == "All") {
             if ($transaction_date_option == "all dates") {
                 $title = "All Transactions done!";
-<<<<<<< HEAD
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
             }elseif ($transaction_date_option == "select date") {
                 $title = "All Transactions on ".date("D dS M Y", strtotime($select_registration_date))."!";
                 $date = date("Ymd",strtotime($select_registration_date));
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC");
-=======
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
-            }elseif ($transaction_date_option == "select date") {
-                $title = "All Transactions on ".date("D dS M Y", strtotime($select_registration_date))."!";
-                $date = date("Ymd",strtotime($select_registration_date));
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC");
->>>>>>> origin/main
             }elseif ($transaction_date_option == "between dates") {
                 $from = date("YmdHis",strtotime($from_select_date));
                 $to = date("Ymd",strtotime($to_select_date))."235959";
                 $title = "All Transactions done between (".date("D dS M Y", strtotime($from_select_date)).") and (".date("D dS M Y",strtotime($to_select_date)).")!";
-<<<<<<< HEAD
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$from,$to]);
             }else{
                 $title = "All Transactions done!";
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
-=======
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$from,$to]);
-            }else{
-                $title = "All Transactions done!";
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
->>>>>>> origin/main
             }
         }elseif ($select_user_option == "specific_user") {
             $client_names = $this->getClientName($client_account);
             if ($transaction_date_option == "all dates") {
                 $title = "All ".$client_names." Transactions done!";
-<<<<<<< HEAD
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
             }elseif ($transaction_date_option == "select date") {
                 $title = "All ".$client_names."`s Transactions done on ".date("D dS M Y",strtotime($select_registration_date))."!";
                 $date = date("Ymd",strtotime($select_registration_date));
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC",[$client_account]);
-=======
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
-            }elseif ($transaction_date_option == "select date") {
-                $title = "All ".$client_names."`s Transactions done on ".date("D dS M Y",strtotime($select_registration_date))."!";
-                $date = date("Ymd",strtotime($select_registration_date));
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC",[$client_account]);
->>>>>>> origin/main
             }elseif ($transaction_date_option == "between dates") {
                 $from = date("YmdHis",strtotime($from_select_date));
                 $to = date("Ymd",strtotime($to_select_date))."235959";
                 $title = "All ".$client_names."`s Transactions done between (".date("D dS M Y",strtotime($from_select_date)).") AND (".date("D dS M Y",strtotime($to_select_date)).")!";
-<<<<<<< HEAD
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$client_account,$from,$to]);
             }else{
                 $title = "All ".$client_names." Transactions done!";
                 $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
-=======
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$client_account,$from,$to]);
-            }else{
-                $title = "All ".$client_names." Transactions done!";
-                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
->>>>>>> origin/main
             }
         }
 
@@ -163,14 +118,11 @@ class Transaction extends Controller
 
         // create pdf
         $pdf = new PDF("P","mm","A4");
-<<<<<<< HEAD
         if (session("organization_logo")) {
             $pdf->setCompayLogo("../../../../../../../../..".public_path(session("organization_logo")));
             $pdf->set_company_name(session("organization")->organization_name);
             $pdf->set_school_contact(session("organization")->organization_main_contact);
         }
-=======
->>>>>>> origin/main
         $pdf->set_document_title($title);
         $pdf->AddPage();
         $pdf->SetFont('Times', 'B', 10);
@@ -203,36 +155,24 @@ class Transaction extends Controller
     //create functions to process transactions requests
 
     function getTransactions(){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0'  ORDER by `transaction_id` DESC LIMIT 500");
-=======
-        $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0'  ORDER by `transaction_id` DESC");
->>>>>>> origin/main
         $date = date("Ymd");
         $account_names = [];
         $dates_infor = [];
         for ($index=0; $index < count($transaction_data); $index++) { 
             // return $transaction_data[$index]->transaction_account;
-<<<<<<< HEAD
             $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$transaction_data[$index]->transaction_account."'");
-=======
-            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$transaction_data[$index]->transaction_account."'");
->>>>>>> origin/main
             $client_name = "Null";
             if (count($client_data) > 0) {
                 $client_name = $client_data[0]->client_name;
                 $transaction_data[$index]->transaction_acc_id = $client_data[0]->client_id;
             }else {
                 // get the client name from the account linked to that transaction
-<<<<<<< HEAD
                 $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '".$transaction_data[$index]->transaction_acc_id."'");
-=======
-                $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '".$transaction_data[$index]->transaction_acc_id."'");
->>>>>>> origin/main
                 $client_name = count($client_data) > 0 ? $client_data[0]->client_name : $transaction_data[$index]->transaction_acc_id;
                 $transaction_data[$index]->transaction_acc_id = count($client_data) > 0 ? $client_data[0]->client_id : $transaction_data[$index]->transaction_acc_id;
             }
@@ -255,7 +195,6 @@ class Transaction extends Controller
         $weekAgo = date("YmdHis",strtotime("-7 days"));
         $twoWeeksAgo = date("YmdHis",strtotime("-14 days"));
         $amonthAgo = date("YmdHis",strtotime("-1 Month"));
-<<<<<<< HEAD
         $sums = DB::connection("mysql2")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '$date%';");
         $week = DB::connection("mysql2")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN '$weekAgo' AND '$todayDate';");
         $twoWeek = DB::connection("mysql2")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN '$twoWeeksAgo' AND '$todayDate';");
@@ -263,15 +202,6 @@ class Transaction extends Controller
 
         // get the clients name username and phonenumber
         $clients_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' ORDER BY `client_id` DESC");
-=======
-        $sums = DB::select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '$date%';");
-        $week = DB::select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN '$weekAgo' AND '$todayDate';");
-        $twoWeek = DB::select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN '$twoWeeksAgo' AND '$todayDate';");
-        $months = DB::select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN '$amonthAgo' AND '$todayDate';");
-
-        // get the clients name username and phonenumber
-        $clients_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' ORDER BY `client_id` DESC");
->>>>>>> origin/main
         $clients_name = [];
         $clients_acc = [];
         $clients_phone = [];
@@ -283,17 +213,12 @@ class Transaction extends Controller
         return view("mytransactions",["transaction_data" => $transaction_data, "today" => $sums,"week" => $week,"month" => $months,"twoweeks" => $twoWeek ,"account_name" => $account_names,"trans_dates" => $dates_infor,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
     }
     function transDetails($trans_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // get the transaction details and pass them to the ciew
         $transaction_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = $trans_id");
-=======
-        // get the transaction details and pass them to the ciew
-        $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = $trans_id");
->>>>>>> origin/main
         $date_data = $transaction_data[0]->transaction_date;
         $year = substr($date_data,0,4);
         $month = substr($date_data,4,2);
@@ -308,44 +233,27 @@ class Transaction extends Controller
         $transaction_acc_id	 = $transaction_data[0]->transaction_acc_id;
         $transaction_account	 = $transaction_data[0]->transaction_account;
         // return $transaction_acc_id;
-<<<<<<< HEAD
         $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$transaction_acc_id'");
         if (count($user_data) > 0) {
             $user_fullname = $user_data[0]->client_name;
         }else {
             $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$transaction_account'");
-=======
-        $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$transaction_acc_id'");
-        if (count($user_data) > 0) {
-            $user_fullname = $user_data[0]->client_name;
-        }else {
-            $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$transaction_account'");
->>>>>>> origin/main
             $user_fullname = (count($user_data) > 0) ? $user_data[0]->client_name : "Null";
         }
 
         // get the clients data
-<<<<<<< HEAD
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0'");
-=======
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0'");
->>>>>>> origin/main
         return view("transaction",["transaction_data" => $transaction_data, "dates" => $dates, "user_fullname"=>$user_fullname, "client_data"=>$client_data]);
     }
 
 
     function assignTransaction($transaction_id,$client_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $transaction_detail = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$transaction_id'");
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$client_id'");
-=======
-        $transaction_detail = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$transaction_id'");
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$client_id'");
->>>>>>> origin/main
         $date_data = $client_data[0]->next_expiration_date;
         $year = substr($date_data,0,4);
         $month = substr($date_data,4,2);
@@ -370,26 +278,17 @@ class Transaction extends Controller
     }
 
     function confirmTransfer($client_id,$trans_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = $client_id");
         $trans_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$trans_id'");
-=======
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = $client_id");
-        $trans_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$trans_id'");
->>>>>>> origin/main
         // update the transaction status to 1 and the transaction account id and account number to 1
         $amount = ($trans_data[0]->transacion_amount) + ($client_data[0]->wallet_amount);
 
         // update the users wallet and the transaction account id account number and the transaction status and return the confirmation message
-<<<<<<< HEAD
         DB::connection("mysql2")->table('client_tables')
-=======
-        DB::table('client_tables')
->>>>>>> origin/main
         ->where('client_id', $client_id)
         ->update([
             'wallet_amount' => $amount,
@@ -399,11 +298,7 @@ class Transaction extends Controller
 
         // update the transaction details
         // transaction status, transaction acc number acc id
-<<<<<<< HEAD
         DB::connection("mysql2")->table('transaction_tables')
-=======
-        DB::table('transaction_tables')
->>>>>>> origin/main
         ->where('transaction_id', $trans_id)
         ->update([
             'transaction_acc_id' => $client_id,
@@ -415,30 +310,14 @@ class Transaction extends Controller
             session()->flash("success","You have successfully transfered the funds to your account");
             return redirect("/Payment");
         }
-<<<<<<< HEAD
                 
         $new_client = new Clients();
         $txt = ":Fund successfully transfered by  ".session('Usernames')." to ".$client_data[0]->client_name."!";
         $new_client->log($txt);
-=======
-        // log file capture error
-        // read the data 
-        $myfile = fopen(public_path("/logs/log.txt"), "r") or die("Unable to open file!");
-        $file_sizes = filesize(public_path("/logs/log.txt")) > 0?filesize(public_path("/logs/log.txt")):8190;
-        $existing_txt = fread($myfile,$file_sizes);
-        // return $existing_txt;
-        $myfile = fopen(public_path("/logs/log.txt"), "w") or die("Unable to open file!");
-        $date = date("dS M Y (H:i:sa)");
-        $txt = $date.":Fund successfully transfered by  ".session('Usernames')." to ".$client_data[0]->client_name."!\n".$existing_txt;
-        // return $txt;
-        fwrite($myfile, $txt);
-        fclose($myfile);
->>>>>>> origin/main
         // end of log file
         session()->flash("success","You have successfully transfered the funds to ".$client_data[0]->client_name."");
         return redirect("/Transactions/View/$trans_id");
     }
-<<<<<<< HEAD
     
     // this function below recieves payments from safaricom mpesa
     function mpesaTransactions(Request $response){
@@ -455,67 +334,6 @@ class Transaction extends Controller
         $change_db = new login();
         $change_db->change_db($organization[0]->organization_database);
 
-=======
-    // HANDLE THE DASHBOARD
-    function getDashboard(){
-        // get the sms sent only 10 sms max
-        $sms_sent = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' ORDER BY `sms_id` DESC LIMIT 5");
-        // holds the content,
-        // sms status
-        
-        // get the names of the users
-        $user_fullname = [];
-        $dates = [];
-        foreach ($sms_sent as $value) {
-            // get the user is and the date value and change them to readable values
-            // fullname
-            $id = $value->account_id;
-            $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$id'");
-            $name = (count($user_data) > 0) ? $user_data[0]->client_name : $value->recipient_phone;
-            array_push($user_fullname,$name);
-            // date
-            $date = $value->date_sent;
-            $date_data = $date;
-            $year = substr($date_data,0,4);
-            $month = substr($date_data,4,2);
-            $day = substr($date_data,6,2);
-            $hour = substr($date_data,8,2);
-            $minute = substr($date_data,10,2);
-            $second = substr($date_data,12,2);
-            $d = mktime($hour, $minute, $second, $month, $day, $year);
-            $dates2 = date("D dS M-Y  h:i:sa", $d);
-            array_push($dates,$dates2);
-        }
-        // return the transactions done that day
-        $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC LIMIT 8");
-        // loop through the data to get the transaction data
-        $fullnames = [];
-        $dates_trans = [];
-        foreach ($transaction_data as $value) {
-            $id = $value->transaction_acc_id;
-            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$id'");
-            $names = (count($client_data) > 0) ? $client_data[0]->client_name : $value->transaction_account;
-            array_push($fullnames,$names);
-            $date = $value->transaction_date;
-            $date_data = $date;
-            $year = substr($date_data,0,4);
-            $month = substr($date_data,4,2);
-            $day = substr($date_data,6,2);
-            $hour = substr($date_data,8,2);
-            $minute = substr($date_data,10,2);
-            $second = substr($date_data,12,2);
-            $d = mktime($hour, $minute, $second, $month, $day, $year);
-            $dates2 = date("D dS M-Y  h:i:sa", $d);
-            array_push($dates_trans,$dates2);
-        }
-
-        // get the client data 
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0'  ORDER BY `client_id` DESC LIMIT 8");
-        return view("index", ["sms_sent" => $sms_sent, "fullnames" => $user_fullname, "dates" => $dates, "transaction_data" => $transaction_data, "trans_fullname" => $fullnames, "trans_dates" => $dates_trans, "client_data" => $client_data]);
-    }
-    // this function below recieves payments from safaricom mpesa
-    function mpesaTransactions(Request $response){
->>>>>>> origin/main
         // get the transaction
         // check the account number if its the user known by the system
         // if the user is known by the system add the amount recieved to the user wallet
@@ -527,466 +345,18 @@ class Transaction extends Controller
 
 
         //data recieved from mpesa
-<<<<<<< HEAD
             // echo $mpesaResponse;
          $jsonMpesaResponse = $mpesaResponse;
-=======
-		$mpesaResponse = $response->getContent();
-            // echo $mpesaResponse;
-         $jsonMpesaResponse = json_decode($mpesaResponse, true);
->>>>>>> origin/main
          if(isset($jsonMpesaResponse)){
             //  check the account number to know the user
             $acc_no = trim($jsonMpesaResponse['BillRefNumber']);
             $ipo = 0;
-<<<<<<< HEAD
 
             // ipo is used to check if its hypbits clients
             if ($ipo == 0) {
                 $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$acc_no'");
                 $phone_number = $jsonMpesaResponse['MSISDN'];
                 // return $user_data;
-=======
-            // CHECK IF ITS HLC
-            if (substr(strtoupper($acc_no),0,3) == "HLC") {
-                $ipo = 1;
-                // get the client details
-                $licence_dets = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `licence_acc_number` = '".$acc_no."'");
-                if (count($licence_dets) > 0) {
-                    // the user has put correct account details
-                    // check what payment plan they are in
-                    $payment_plan = DB::select("SELECT * FROM `sms_clients_packages` WHERE `deleted`= '0' AND `package_id` = '".$licence_dets[0]->packages."'");
-                    // check if the user has made any payments if not check when they were registered if its after the free period
-                    // return $payment_plan;
-                    if (count($payment_plan) > 0) {
-                        if ($payment_plan[0]->amount_to_pay >= $jsonMpesaResponse['TransAmount']) {
-                            // they are enrolled in a payment plan
-                            $any_transaction = DB::select("SELECT * FROM `transaction_sms_tables` WHERE `deleted`= '0' AND `transaction_account` = '".$acc_no."'");
-                            // if there is a transaction done this means the user was done with the free trial
-                            // return $any_transaction;
-                            if (count($any_transaction) > 0) {
-                                // produce licences
-                                $licence = "";
-                                $hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-                                for ($index=1; $index <= 20; $index++) { 
-                                    $random = rand(0,15);
-                                    if ($index%4 == 0) {
-                                        $licence .= $hex[$random]."-";
-                                    }else {
-                                        $licence .= $hex[$random];
-                                    }
-                                }
-                                $licence = substr($licence,0,-1);
-                                $free_trial_period = $payment_plan[0]->free_trial_period;
-                                $payment_intervals = $payment_plan[0]->payment_intervals;
-                                // this means they are done with the free trial
-                                // check if their expiry date is ahead of today
-                                $expiry_dates = date("Ymd",strtotime($licence_dets[0]->licence_expiry));
-                                $today = date("Ymd");
-    
-                                if ($expiry_dates > $today) {
-                                    $date = date_create($expiry_dates);
-                                    date_add($date,date_interval_create_from_date_string($payment_intervals));
-                                    $next_expiration_date = date_format($date,"YmdHis");
-    
-                                    // uodate the database
-                                    DB::table("sms_clients")->where("licence_acc_number",$acc_no)->update([
-                                        "licence_expiry" => $next_expiration_date,
-                                        "licence_number" => $licence,
-                                        'date_changed' => date("YmdHis")
-                                    ]);
-                                    $transactions = new transaction_sms_table();
-                                    $transactions->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
-                                    $transactions->transaction_date = $jsonMpesaResponse['TransTime'];
-                                    $transactions->transacion_amount = $jsonMpesaResponse['TransAmount'];
-                                    $transactions->phone_transacting = $jsonMpesaResponse['MSISDN'];
-                                    $transactions->transaction_account = $jsonMpesaResponse['BillRefNumber'];
-                                    $transactions->transaction_acc_id = $licence_dets[0]->client_id;
-                                    $transactions->transaction_status = "1";
-                                    $transactions->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
-                                    $second_name = isset($jsonMpesaResponse['MiddleName']) ? $jsonMpesaResponse['MiddleName'] : "";
-                                    $last_name = isset($jsonMpesaResponse['LastName']) ? $jsonMpesaResponse['LastName'] : "";
-                                    $transactions->fullnames = str_replace("'","-",$jsonMpesaResponse['FirstName']." ".$second_name." ".$last_name);
-                                    $transactions->save();
-                                    return $transactions;
-                                }else {
-                                    $today = date("YmdHis");
-                                    $date = date_create($today);
-                                    date_add($date,date_interval_create_from_date_string($payment_intervals));
-                                    $next_expiration_date = date_format($date,"YmdHis");
-    
-                                    // uodate the database
-                                    DB::table("sms_clients")->where("licence_acc_number",$acc_no)->update([
-                                        "licence_expiry" => $next_expiration_date,
-                                        "licence_number" => $licence,
-                                        'date_changed' => date("YmdHis")
-                                    ]);
-                                    $transactions = new transaction_sms_table();
-                                    $transactions->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
-                                    $transactions->transaction_date = $jsonMpesaResponse['TransTime'];
-                                    $transactions->transacion_amount = $jsonMpesaResponse['TransAmount'];
-                                    $transactions->phone_transacting = $jsonMpesaResponse['MSISDN'];
-                                    $transactions->transaction_account = $jsonMpesaResponse['BillRefNumber'];
-                                    $transactions->transaction_acc_id = $licence_dets[0]->client_id;
-                                    $transactions->transaction_status = "1";
-                                    $transactions->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
-                                    $transactions->fullnames = str_replace("'","_",$jsonMpesaResponse['FirstName']);
-                                    $transactions->save();
-                                    return $transactions;
-                                }
-                            }else {
-                                // they have not made any payment
-                                // check the day they were registered and add the free trial period and it should be equal to the date today 
-                                // so that we know its ending that day or if its positive add the days if negative add the day from today
-                                $date_reg = date("Ymd",strtotime($licence_dets[0]->date_joined));
-                                $free_trial_period = $payment_plan[0]->free_trial_period;
-                                $payment_intervals = $payment_plan[0]->payment_intervals;
-                                $date = date_create($date_reg);
-                                date_add($date,date_interval_create_from_date_string($free_trial_period));
-                                $date_free_trial_end = date_format($date,"Ymd");
-                                $date_today = date("Ymd");
-                                // return $date_free_trial_end;
-                                if ($date_free_trial_end > $date_today){
-                                    // get the number of days its ahead and add the period to the date found
-                                    $date1=date_create($date_today);
-                                    $date2=date_create($date_free_trial_end);
-                                    $diff=date_diff($date1,$date2);
-                                    $days_diff =  $diff->format("%R%a days");
-                                    // add the difference found in the days
-                                    $today = date("YmdHis",strtotime($days_diff));
-                                    // take the period between and add the date
-                                    
-                                    $date = date_create($today);
-                                    date_add($date,date_interval_create_from_date_string($payment_intervals));
-                                    $next_expiration_date = date_format($date,"YmdHis");
-                                    // produce licences
-                                    $licence = "";
-                                    $hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-                                    for ($index=1; $index <= 20; $index++) { 
-                                        $random = rand(0,15);
-                                        if ($index%4 == 0) {
-                                            $licence .= $hex[$random]."-";
-                                        }else {
-                                            $licence .= $hex[$random];
-                                        }
-                                    }
-                                    $licence = substr($licence,0,-1);
-                                    // uodate the database
-                                    DB::table("sms_clients")->where("licence_acc_number",$acc_no)->update([
-                                        "licence_expiry" => $next_expiration_date,
-                                        "licence_number" => $licence,
-                                        'date_changed' => date("YmdHis")
-                                    ]);
-                                    $transactions = new transaction_sms_table();
-                                    $transactions->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
-                                    $transactions->transaction_date = $jsonMpesaResponse['TransTime'];
-                                    $transactions->transacion_amount = $jsonMpesaResponse['TransAmount'];
-                                    $transactions->phone_transacting = $jsonMpesaResponse['MSISDN'];
-                                    $transactions->transaction_account = $jsonMpesaResponse['BillRefNumber'];
-                                    $transactions->transaction_acc_id = $licence_dets[0]->client_id;
-                                    $transactions->transaction_status = "1";
-                                    $transactions->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
-                                    $transactions->fullnames = str_replace("'","_",$jsonMpesaResponse['FirstName']);
-                                    $transactions->save();
-                                    return $transactions;
-                                }else {
-                                    // generate a 20 digit code that is seperated by a hyphen of four digits
-                                    $licence = "";
-                                    $hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-                                    for ($index=1; $index <= 20; $index++) { 
-                                        $random = rand(0,15);
-                                        if ($index%4 == 0) {
-                                            $licence .= $hex[$random]."-";
-                                        }else {
-                                            $licence .= $hex[$random];
-                                        }
-                                    }
-                                    $licence = substr($licence,0,-1);
-                                    // add the date of expiration as today
-                                    $next_expiration_date = date("YmdHis",strtotime($payment_intervals));
-                                    DB::table("sms_clients")->where("licence_acc_number",$acc_no)->update([
-                                        "licence_expiry" => $next_expiration_date,
-                                        "licence_number" => $licence,
-                                        'date_changed' => date("YmdHis")
-                                    ]);
-                                    $transactions = new transaction_sms_table();
-                                    $transactions->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
-                                    $transactions->transaction_date = $jsonMpesaResponse['TransTime'];
-                                    $transactions->transacion_amount = $jsonMpesaResponse['TransAmount'];
-                                    $transactions->phone_transacting = $jsonMpesaResponse['MSISDN'];
-                                    $transactions->transaction_account = $jsonMpesaResponse['BillRefNumber'];
-                                    $transactions->transaction_acc_id = $licence_dets[0]->client_id;
-                                    $transactions->transaction_status = "1";
-                                    $transactions->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
-                                    $transactions->fullnames = str_replace("'","_",$jsonMpesaResponse['FirstName']);
-                                    $transactions->save();
-                                    return $transactions;
-                                }
-                            }
-                        }else {
-                            echo "Client has not paid enough";
-                        }
-                    }else {
-                        return "Client not enrolled in the Payment Plan";
-                    }
-                }else {
-                    echo "Invalid User!";
-                }
-            }
-            // CHECK IF ITS FOR THE HSMS
-            if (substr(strtoupper($acc_no),0,4) == "HSMS" && $ipo == 0) {
-                $ipo = 1;
-                $transStatus = 0;
-                // this here processes transactions for the sms clients
-                // check if the clients is a valid client
-                $smsclient = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `account_number` = '".$acc_no."'");
-                if (count($smsclient) > 0) {
-                    $transStatus = 1;
-                    // the client is present
-                    // check if the amount paid is less than the minimum amount
-                    $transaction_amnt = $jsonMpesaResponse['TransAmount'];
-                    if ($transaction_amnt >= 1000) {
-                        // convert the cash to sms
-                        $sms_rate = $smsclient[0]->sms_rate;
-                        $sms_balance = $smsclient[0]->sms_balance;
-                        $phone_number = $smsclient[0]->phone_number;
-                        $trans_amnt = $jsonMpesaResponse['TransAmount'];
-                        $new_sms = round($trans_amnt/$sms_rate);
-                        // save the new balance
-                        // return $new_sms;
-                        $sms_balance+=$new_sms;
-                        DB::table("sms_clients")->where("client_id",$smsclient[0]->client_id)->update([
-                            "sms_balance" => $sms_balance,
-                            'date_changed' => date("YmdHis")
-                        ]);
-                        // its less than the minimum amount
-                        // send message for the invalid account number
-                        $sms_data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
-                        $sms_contents = json_decode($sms_data[0]->value);
-                        $messages = $sms_contents[4]->messages;
-                        $msg = "";
-                        // return $messages;
-                        for ($indexes=0; $indexes < count($messages); $indexes++) { 
-                            $msg_data = $messages[$indexes];
-                            if ($msg_data->Name == "rcv_coracc_billsms") {
-                                $msg = $msg_data->message;
-                            }
-                        }
-                        $msg = $this->message_content($msg,$smsclient[0]->client_id,$jsonMpesaResponse['TransAmount'],0,0,"sms_client");
-                        // send message for the invalid account number
-                        if (strlen(trim($msg)) > 0) {
-                            // get the sms keys
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-                            $sms_api_key = $sms_keys[0]->value;
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-                            $sms_partner_id = $sms_keys[0]->value;
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-                            $sms_shortcode = $sms_keys[0]->value;
-            
-            
-                            $partnerID = $sms_partner_id;
-                            $apikey = $sms_api_key;
-                            $shortcode = $sms_shortcode;
-                            $mobile = $phone_number;
-                            $message = $msg;
-                            $sms_type = 1;
-                            
-                            $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
-                            $ch = \curl_init();
-                            \curl_setopt($ch, CURLOPT_URL, $finalURL);
-                            \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                            $response = \curl_exec($ch);
-                            \curl_close($ch);
-                            $res = json_decode($response);
-                            // return $res;
-                            $values = $res->responses[0];
-                            // return $values;
-                            foreach ($values as  $key => $value) {
-                                // echo $key;
-                                if ($key == "response-code") {
-                                    if ($value == "200") {
-                                        // if its 200 the message is sent delete the
-                                        $message_status = 1;
-                                    }
-                                }
-                            }
-                            // get the user id of the number from the database
-                            $user_data = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `account_number` = '".$jsonMpesaResponse['BillRefNumber']."'");
-                            $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
-                            // if the message status is one the message is already sent to the user
-                            $sms_table = new sms_table();
-                            $sms_table->sms_content = $message;
-                            $sms_table->date_sent = date("YmdHis");
-                            $sms_table->recipient_phone = $mobile;
-                            $sms_table->sms_status = $message_status;
-                            $sms_table->account_id = $client_id;
-                            $sms_table->sms_type = $sms_type;
-                            $sms_table->save();
-                        }
-                    }else {
-                        // convert the cash to sms
-                        $sms_rate = $smsclient[0]->sms_rate;
-                        $sms_balance = $smsclient[0]->sms_balance;
-                        $phone_number = $smsclient[0]->phone_number;
-                        $trans_amnt = $jsonMpesaResponse['TransAmount'];
-                        $new_sms = round($trans_amnt/$sms_rate);
-                        // save the new balance
-                        $sms_balance+=$new_sms;
-                        DB::table("sms_clients")->where("client_id",$smsclient[0]->client_id)->update([
-                            "sms_balance" => $sms_balance,
-                            'date_changed' => date("YmdHis")
-                        ]);
-                        // its less than the minimum amount
-                        // send message for the invalid account number
-                        $sms_data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
-                        $sms_contents = json_decode($sms_data[0]->value);
-                        $messages = $sms_contents[4]->messages;
-                        $msg = "";
-                        for ($indexes=0; $indexes < count($messages); $indexes++) { 
-                            $msg_data = $messages[$indexes];
-                            if ($msg_data->Name == "rcv_belowmin_billsms") {
-                                $msg = $msg_data->message;
-                            }
-                        }
-                        $msg = $this->message_content($msg,$smsclient[0]->client_id,$jsonMpesaResponse['TransAmount'],0,0,"sms_client");
-                        // send message for the invalid account number
-                        if (strlen(trim($msg)) > 0) {
-                            // get the sms keys
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-                            $sms_api_key = $sms_keys[0]->value;
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-                            $sms_partner_id = $sms_keys[0]->value;
-                            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-                            $sms_shortcode = $sms_keys[0]->value;
-            
-            
-                            $partnerID = $sms_partner_id;
-                            $apikey = $sms_api_key;
-                            $shortcode = $sms_shortcode;
-                            $mobile = $phone_number;
-                            $message = $msg;
-                            $sms_type = 1;
-                            
-                            $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
-                            $ch = \curl_init();
-                            \curl_setopt($ch, CURLOPT_URL, $finalURL);
-                            \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                            $response = \curl_exec($ch);
-                            \curl_close($ch);
-                            $res = json_decode($response);
-                            // return $res;
-                            $values = $res->responses[0];
-                            // return $values;
-                            foreach ($values as  $key => $value) {
-                                // echo $key;
-                                if ($key == "response-code") {
-                                    if ($value == "200") {
-                                        // if its 200 the message is sent delete the
-                                        $message_status = 1;
-                                    }
-                                }
-                            }
-                            // get the user id of the number from the database
-                            $user_data = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `account_number`= '".$jsonMpesaResponse['BillRefNumber']."'");
-                            $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
-                            // if the message status is one the message is already sent to the user
-                            $sms_table = new sms_table();
-                            $sms_table->sms_content = $message;
-                            $sms_table->date_sent = date("YmdHis");
-                            $sms_table->recipient_phone = $mobile;
-                            $sms_table->sms_status = $message_status;
-                            $sms_table->account_id = $client_id;
-                            $sms_table->sms_type = $sms_type;
-                            $sms_table->save();
-                        }
-                    }
-                }else {
-                    // send message for the invalid account number
-                    $sms_data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
-                    $sms_contents = json_decode($sms_data[0]->value);
-                    $messages = $sms_contents[4]->messages;
-                    $msg = "";
-                    for ($indexes=0; $indexes < count($messages); $indexes++) { 
-                        $msg_data = $messages[$indexes];
-                        if ($msg_data->Name == "rcv_incoracc_billsms") {
-                            $msg = $msg_data->message;
-                        }
-                    }
-                    $msg = $this->message_content($msg,0,$jsonMpesaResponse['TransAmount'],0,0,"sms_client");
-                    // send message for the invalid account number
-                    if (strlen(trim($msg)) > 0) {
-                        // get the sms keys
-                        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-                        $sms_api_key = $sms_keys[0]->value;
-                        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-                        $sms_partner_id = $sms_keys[0]->value;
-                        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-                        $sms_shortcode = $sms_keys[0]->value;
-        
-        
-                        $partnerID = $sms_partner_id;
-                        $apikey = $sms_api_key;
-                        $shortcode = $sms_shortcode;
-                        $mobile = $jsonMpesaResponse['MSISDN'];
-                        $message = $msg;
-                        $sms_type = 1;
-                        
-                        $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
-                        $ch = \curl_init();
-                        \curl_setopt($ch, CURLOPT_URL, $finalURL);
-                        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                        $response = \curl_exec($ch);
-                        \curl_close($ch);
-                        $res = json_decode($response);
-                        // return $res;
-                        $values = $res->responses[0];
-                        // return $values;
-                        foreach ($values as  $key => $value) {
-                            // echo $key;
-                            if ($key == "response-code") {
-                                if ($value == "200") {
-                                    // if its 200 the message is sent delete the
-                                    $message_status = 1;
-                                }
-                            }
-                        }
-                        // get the user id of the number from the database
-                        $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$jsonMpesaResponse['BillRefNumber']."'");
-                        $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
-                        // if the message status is one the message is already sent to the user
-                        $sms_table = new sms_table();
-                        $sms_table->sms_content = $message;
-                        $sms_table->date_sent = date("YmdHis");
-                        $sms_table->recipient_phone = $mobile;
-                        $sms_table->sms_status = $message_status;
-                        $sms_table->account_id = $client_id;
-                        $sms_table->sms_type = $sms_type;
-                        $sms_table->save();
-                    }
-                }
-                // save the data in the transaction table
-                $transTable = new transaction_sms_table();
-                $transTable->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
-                $transTable->transaction_date = $jsonMpesaResponse['TransTime'];
-                $transTable->transacion_amount = $jsonMpesaResponse['TransAmount'];
-                $transTable->phone_transacting = $jsonMpesaResponse['MSISDN'];
-                $transTable->transaction_account = $jsonMpesaResponse['BillRefNumber'];
-                $transTable->transaction_acc_id = $client_id;
-                $transTable->transaction_status = $transStatus;
-                $transTable->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
-                $transTable->fullnames = str_replace("'","_",$jsonMpesaResponse['FirstName']);
-                $transTable->save();
-            }
-            // return substr(strtolower($acc_no),0,4);
-
-            // ipo is used to check if its hypbits clients
-            if ($ipo == 0) {
-                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$acc_no'");
-                $phone_number = $jsonMpesaResponse['MSISDN'];
->>>>>>> origin/main
                 $client_id = 0;
                 $client_transaction_id = 0;
                 $transStatus = "0";
@@ -1008,11 +378,7 @@ class Transaction extends Controller
                     $client_transaction_id = $client_id;
                     // the user available amount is greater than the minimum amount
                     // update the wallet amount and send the sms to the user
-<<<<<<< HEAD
                     DB::connection("mysql2")->table("client_tables")->where('client_id', $user_data[0]->client_id)->update(["wallet_amount" => $wallet, 'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
-=======
-                    DB::table("client_tables")->where('client_id', $user_data[0]->client_id)->update(["wallet_amount" => $wallet, 'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
->>>>>>> origin/main
                     // send sms and record it
                     // GET THE SMS KEYS FROM THE DATABASE
                     // check if the user phone number is same to the one stored in the database
@@ -1021,19 +387,11 @@ class Transaction extends Controller
                     $same = ($phone_mpesa == $phone_db) ? 1 : 0;
     
                     // get the sms keys
-<<<<<<< HEAD
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
                     $sms_api_key = $sms_keys[0]->value;
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
                     $sms_partner_id = $sms_keys[0]->value;
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-=======
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-                    $sms_api_key = $sms_keys[0]->value;
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-                    $sms_partner_id = $sms_keys[0]->value;
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
->>>>>>> origin/main
                     $sms_shortcode = $sms_keys[0]->value;
     
     
@@ -1053,13 +411,9 @@ class Transaction extends Controller
                     }else {
                         $message = $message_contents[1]->messages[3]->message;
                     }
-<<<<<<< HEAD
 
                     if ($message) {
                         // replace false with message above
-=======
-                    if ($message) {// replace false with message above
->>>>>>> origin/main
                         $trans_amount = $jsonMpesaResponse['TransAmount'];
                         $message = $this->message_content($message,$client_id,$trans_amount);
                         // send_sms($conn,$row['clients_contacts'],$message,$row['client_id']);
@@ -1084,11 +438,7 @@ class Transaction extends Controller
                             }
                         }
                         // get the user id of the number from the database
-<<<<<<< HEAD
                         $user_data = DB::connection("mysql2")->select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `account_number` = '".trim($jsonMpesaResponse['BillRefNumber'])."'");
-=======
-                        $user_data = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `account_number` = '".trim($jsonMpesaResponse['BillRefNumber'])."'");
->>>>>>> origin/main
                         $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
                         // if the message status is one the message is already sent to the user
                         $sms_table = new sms_table();
@@ -1100,12 +450,8 @@ class Transaction extends Controller
                         $sms_table->sms_type = $sms_type;
                         $sms_table->save();
                     }
-<<<<<<< HEAD
 
                     $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".trim($jsonMpesaResponse['BillRefNumber'])."'");
-=======
-                    $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".trim($jsonMpesaResponse['BillRefNumber'])."'");
->>>>>>> origin/main
                     // check if the user has a refferer then share the cut to the user
                     $user_data[0]->reffered_by = str_replace("'","\"",$user_data[0]->reffered_by);
                     $client_refferal = strlen($user_data[0]->reffered_by) > 0? json_decode($user_data[0]->reffered_by): json_decode("{}");
@@ -1116,28 +462,17 @@ class Transaction extends Controller
                             // get the precentage the refferer is to be paid of the amount paid
                             $percentage = round((($client_refferal->monthly_payment * 100) / $monthly_payments),2);
                             $refferal_amount = round($percentage * ($jsonMpesaResponse['TransAmount'] * 1)) / 100;
-<<<<<<< HEAD
                             $refferer_dets = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
                             // add the refferal amount to the wallet
                             $new_wallet_balance = ($refferal_amount*1) + ($refferer_dets[0]->wallet_amount*1);
                             DB::connection("mysql2")->table("client_tables")->where('client_id', $refferer_dets[0]->client_id)->update(["wallet_amount" => $new_wallet_balance,'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
-=======
-                            $refferer_dets = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
-                            // add the refferal amount to the wallet
-                            $new_wallet_balance = ($refferal_amount*1) + ($refferer_dets[0]->wallet_amount*1);
-                            DB::table("client_tables")->where('client_id', $refferer_dets[0]->client_id)->update(["wallet_amount" => $new_wallet_balance,'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
->>>>>>> origin/main
                             $reffer_phone = $refferer_dets[0]->clients_contacts;
                             $mobile = $reffer_phone; // Bulk messages can be comma separated
                             $new_payment = array("amount" => $refferal_amount,"date" => date("YmdHis"));
                             array_push($client_refferal->payment_history,$new_payment);
                             $payments = json_encode($client_refferal);
                             // update the main client payments
-<<<<<<< HEAD
                             DB::connection("mysql2")->table("client_tables")->where('client_account',$jsonMpesaResponse['BillRefNumber'])->update(["reffered_by" => $payments,'date_changed' => date("YmdHis")]);
-=======
-                            DB::table("client_tables")->where('client_account',$jsonMpesaResponse['BillRefNumber'])->update(["reffered_by" => $payments,'date_changed' => date("YmdHis")]);
->>>>>>> origin/main
                             // send sms
                             $message_contents = $this->get_sms();
                             $message = $message_contents[1]->messages[2]->message;
@@ -1167,11 +502,7 @@ class Transaction extends Controller
                                     }
                                 }
                                 // get the user id of the number from the database
-<<<<<<< HEAD
                                 $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
-=======
-                                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
->>>>>>> origin/main
                                 $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
                                 // if the message status is one the message is already sent to the user
                                 $sms_table = new sms_table();
@@ -1190,19 +521,11 @@ class Transaction extends Controller
                     // send the sms showing that the transaction is pending
     
                     // get the sms keys
-<<<<<<< HEAD
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
                     $sms_api_key = $sms_keys[0]->value;
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
                     $sms_partner_id = $sms_keys[0]->value;
                     $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-=======
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-                    $sms_api_key = $sms_keys[0]->value;
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-                    $sms_partner_id = $sms_keys[0]->value;
-                    $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
->>>>>>> origin/main
                     $sms_shortcode = $sms_keys[0]->value;
     
     
@@ -1268,7 +591,6 @@ class Transaction extends Controller
                 $transTable->fullnames = $clientelle;
                 $transTable->save();
             }
-<<<<<<< HEAD
                 
             $new_client = new Clients();
             $txt = ": Funds successfully received from ".$jsonMpesaResponse['FirstName']." paid for INVALID account number ".$jsonMpesaResponse['BillRefNumber']."!";
@@ -1345,50 +667,23 @@ class Transaction extends Controller
             $txt = ":Client account ".$jsonMpesaResponse['BillRefNumber']." funds not validated!";
             $new_client->log_db($txt,$organization[0]->organization_database);
             return $response;
-=======
-
-            // log file capture error
-            // read the data
-            $myfile = fopen(public_path("/logs/log.txt"), "r") or die("Unable to open file!");
-            $file_sizes = filesize(public_path("/logs/log.txt")) > 0?filesize(public_path("/logs/log.txt")):8190;
-            $existing_txt = fread($myfile,$file_sizes);
-            // return $existing_txt;
-            $myfile = fopen(public_path("/logs/log.txt"), "w") or die("Unable to open file!");
-            $date = date("dS M Y (H:i:sa)");
-            $txt = $date.":Fund successfully recieved from  ".$jsonMpesaResponse['FirstName']."!\n".$existing_txt;
-            // return $txt;
-            fwrite($myfile, $txt);
-            fclose($myfile);
-            // end of log file
->>>>>>> origin/main
         }
     }
 
     function refferalCUt($user_data,$monthly_payments,$jsonMpesaResponse){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
-=======
->>>>>>> origin/main
         // check if the user has a refferer then share the cut to the user
         $client_refferal = strlen($user_data[0]->reffered_by) > 0? json_decode($user_data[0]->reffered_by): json_decode("{}");
         if (isset($client_refferal->client_acc)) {
             // get the sms keys
-<<<<<<< HEAD
             $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
             $sms_api_key = $sms_keys[0]->value;
             $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
             $sms_partner_id = $sms_keys[0]->value;
             $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
-=======
-            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
-            $sms_api_key = $sms_keys[0]->value;
-            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
-            $sms_partner_id = $sms_keys[0]->value;
-            $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
->>>>>>> origin/main
             $sms_shortcode = $sms_keys[0]->value;
             $partnerID = $sms_partner_id;
             $apikey = $sms_api_key;
@@ -1397,28 +692,17 @@ class Transaction extends Controller
             // get the precentage the refferer is to be paid of the amount paid
             $percentage = round(($client_refferal->monthly_payment * 100) / $monthly_payments,2);
             $refferal_amount = round($percentage * ($jsonMpesaResponse['TransAmount'] * 1));
-<<<<<<< HEAD
             $refferer_dets = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
             // add the refferal amount to the wallet
             $new_wallet_balance = $refferal_amount + $refferer_dets[0]->wallet_amount;
             DB::connection("mysql2")->table("client_tables")->where('client_id', $refferer_dets[0]->client_id)->update(["wallet_amount" => $new_wallet_balance,'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
-=======
-            $refferer_dets = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
-            // add the refferal amount to the wallet
-            $new_wallet_balance = $refferal_amount + $refferer_dets[0]->wallet_amount;
-            DB::table("client_tables")->where('client_id', $refferer_dets[0]->client_id)->update(["wallet_amount" => $new_wallet_balance,'last_changed' => date("YmdHis"),'date_changed' => date("YmdHis")]);
->>>>>>> origin/main
             $reffer_phone = $refferer_dets[0]->clients_contacts;
             $mobile = $reffer_phone; // Bulk messages can be comma separated
             $new_payment = array("amount" => $refferal_amount,"date" => date("YmdHis"));
             array_push($client_refferal->payment_history,$new_payment);
             $payments = json_encode($client_refferal);
             // update the main client payments
-<<<<<<< HEAD
             DB::connection("mysql2")->table("client_tables")->where('client_account',$jsonMpesaResponse['BillRefNumber'])->update(["reffered_by" => $payments,'date_changed' => date("YmdHis")]);
-=======
-            DB::table("client_tables")->where('client_account',$jsonMpesaResponse['BillRefNumber'])->update(["reffered_by" => $payments,'date_changed' => date("YmdHis")]);
->>>>>>> origin/main
             // send sms
             $message_contents = $this->get_sms();
             $message = $message_contents[1]->messages[0]->message;
@@ -1448,11 +732,7 @@ class Transaction extends Controller
                 }
                 $sms_type = 1;
                 // get the user id of the number from the database
-<<<<<<< HEAD
                 $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
-=======
-                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$client_refferal->client_acc."'");
->>>>>>> origin/main
                 $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
                 // if the message status is one the message is already sent to the user
                 $sms_table = new sms_table();
@@ -1468,7 +748,6 @@ class Transaction extends Controller
     }
 
     function stkpush(){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -1477,18 +756,11 @@ class Transaction extends Controller
         // push stk
         $client_id =  session("client_id");
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$client_id'");
-=======
-        // get the clients id 
-        // push stk
-        $client_id =  session("client_id");
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$client_id'");
->>>>>>> origin/main
         $phone_number = strlen($client_data[0]->clients_contacts) == 12? $client_data[0]->clients_contacts: "254".substr($client_data[0]->clients_contacts,1);
         $monthly_payment = $client_data[0]->monthly_payment;
         $acc_no = $client_data[0]->client_account;
 
         // get the consumer key
-<<<<<<< HEAD
         $key = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'consumer_key'");
         $consumer_key = $key[0]->value;
 
@@ -1499,18 +771,6 @@ class Transaction extends Controller
         $passkey = $key[0]->value;
 
         $key = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'paybill'");
-=======
-        $key = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'consumer_key'");
-        $consumer_key = $key[0]->value;
-
-        $key = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'consumer_secret'");
-        $consumer_secret = $key[0]->value;
-
-        $key = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'passkey'");
-        $passkey = $key[0]->value;
-
-        $key = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'paybill'");
->>>>>>> origin/main
         $paybillno = $key[0]->value;
         $time = date("YmdHis");
 
@@ -1577,26 +837,17 @@ class Transaction extends Controller
         }
     }
 	function get_sms(){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $data = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
-=======
-        $data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
->>>>>>> origin/main
         return json_decode($data[0]->value);
 	}
 	function message_content($data,$user_id,$trans_amount,$refferer_amount = 'Null',$refferer_acc = "0" ,$user_type = "net_client") {
         if ($user_type == "net_client") {
-<<<<<<< HEAD
             $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$user_id'");
             $refferal_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$refferer_acc'");
-=======
-            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$user_id'");
-            $refferal_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '$refferer_acc'");
->>>>>>> origin/main
             $refferal_name = count($refferal_data) > 0? $refferal_data[0]->client_name:"Null";
             $refferal_f_name = count($refferal_data) > 0? explode(" ",$refferal_data[0]->client_name)[0]:"Null";
             if (count($client_data) > 0) {
@@ -1690,11 +941,7 @@ class Transaction extends Controller
                 return $data;
             }
         }elseif ($user_type == "sms_client") {
-<<<<<<< HEAD
             $client_data = DB::connection("mysql2")->select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `client_id` = '$user_id'");
-=======
-            $client_data = DB::select("SELECT * FROM `sms_clients` WHERE `deleted`= '0' AND `client_id` = '$user_id'");
->>>>>>> origin/main
             if (count($client_data) > 0) {
                 $full_name = ucwords(strtolower($client_data[0]->client_name));
                 $f_name = ucfirst(strtolower((explode(" ",$full_name)[0])));
@@ -1757,16 +1004,12 @@ class Transaction extends Controller
         }
 	}
 
-<<<<<<< HEAD
 
     function transactionStatistics(){
         // change db
         $change_db = new login();
         $change_db->change_db();
 
-=======
-    function transactionStatistics(){
->>>>>>> origin/main
         // get the data for weeks months and years
         $days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
         $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1789,11 +1032,7 @@ class Transaction extends Controller
         $last_end_week = $this->addDays($last_week_start,6);
 
         // get when the first client made their payment
-<<<<<<< HEAD
         $first_payment = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_date` ASC LIMIT 1");
-=======
-        $first_payment = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_date` ASC LIMIT 1");
->>>>>>> origin/main
         $first_payment_date = count($first_payment) > 0 ? $first_payment[0]->transaction_date : date("YmdHis");
         // return $first_payment_date;
 
@@ -1823,22 +1062,13 @@ class Transaction extends Controller
             $trans_stats = [];
             $trans_records = [];
             for ($index=0; $index < 7; $index++) {
-<<<<<<< HEAD
                 $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($day_1))."%'");
                 $daily_trans_records = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($day_1))."%' ORDER BY `transaction_date` DESC");
-=======
-                $get_amount_per_day = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($day_1))."%'");
-                $daily_trans_records = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($day_1))."%' ORDER BY `transaction_date` DESC");
->>>>>>> origin/main
                 $trans_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
 
 
                 for ($indexex=0; $indexex < count($daily_trans_records); $indexex++) { 
-<<<<<<< HEAD
                     $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
-=======
-                    $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
->>>>>>> origin/main
                     $client_name = isset($client_data[0]->client_name) ? $client_data[0]->client_name : $daily_trans_records[$indexex]->transaction_account;
                     // array_push($account_names,$client_name);
                     $daily_trans_records[$indexex]->account_names = $client_name;
@@ -1884,11 +1114,7 @@ class Transaction extends Controller
         //  return $months_index;
  
          // get when the first client made their payment
-<<<<<<< HEAD
          $first_payment = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0'  ORDER BY `transaction_date` ASC LIMIT 1");
-=======
-         $first_payment = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0'  ORDER BY `transaction_date` ASC LIMIT 1");
->>>>>>> origin/main
          $first_payment_date = count($first_payment) > 0 ? $first_payment[0]->transaction_date : date("YmdHis");
          // return $first_payment_date;
  
@@ -1917,21 +1143,12 @@ class Transaction extends Controller
              $trans_stats = [];
              $trans_records = [];
              for ($index=0; $index < 12; $index++) {
-<<<<<<< HEAD
                  $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ym",strtotime($day_1))."%'");
                  $daily_trans_records = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ym",strtotime($day_1))."%' ORDER BY `transaction_date` DESC");
                  $trans_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
 
                 for ($indexex=0; $indexex < count($daily_trans_records); $indexex++) { 
                     $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
-=======
-                 $get_amount_per_day = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ym",strtotime($day_1))."%'");
-                 $daily_trans_records = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".date("Ym",strtotime($day_1))."%' ORDER BY `transaction_date` DESC");
-                 $trans_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
-
-                for ($indexex=0; $indexex < count($daily_trans_records); $indexex++) { 
-                    $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
->>>>>>> origin/main
                     $client_name = isset($client_data[0]->client_name) ? $client_data[0]->client_name : $daily_trans_records[$indexex]->transaction_account;
                     // array_push($account_names,$client_name);
                     $daily_trans_records[$indexex]->account_names = $client_name;
@@ -1958,32 +1175,19 @@ class Transaction extends Controller
         // return $transaction_stats_monthly;
 
         // get the yearly data
-<<<<<<< HEAD
         $first_payment = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_date` ASC LIMIT 1");
-=======
-        $first_payment = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_date` ASC LIMIT 1");
->>>>>>> origin/main
         $first_payment_year = date("YmdHis",strtotime(count($first_payment) > 0 ? $first_payment[0]->transaction_date : date("YmdHis")));
 
         $transaction_yearly_stats = [];
         $transaction_yearly_records = [];
 
         for ($index=(date("Y",strtotime($first_payment_year))*1); $index <= (date("Y")*1); $index++) {
-<<<<<<< HEAD
             $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$index."%'");
             $daily_trans_records = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$index."%' ORDER BY `transaction_date` DESC");
             $trans_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
 
             for ($indexex=0; $indexex < count($daily_trans_records); $indexex++) { 
                 $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
-=======
-            $get_amount_per_day = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$index."%'");
-            $daily_trans_records = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$index."%' ORDER BY `transaction_date` DESC");
-            $trans_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
-
-            for ($indexex=0; $indexex < count($daily_trans_records); $indexex++) { 
-                $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = '".$daily_trans_records[$indexex]->transaction_account."'");
->>>>>>> origin/main
                 $client_name = isset($client_data[0]->client_name) ? $client_data[0]->client_name : $daily_trans_records[$indexex]->transaction_account;
                 // array_push($account_names,$client_name);
                 $daily_trans_records[$indexex]->account_names = $client_name;
@@ -2000,10 +1204,7 @@ class Transaction extends Controller
         // proceed to the next year
         return view("trans-stats",["transaction_stats_weekly" => $transaction_stats_weekly,"transaction_records_weekly" => $transaction_records_weekly,"transaction_stats_monthly" => $transaction_stats_monthly,"transaction_records_monthly" => $transaction_records_monthly,"transaction_yearly_stats" => $transaction_yearly_stats,"transaction_yearly_records" => $transaction_yearly_records]);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/main
     function addDays($date,$days){
         $date = date_create($date);
         date_add($date,date_interval_create_from_date_string($days." day"));

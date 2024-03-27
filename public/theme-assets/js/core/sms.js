@@ -242,11 +242,7 @@ function displayRecord(start, finish, arrays) {
             var transactiontype = (arrays[index][6] == 1) ? "Transaction" : "Notification";
             var status = (arrays[index][5] == "1") ? "<span class='badge badge-success'> </span>":"<span class='badge badge-danger'> </span>";
 
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id d-none' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/Organizations/SMS/View/"+organization_details.organization_id+"/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"  <a href='/sms/resend/"+arrays[index][4]+"' class='text-bolder' data-toggle='tooltip' title='Re-send this Message'><i class='ft-refresh-ccw'></i></a></th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Clients/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/sms/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
     }else{
@@ -257,11 +253,7 @@ function displayRecord(start, finish, arrays) {
             var transactiontype = (arrays[index][6] == 1) ? "Transaction" : "Notification";
             var status = (arrays[index][5] == "1") ? "<span class='badge badge-success'> </span>":"<span class='badge badge-danger'> </span>";
 
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id d-none' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/Organizations/SMS/View/"+organization_details.organization_id+"/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"  <a href='/sms/resend/"+arrays[index][4]+"' class='text-bolder' data-toggle='tooltip' title='Re-send this Message'><i class='ft-refresh-ccw'></i></a></th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Clients/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/sms/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
         fins = total;

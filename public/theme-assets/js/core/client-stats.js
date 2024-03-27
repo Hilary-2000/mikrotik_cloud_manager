@@ -7,10 +7,7 @@
 function cObj(id) {
     return document.getElementById(id);
 }
-<<<<<<< HEAD
 var organization_details = organization_details;
-=======
->>>>>>> origin/main
 function valObj(id) {
     return document.getElementById(id).value;
 }
@@ -566,11 +563,7 @@ function displayRecord(start, finish, arrays) {
                     assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
                 }
             
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
->>>>>>> origin/main
             counter++;
         }
     }else{
@@ -590,11 +583,7 @@ function displayRecord(start, finish, arrays) {
             }
             
             // console.log(location);
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
         fins = total;
@@ -1030,11 +1019,7 @@ cObj("display_clients").onclick = function () {
     if (err == 0) {
         if (valObj("select_dates") != "Select date") {
             var datapass = "selected_dates="+valObj("select_dates")+"&from_today="+from_todays;
-<<<<<<< HEAD
             sendDataPost1("POST","/Organization/Client-due-demographics/"+organization_details[0].organization_id,datapass,cObj("display_data"),cObj("interface_load"));
-=======
-            sendDataPost1("POST","/Client-due-demographics",datapass,cObj("display_data"),cObj("interface_load"));
->>>>>>> origin/main
             setTimeout(() => {
                 var timeout = 0;
                 var idss = setInterval(() => {
@@ -1044,11 +1029,7 @@ cObj("display_clients").onclick = function () {
                         stopInterval(idss);                        
                     }
                     if (cObj("interface_load").classList.contains("invisible")) {
-<<<<<<< HEAD
                         // console.log(cObj("display_data").innerText);
-=======
-                        console.log(cObj("display_data").innerText);
->>>>>>> origin/main
                         displayDueDemographics(cObj("display_data").innerText);
                         stopInterval(idss);
                     }
@@ -1058,11 +1039,7 @@ cObj("display_clients").onclick = function () {
             err = checkBlank("select_due_dates_demo");
             if (err == 0) {
                 var datapass = "selected_dates="+valObj("select_due_dates_demo")+"&from_today="+from_todays;
-<<<<<<< HEAD
                 sendDataPost1("POST","/Organization/Client-due-demographics/"+organization_details[0].organization_id,datapass,cObj("display_data"),cObj("interface_load"));
-=======
-                sendDataPost1("POST","/Client-due-demographics",datapass,cObj("display_data"),cObj("interface_load"));
->>>>>>> origin/main
                 setTimeout(() => {
                     var timeout = 0;
                     var idss = setInterval(() => {
@@ -1213,11 +1190,7 @@ function displayRecord_2(start, finish, arrays) {
                     assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
                 }
             
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
->>>>>>> origin/main
             counter++;
         }
     }else{
@@ -1237,11 +1210,7 @@ function displayRecord_2(start, finish, arrays) {
             }
             
             // console.log(location);
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
         fins = total;

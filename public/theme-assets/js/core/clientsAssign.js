@@ -26,7 +26,6 @@ window.onload = function() {
             // create the collumn array that will take the row value
             var col = [];
             // console.log(element);
-<<<<<<< HEAD
             col.push(element['organization_id']);
             col.push(element['organization_name']);
             col.push(element['organization_address']);
@@ -39,20 +38,6 @@ window.onload = function() {
             col.push(element['BusinessShortCode']);
             col.push(element['wallet']);
             col.push(element['account_no']);
-=======
-            col.push(element['client_id']);
-            col.push(element['client_name']);
-            col.push(element['client_network']);
-            col.push(element['client_status']);
-            col.push(element['clients_contacts']);
-            col.push(element['client_address']);
-            col.push(element['monthly_payment']);
-            col.push(element['next_expiration_date']);
-            col.push(element['payments_status']);
-            col.push(element['router_name']);
-            col.push(element['wallet_amount']);
-            col.push(element['client_account']);
->>>>>>> origin/main
             // var col = element.split(":");
             rowsColStudents.push(col);
         }
@@ -91,11 +76,7 @@ function displayRecord(start, finish, arrays) {
                     // if the user is active
                     status = "<span class='badge badge-danger'> </span>";
                 }
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder disabled "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
     }else{
@@ -107,11 +88,7 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder disabled "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
-=======
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
->>>>>>> origin/main
             counter++;
         }
         fins = total;

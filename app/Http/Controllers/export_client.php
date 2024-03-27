@@ -11,7 +11,6 @@ class export_client extends Controller
 {
     //
     function exportClients(){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -19,21 +18,12 @@ class export_client extends Controller
         // echo "This might take a while";
         // get all the routers you do have
         $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0'");
-=======
-        // echo "This might take a while";
-        // get all the routers you do have
-        $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0'");
->>>>>>> origin/main
         // get the users from the database and link them to their respective router
         // for each router loop through the router and get its clients and know how many are connected to the router
         $my_router_data = [];
         foreach ($router_data as $value) {
             $router_id = $value->router_id;
-<<<<<<< HEAD
             $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
-=======
-            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
->>>>>>> origin/main
             $data_in = 0;
             // get the users that their details are present
             // connect to the router and get user details
@@ -164,17 +154,12 @@ class export_client extends Controller
         return view("export",["export_information"=>$my_router_data]);
     }
     function router_client_information($router_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // get router information
         $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '$router_id'");
-=======
-        // get router information
-        $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '$router_id'");
->>>>>>> origin/main
         // get the ip address
             // Initiate curl session in a variable (resource)
             $curl_handle = curl_init();
@@ -232,11 +217,7 @@ class export_client extends Controller
             $router_secrets = json_decode($curl_data);
             
             // get the clients information in the router and see if they are 
-<<<<<<< HEAD
             $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
-=======
-            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
->>>>>>> origin/main
             // loop through each client and display their information
             $client_information_pppoe = [];
             $client_information_static = [];
@@ -346,15 +327,11 @@ class export_client extends Controller
             return view("routerExport",["RouterName" => $router_data[0]->router_name,"client_information_static" => $client_information_static,"client_information_pppoe" => $client_information_pppoe,"router_id" => $router_id]);
     }
     function sync_client_router($client_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `client_id` = '$client_id'");
-=======
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `client_id` = '$client_id'");
->>>>>>> origin/main
         $client_name = $client_data[0]->client_name;
         $client_account = $client_data[0]->client_account;
         $client_address = $client_data[0]->client_address;
@@ -413,20 +390,12 @@ class export_client extends Controller
             $router_simple_queues = json_decode($curl_data);
             
             // lets get the router connection information
-<<<<<<< HEAD
             $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
-=======
-            $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
->>>>>>> origin/main
             // connect to the router
             $API = new routeros_api();
             $API->debug = false;
             if ($API->connect($router_data[0]->router_ipaddr,$router_data[0]->router_api_username,$router_data[0]->router_api_password,$router_data[0]->router_api_port)) {
-<<<<<<< HEAD
                 $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `client_id` = '$client_id';");
-=======
-                $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `client_id` = '$client_id';");
->>>>>>> origin/main
                 // return $client_data;
                 $old_network = $client_network;
                 $old_client_gw = $client_gw_name;
@@ -537,11 +506,7 @@ class export_client extends Controller
                 // $download = $download_speed.$unit2;
     
                 // // update the table
-<<<<<<< HEAD
                 // DB::connection("mysql2")->table('client_tables')
-=======
-                // DB::table('client_tables')
->>>>>>> origin/main
                 //         ->where('client_id', $client_id)
                 //         ->update([
                 //             'client_name' => $client_name,
@@ -608,11 +573,7 @@ class export_client extends Controller
                             $id = $value;
                             // return $id;
                             // connect to the router and set the necessary fields
-<<<<<<< HEAD
                             $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
-=======
-                            $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
->>>>>>> origin/main
                             // connect to the router
                             $API = new routeros_api();
                             $API->debug = false;
@@ -640,11 +601,7 @@ class export_client extends Controller
             if ($present == 0) {
                 // add the interface beacause its not present
                 // connect to the router and set the necessary fields
-<<<<<<< HEAD
                 $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
-=======
-                $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_name."'");
->>>>>>> origin/main
                 // connect to the router
                 $API = new routeros_api();
                 $API->debug = false;
@@ -666,17 +623,12 @@ class export_client extends Controller
         }
     }
     function exportall($router_id){
-<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // return $router_id;
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
-=======
-        // return $router_id;
-        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted` = '0' AND `router_name` = '$router_id'");
->>>>>>> origin/main
         // return $client_data;
         // loop through the clients data and sync their informatiom
         // get the ip address and queue list above
@@ -741,20 +693,12 @@ class export_client extends Controller
         $router_secrets = json_decode($curl_data);
         
         // lets get the router connection information
-<<<<<<< HEAD
         $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_id."'");
-=======
-        $router_data = DB::select("SELECT * FROM `router_tables` WHERE `deleted` = '0' AND `router_id` = '".$router_id."'");
->>>>>>> origin/main
         // connect to the router
         $API = new routeros_api();
         $API->debug = false;
         if ($API->connect($router_data[0]->router_ipaddr,$router_data[0]->router_api_username,$router_data[0]->router_api_password,$router_data[0]->router_api_port)) {
-<<<<<<< HEAD
             // $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id'");
-=======
-            // $client_data = DB::select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id'");
->>>>>>> origin/main
             // loop through the clients
             for ($indexes=0; $indexes < count($client_data); $indexes++) { 
                 $client_name = $client_data[$indexes]->client_name;

@@ -136,20 +136,12 @@ date_default_timezone_set('Africa/Nairobi');
 
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true"
         data-img="/theme-assets/images/backgrounds/02.jpg">
-<<<<<<< HEAD
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
                         href="/Dashboard">
                         <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
                             src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
-=======
-        <div class="navbar-header">
-            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
-                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand "
-                        href="/Dashboard"><img class="brand-logo w-100 mb-1 " alt="Chameleon admin logo"
-                            src="/theme-assets/images/logo.jpeg" />
->>>>>>> origin/main
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
             </ul>
@@ -237,7 +229,6 @@ date_default_timezone_set('Africa/Nairobi');
                                     @if (session('success'))
                                         <p class="text-success">{{ session('success') }}</p>
                                     @endif
-<<<<<<< HEAD
                                     <div class="row">
                                         <div class="col-md-6">
                                             <a href="/Accounts/add" class="btn btn-infor"><i class="ft-arrow-left"></i>
@@ -255,10 +246,6 @@ date_default_timezone_set('Africa/Nairobi');
                                             </div>
                                         </div>
                                     </div>
-=======
-                                    <a href="/Accounts/add" class="btn btn-infor"><i class="ft-arrow-left"></i>
-                                        Back to list</a>
->>>>>>> origin/main
                                     <h6><strong>Update Administrator</strong></h6>
                                     <p class="card-text">Fill all fields to add the Administrator.</p>
                                     <form action="/updateAdministrator" method="post">
