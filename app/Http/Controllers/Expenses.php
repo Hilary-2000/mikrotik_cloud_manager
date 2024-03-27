@@ -18,6 +18,7 @@ class Expenses extends Controller
     }
     //manages expenses
     function getExpenses(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -27,12 +28,20 @@ class Expenses extends Controller
         $first_year = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `id` ASC");
         $year = count($first_year) > 0 ? date("Y",strtotime($first_year[0]->date_recorded)) : date("Y");
         $exp_category = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+=======
+        // return redirect("/Dashboard");
+        $expenses = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `id` DESC");
+        $first_year = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `id` ASC");
+        $year = count($first_year) > 0 ? date("Y",strtotime($first_year[0]->date_recorded)) : date("Y");
+        $exp_category = DB::select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+>>>>>>> origin/main
         $exp_cat_data = count($exp_category) > 0 ? ($this->isJson_report($exp_category[0]->value) ? json_decode($exp_category[0]->value) : []) : [];
         // proceed with the data
         return view("expenses",["expenses" => $expenses,"exp_category" => $exp_cat_data, "year" => $year]);
     }
 
     function viewExpense($expense_index){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -40,6 +49,11 @@ class Expenses extends Controller
         $select = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `id` = ? ",[$expense_index]);
         if (count($select) > 0) {
             $exp_category = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+=======
+        $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `id` = ? ",[$expense_index]);
+        if (count($select) > 0) {
+            $exp_category = DB::select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+>>>>>>> origin/main
             $exp_cat_data = count($exp_category) > 0 ? ($this->isJson_report($exp_category[0]->value) ? json_decode($exp_category[0]->value) : []) : [];
             return view("expensesInfo",["expense_data" => $select[0],"exp_category" => $exp_cat_data]);
         }else {
@@ -49,10 +63,13 @@ class Expenses extends Controller
     }
 
     function updateExpense(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // return $req;
         $expense_id = $req->input("expense_id");
         $expense_name = $req->input("expense_name");
@@ -66,16 +83,23 @@ class Expenses extends Controller
 
         // update the database
         $now = date("YmdHis");
+<<<<<<< HEAD
         $update = DB::connection("mysql2")->update("UPDATE `Expenses` SET `name` = ?, `category` = ?, `unit_of_measure` = ?, `unit_price` = ?, `unit_amount` = ?, `total_price` = ?, `date_recorded` = ?, `date_changed` = ?, `description` = ? WHERE `id` = ?",[$expense_name,$expense_category,$expense_unit,$expense_unit_price,$expense_quantity,$expense_total_price,$expense_date,$now,$expense_description,$expense_id]);
+=======
+        $update = DB::update("UPDATE `Expenses` SET `name` = ?, `category` = ?, `unit_of_measure` = ?, `unit_price` = ?, `unit_amount` = ?, `total_price` = ?, `date_recorded` = ?, `date_changed` = ?, `description` = ? WHERE `id` = ?",[$expense_name,$expense_category,$expense_unit,$expense_unit_price,$expense_quantity,$expense_total_price,$expense_date,$now,$expense_description,$expense_id]);
+>>>>>>> origin/main
         session()->flash("expense_success","Expense record \"".$expense_name."\" updated successfully!");
         return redirect("/Expense/View/".$expense_id."");
     }
 
     function generateReports(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // return $req;
         $expense_date_option = $req->input("expense_date_option");
         $single_date = $req->input("single_date");
@@ -88,6 +112,7 @@ class Expenses extends Controller
         $title = "No data to display!";
         if ($expense_categories == "All") {
             if ($expense_date_option == "all") {
+<<<<<<< HEAD
                 $select = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `id` DESC");
                 $expense_data = $select;
                 $title = "Expense Data List";
@@ -101,11 +126,27 @@ class Expenses extends Controller
                 $title = "All Expense recorded between ".date("D dS M Y",strtotime($from_date))." and ".date("D dS M Y",strtotime($to_date))."";
             }else {
                 $select = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0'  ORDER BY `id` DESC");
+=======
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `id` DESC");
+                $expense_data = $select;
+                $title = "Expense Data List";
+            }elseif ($expense_date_option == "select date") {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0'  AND `date_recorded` LIKE '".date("Ymd",strtotime($single_date))."%' ORDER BY `id` DESC");
+                $expense_data = $select;
+                $title = "All Expense recorded on ".date("D dS M Y",strtotime($single_date));
+            }elseif ($expense_date_option == "select between date") {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` BETWEEN '".date("Ymd",strtotime($from_date))."000000' AND '".date("Ymd",strtotime($to_date))."235959' ORDER BY `id` DESC");
+                $expense_data = $select;
+                $title = "All Expense recorded between ".date("D dS M Y",strtotime($from_date))." and ".date("D dS M Y",strtotime($to_date))."";
+            }else {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0'  ORDER BY `id` DESC");
+>>>>>>> origin/main
                 $expense_data = $select;
                 $title = "Expense Data List";
             }
         }else {
             if ($expense_date_option == "all") {
+<<<<<<< HEAD
                 $select = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `category` = ? ORDER BY `id` DESC",[$expense_categories]);
                 $expense_data = $select;
                 $title = "Showing all Expense recorded under \"".$expense_categories."\" Category.";
@@ -119,6 +160,21 @@ class Expenses extends Controller
                 $title = "All Expense recorded between ".date("D dS M Y",strtotime($from_date))." and ".date("D dS M Y",strtotime($to_date)).""." under \"".$expense_categories."\" Category.";
             }else {
                 $select = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0'  AND `category` = ? ORDER BY `id` DESC",[$expense_categories]);
+=======
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `category` = ? ORDER BY `id` DESC",[$expense_categories]);
+                $expense_data = $select;
+                $title = "Showing all Expense recorded under \"".$expense_categories."\" Category.";
+            }elseif ($expense_date_option == "select date") {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `category` = ? AND `date_recorded` LIKE '".date("Ymd",strtotime($single_date))."%' ORDER BY `id` DESC",[$expense_categories]);
+                $expense_data = $select;
+                $title = "Showing all Expense recorded on ".date("D dS M Y",strtotime($single_date))." under \"".$expense_categories."\" Category.";
+            }elseif ($expense_date_option == "select between date") {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `category` = ? AND `date_recorded` BETWEEN '".date("Ymd",strtotime($from_date))."000000' AND '".date("Ymd",strtotime($to_date))."235959' ORDER BY `id` DESC",[$expense_categories]);
+                $expense_data = $select;
+                $title = "All Expense recorded between ".date("D dS M Y",strtotime($from_date))." and ".date("D dS M Y",strtotime($to_date)).""." under \"".$expense_categories."\" Category.";
+            }else {
+                $select = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0'  AND `category` = ? ORDER BY `id` DESC",[$expense_categories]);
+>>>>>>> origin/main
                 $expense_data = $select;
                 $title = "All Expense recorded under \"".$expense_categories."\" Category.";
             }
@@ -143,11 +199,14 @@ class Expenses extends Controller
         if (count($table_data) > 0) {
             // return $new_client_data;
             $pdf = new PDF("P","mm","A4");
+<<<<<<< HEAD
             if (session("organization_logo")) {
                 $pdf->setCompayLogo("../../../../../../../../..".public_path(session("organization_logo")));
                 $pdf->set_company_name(session("organization")->organization_name);
                 $pdf->set_school_contact(session("organization")->organization_main_contact);
             }
+=======
+>>>>>>> origin/main
             $pdf->set_document_title($title);
             $pdf->AddPage();
             $pdf->SetFont('Times', 'B', 10);
@@ -173,10 +232,13 @@ class Expenses extends Controller
     }
 
     function expenseStatistics(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // get the data for weeks months and years
         $days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
         $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -200,7 +262,11 @@ class Expenses extends Controller
         
 
         // get when the first expense was recorded
+<<<<<<< HEAD
         $first_payment = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+=======
+        $first_payment = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+>>>>>>> origin/main
         $first_payment_date = count($first_payment) > 0 ? $first_payment[0]->date_recorded : date("YmdHis");
         // return $first_payment_date;
 
@@ -231,8 +297,13 @@ class Expenses extends Controller
             $exp_stats = [];
             $exp_records = [];
             for ($index=0; $index < 7; $index++) {
+<<<<<<< HEAD
                 $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND  `date_recorded` LIKE '".date("Ymd",strtotime($day_1))."%'");
                 $daily_expense_records = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ymd",strtotime($day_1))."%' ORDER BY `date_recorded` DESC");
+=======
+                $get_amount_per_day = DB::select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND  `date_recorded` LIKE '".date("Ymd",strtotime($day_1))."%'");
+                $daily_expense_records = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ymd",strtotime($day_1))."%' ORDER BY `date_recorded` DESC");
+>>>>>>> origin/main
                 $exp_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
                 
 
@@ -279,7 +350,11 @@ class Expenses extends Controller
         //  return $last_end_month;
  
          // get when the first client made their payment
+<<<<<<< HEAD
          $first_payment = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+=======
+         $first_payment = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+>>>>>>> origin/main
          $first_payment_date = count($first_payment) > 0 ? $first_payment[0]->date_recorded : date("YmdHis");
         //  return $first_payment_date;
  
@@ -307,8 +382,13 @@ class Expenses extends Controller
              $expense_stats = [];
              $expense_records = [];
              for ($index=0; $index < 12; $index++) {
+<<<<<<< HEAD
                  $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ym",strtotime($day_1))."%'");
                  $daily_expense_records = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ym",strtotime($day_1))."%' ORDER BY `date_recorded` DESC");
+=======
+                 $get_amount_per_day = DB::select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ym",strtotime($day_1))."%'");
+                 $daily_expense_records = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ym",strtotime($day_1))."%' ORDER BY `date_recorded` DESC");
+>>>>>>> origin/main
                  $exp_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
                  
 
@@ -334,7 +414,11 @@ class Expenses extends Controller
         // return $expense_stats_monthly;
 
         // get the yearly data
+<<<<<<< HEAD
         $first_payment = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+=======
+        $first_payment = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' ORDER BY `date_recorded` ASC LIMIT 1");
+>>>>>>> origin/main
         $first_payment_year = date("YmdHis",strtotime(count($first_payment) > 0 ? $first_payment[0]->date_recorded : date("YmdHis")));
         // return $first_payment_year;
 
@@ -342,8 +426,13 @@ class Expenses extends Controller
         $expense_yearly_records = [];
 
         for ($index=(date("Y",strtotime($first_payment_year))*1); $index <= (date("Y")*1); $index++) {
+<<<<<<< HEAD
             $get_amount_per_day = DB::connection("mysql2")->select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$index."%'");
             $daily_exp_records = DB::connection("mysql2")->select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$index."%' ORDER BY `date_recorded` DESC");
+=======
+            $get_amount_per_day = DB::select("SELECT SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$index."%'");
+            $daily_exp_records = DB::select("SELECT * FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$index."%' ORDER BY `date_recorded` DESC");
+>>>>>>> origin/main
             $exp_amount = $get_amount_per_day[0]->Total == null ? 0 : $get_amount_per_day[0]->Total;
             
             $transaction_data = array("date" => $index,"expense_amount" => $exp_amount);
@@ -357,22 +446,31 @@ class Expenses extends Controller
     }
 
     function deleteExpenseRecords($expense_id){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $date_today = date("YmdHis");
         $delete = DB::connection("mysql2")->update("UPDATE `Expenses` SET `date_changed` = ?, `deleted` = '1' WHERE `id` = ?",[$date_today,$expense_id]);
+=======
+        $date_today = date("YmdHis");
+        $delete = DB::update("UPDATE `Expenses` SET `date_changed` = ?, `deleted` = '1' WHERE `id` = ?",[$date_today,$expense_id]);
+>>>>>>> origin/main
         session()->flash("expense_success","Expense record deleted successfully!");
         return redirect("/Expenses");
     }
 
     function deleteExpense($expense_id){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $exp_category = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+=======
+        $exp_category = DB::select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'expenses'");
+>>>>>>> origin/main
         if (count($exp_category) > 0) {
             $values = $exp_category[0]->value;
             if ($this->isJson_report($values)) {
@@ -388,7 +486,11 @@ class Expenses extends Controller
                     }
                 }
                 $new_value = json_encode($new_value);
+<<<<<<< HEAD
                 $update = DB::connection("mysql2")->update("UPDATE `settings` SET `value` = ?, `date_changed` = ? WHERE `keyword` = 'expenses'",[$new_value,date("YmdHis")]);
+=======
+                $update = DB::update("UPDATE `settings` SET `value` = ?, `date_changed` = ? WHERE `keyword` = 'expenses'",[$new_value,date("YmdHis")]);
+>>>>>>> origin/main
                 session()->flash("expense_success","Expense category \"".$expense_name."\" deleted successfully!");
                 return redirect("/Expenses");
             }
@@ -398,10 +500,13 @@ class Expenses extends Controller
     }
 
     function financeStats(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // return $req;
         $select_income_statement_period = $req->input("select_income_statement_period");
         $select_report_date = $req->input("select_report_date");
@@ -416,51 +521,91 @@ class Expenses extends Controller
         $title = "No title set";
         if ($select_income_statement_period == "All") {
             // get income
+<<<<<<< HEAD
             $select = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0'");
             $net_income = count($select) > 0 ? $select[0]->Total : 0;
 
             // get expense grouped by category
             $expense = DB::connection("mysql2")->select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' GROUP BY `category`");
+=======
+            $select = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0'");
+            $net_income = count($select) > 0 ? $select[0]->Total : 0;
+
+            // get expense grouped by category
+            $expense = DB::select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' GROUP BY `category`");
+>>>>>>> origin/main
             $expenses = count($expense) > 0 ? $expense : [];
             $title = "Full Income Statement For HypBits Enterprises";
         }elseif ($select_income_statement_period == "Daily") {
             $title = "Income Statement For HypBits Enterprises on \"".date("D dS M Y",strtotime($select_report_date))."\"";
             // get income
+<<<<<<< HEAD
             $select = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($select_report_date))."%'");
+=======
+            $select = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".date("Ymd",strtotime($select_report_date))."%'");
+>>>>>>> origin/main
             $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total)  : 0;
             // return $select;
 
             // get expense grouped by category
+<<<<<<< HEAD
             $expense = DB::connection("mysql2")->select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ymd",strtotime($select_report_date))."%' GROUP BY `category`");
+=======
+            $expense = DB::select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".date("Ymd",strtotime($select_report_date))."%' GROUP BY `category`");
+>>>>>>> origin/main
             $expenses = count($expense) > 0 ? $expense : [];
         }elseif ($select_income_statement_period == "Between Dates") {
             $title = "Income Statement For HypBits Enterprises between \"".date("D dS M Y",strtotime($select_report_from_date))."\" and \"".date("D dS M Y",strtotime($select_report_to_date))."\"";
             // get income
+<<<<<<< HEAD
             $select = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` BETWEEN ? AND ? ",[$select_report_from_date,$select_report_to_date]);
             $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
 
             // get expense grouped by category
             $expense = DB::connection("mysql2")->select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` BETWEEN ? AND ?  GROUP BY `category`",[$select_report_from_date,$select_report_to_date]);
+=======
+            $select = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` BETWEEN ? AND ? ",[$select_report_from_date,$select_report_to_date]);
+            $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
+
+            // get expense grouped by category
+            $expense = DB::select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` BETWEEN ? AND ?  GROUP BY `category`",[$select_report_from_date,$select_report_to_date]);
+>>>>>>> origin/main
             $expenses = count($expense) > 0 ? $expense : [];
         }elseif ($select_income_statement_period == "Monthly") {
             $monthly = date("Ym",strtotime($select_year_option."-".$select_mon_option."-01"));
             $title = "Income Statement For HypBits Enterprises on the Month of : ".date("F Y",strtotime($select_year_option."-".$select_mon_option."-01"));
             // return $monthly;
             // get income
+<<<<<<< HEAD
             $select = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".$monthly."%' ");
             $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
 
             // get expense grouped by category
             $expense = DB::connection("mysql2")->select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$monthly."%'  GROUP BY `category`");
+=======
+            $select = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".$monthly."%' ");
+            $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
+
+            // get expense grouped by category
+            $expense = DB::select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$monthly."%'  GROUP BY `category`");
+>>>>>>> origin/main
             $expenses = count($expense) > 0 ? $expense : [];
         }elseif ($select_income_statement_period == "Yearly") {
             $title = "Income Statement For HypBits Enterprises of the year : ".$select_year_option;
             // get income
+<<<<<<< HEAD
             $select = DB::connection("mysql2")->select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".$select_year_option."%' ");
             $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
 
             // get expense grouped by category
             $expense = DB::connection("mysql2")->select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$select_year_option."%'  GROUP BY `category`");
+=======
+            $select = DB::select("SELECT SUM(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `deleted` = '0' AND `transaction_date` LIKE '".$select_year_option."%' ");
+            $net_income = count($select) > 0 ? ($select[0]->Total == null ? 0 : $select[0]->Total) : 0;
+
+            // get expense grouped by category
+            $expense = DB::select("SELECT `category`, SUM(`total_price`) AS 'Total' FROM `Expenses` WHERE `deleted` = '0' AND `date_recorded` LIKE '".$select_year_option."%'  GROUP BY `category`");
+>>>>>>> origin/main
             $expenses = count($expense) > 0 ? $expense : [];
         }
 
@@ -507,6 +652,7 @@ class Expenses extends Controller
 
     // 
     function addExpenseCategory(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -515,6 +661,12 @@ class Expenses extends Controller
         $expense_category = $req->input("expense_category");
         // get the existing
         $expense_categories = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND  `keyword` = 'expenses'");
+=======
+        // return $req;
+        $expense_category = $req->input("expense_category");
+        // get the existing
+        $expense_categories = DB::select("SELECT * FROM `settings` WHERE `deleted` = '0' AND  `keyword` = 'expenses'");
+>>>>>>> origin/main
         $expense_category_saved = count($expense_categories) > 0 ? $expense_categories[0]->value : "[]";
 
         // get the expense categories
@@ -535,7 +687,11 @@ class Expenses extends Controller
 
             // encode the data to string and update
             $expense_category_saved = json_encode($expense_category_saved);
+<<<<<<< HEAD
             $update = DB::connection("mysql2")->update("UPDATE `settings` SET `value` = ?, `date_changed` = ? WHERE `keyword` = 'expenses'",[$expense_category_saved,date("YmdHis")]);
+=======
+            $update = DB::update("UPDATE `settings` SET `value` = ?, `date_changed` = ? WHERE `keyword` = 'expenses'",[$expense_category_saved,date("YmdHis")]);
+>>>>>>> origin/main
             
             session()->flash("expense_success","Expense category added successfully!");
             return redirect("/Expenses");
@@ -547,7 +703,11 @@ class Expenses extends Controller
 
             // encode the data to string and update
             $expense_category_saved = json_encode($expense_category_saved);
+<<<<<<< HEAD
             $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`,`value`,`status`) VALUES ('expenses',?,'1')",[$expense_category_saved]);
+=======
+            $insert = DB::insert("INSERT INTO `settings` (`keyword`,`value`,`status`) VALUES ('expenses',?,'1')",[$expense_category_saved]);
+>>>>>>> origin/main
             
             session()->flash("expense_success","Expense category added successfully!");
             return redirect("/Expenses");
@@ -556,10 +716,13 @@ class Expenses extends Controller
 
     // add expense
     function addExpense(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // return $req;
         $expense_name = $req->input("expense_name");
         $expense_category = $req->input("expense_category");
@@ -571,7 +734,11 @@ class Expenses extends Controller
         $expense_description = $req->input("expense_description");
 
         // insert the record in the database
+<<<<<<< HEAD
         $insert = DB::connection("mysql2")->insert("INSERT INTO `Expenses` (`name`,`category`,`unit_of_measure`,`unit_price`,`unit_amount`,`total_price`,`date_recorded`,`date_changed`,`description`) VALUES (?,?,?,?,?,?,?,?,?)",[$expense_name,$expense_category,$expense_unit,$expense_unit_price,$expense_quantity,$expense_total_price,$expense_date,$expense_date,$expense_description]);
+=======
+        $insert = DB::insert("INSERT INTO `Expenses` (`name`,`category`,`unit_of_measure`,`unit_price`,`unit_amount`,`total_price`,`date_recorded`,`date_changed`,`description`) VALUES (?,?,?,?,?,?,?,?,?)",[$expense_name,$expense_category,$expense_unit,$expense_unit_price,$expense_quantity,$expense_total_price,$expense_date,$expense_date,$expense_description]);
+>>>>>>> origin/main
         // return to the default page of the expenses
         session()->flash("expense_success","Expense added successfully!");
         return redirect("/Expenses");

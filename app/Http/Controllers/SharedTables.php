@@ -49,10 +49,13 @@ class SharedTables extends Controller
 
     // SaveTable
     function SaveTable(Request $request){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // return $request;
         $table_carry_data = $request->input("table_carry_data");
         $table_comments = $request->input("table_comments");

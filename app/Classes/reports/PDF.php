@@ -93,8 +93,12 @@ class PDF extends FPDF
         $this->Cell(0, 5, 'Page ' . $this->PageNo() . '', 0, 0, 'C');
         $this->Ln();
         $this->SetFont('Arial', 'I', 8);
+<<<<<<< HEAD
         $this->Cell($this->company_header_position, 3, "This is a computer generated document. If found please return to " . ucwords(strtolower(trim($this->company_name))) . " or contact " . $this->company_contact . "",0,1,'C');
         $this->Cell($this->company_header_position, 4, "Date Generated: " . date("D dS M Y @ h:i:sA"),0,0,'C');
+=======
+        $this->Cell($this->company_header_position, 7, "This is a computer generated document. If found please return to " . ucwords(strtolower(trim($this->company_name))) . " or contact " . $this->company_contact . "",0,0,'C');
+>>>>>>> origin/main
     }
 
     function setHeaderPos($pos)

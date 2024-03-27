@@ -14,7 +14,10 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         '/Transact',
+<<<<<<< HEAD
         '/Validate',
+=======
+>>>>>>> origin/main
         '/connect_router',
         '/remove_interface_bridge',
         '/add_bridge',
@@ -35,7 +38,11 @@ class VerifyCsrfToken extends Middleware
         "/get_internet_access",
         '/get_supply_method',
         'wireless_settings',
+<<<<<<< HEAD
         '/Client-due-demographics',
         '/Organization/Client-due-demographics/*'
+=======
+        '/Client-due-demographics'
+>>>>>>> origin/main
     ];
 }

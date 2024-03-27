@@ -187,7 +187,11 @@ function displayRecord(start, finish, arrays) {
                     // if the user is active
                     status = "<span class='badge badge-danger'> </span>";
                 }
+<<<<<<< HEAD
             tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+=======
+            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Clients/View/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
     }else{
@@ -199,7 +203,11 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
+<<<<<<< HEAD
             tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+=======
+            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Clients/View/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
         fins = total;

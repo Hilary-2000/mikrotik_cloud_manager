@@ -133,12 +133,19 @@
     @endphp
 
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+<<<<<<< HEAD
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
                         href="/Dashboard">
                         <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
                             src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
+=======
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
+                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand " href="/Dashboard"><img class="brand-logo w-100 mb-1 "
+                            alt="Chameleon admin logo" src="/theme-assets/images/logo.jpeg" />
+>>>>>>> origin/main
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
             </ul>
@@ -147,6 +154,7 @@
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class="active"><a href="/Dashboard"><i class="ft-home"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
                 </li>
+<<<<<<< HEAD
                 <li class="nav-item"><a href="/Clients"><i class="ft-users"></i><span class="menu-title" data-i18n="">User Accounts</span></a>
                 </li>
                 <li class="nav-item"><a href="/Routers"><i class="ft-layers"></i><span class="menu-title" data-i18n="">Packages</span></a>
@@ -154,6 +162,22 @@
                 <li class="nav-item"><a href="/sms"><i class="ft-mail"></i><span class="menu-title" data-i18n="">SMS</span></a>
                 </li>
                 <li class="nav-item"><a href="/Accounts"><i class="ft-lock"></i><span class="menu-title" data-i18n="">Account and Profile</span></a>
+=======
+                <li class="{{showOption($priviledges,"My Clients")}} nav-item"><a href="/Clients"><i class="ft-users"></i><span class="menu-title" data-i18n="">My Clients</span></a>
+                </li>
+                <li class="{{(showOption($priviledges,"Transactions") == "hide" && showOption($priviledges,"Expenses") == "hide") ? "hide" : ""}} nav-item has-sub"><a href="#"><i class="ft-activity"></i><span class="menu-title" data-i18n="">Accounts</span></a>
+                    <ul class="menu-content" style="">
+                        <li class="{{showOption($priviledges,"Transactions")}} nav-item"><a href="/Transactions"><span><i class="ft-award"></i> Transactions</span></a>
+                        </li>
+                      <li class="{{showOption($priviledges,"Expenses")}} nav-item"><a href="/Expenses"><i class="ft-bar-chart-2"></i> Expenses</a></li>
+                    </ul>
+                </li>
+                <li class="{{showOption($priviledges,"My Routers")}} nav-item"><a href="/Routers"><i class="ft-layers"></i><span class="menu-title" data-i18n="">My Routers</span></a>
+                </li>
+                <li class="{{showOption($priviledges,"SMS")}} nav-item"><a href="/sms"><i class="ft-mail"></i><span class="menu-title" data-i18n="">SMS</span></a>
+                </li>
+                <li class="{{showOption($priviledges,"Account and Profile")}} nav-item"><a href="/Accounts"><i class="ft-lock"></i><span class="menu-title" data-i18n="">Account and Profile</span></a>
+>>>>>>> origin/main
                 </li>
             </ul>
         </div>
@@ -469,10 +493,17 @@
     </div>
     <!-- ////////////////////////////////////////////////////////////////////////////-->
     <!-- The footer -->
+<<<<<<< HEAD
     <footer style="margin-bottom: 0% !important" class="footer footer-static footer-dark navbar-border navbar-shadow">
     <div  class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block"><?php echo date("Y"); ?> &copy; Copyright Hypbits Enterprises</span>
         <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
             <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com" target="_blank"> Ladybird Softech Co.</a></li>
+=======
+    <footer style="margin-bottom: 0% !important" class="footer footer-static footer-light navbar-border navbar-shadow">
+    <div  class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block"><?php echo date("Y"); ?> &copy; Copyright Hypbits Enterprises</span>
+        <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
+            <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com/sims/" target="_blank"> Ladybird Softech Co.</a></li>
+>>>>>>> origin/main
         </ul>
     </div>
 </footer>

@@ -10,6 +10,7 @@ use App\Http\Controllers\admin;
 use App\Http\Controllers\Clients_data;
 use App\Http\Controllers\export_client;
 use App\Http\Controllers\billsms_manager;
+<<<<<<< HEAD
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Expenses;
 use App\Http\Controllers\Organization;
@@ -22,6 +23,10 @@ use App\Http\Controllers\Router_Cloud;
 use App\Http\Controllers\SharedTables;
 use App\Http\Controllers\Transactions;
 use Facade\Ignition\Support\Packagist\Package;
+=======
+use App\Http\Controllers\Expenses;
+use App\Http\Controllers\SharedTables;
+>>>>>>> origin/main
 use Symfony\Component\Mime\Crypto\SMime;
 
 /*
@@ -35,19 +40,34 @@ use Symfony\Component\Mime\Crypto\SMime;
 |
 */
 
+<<<<<<< HEAD
+=======
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+>>>>>>> origin/main
 // Route::view("/","mainpage");
 Route::get("/", function () {
     return redirect('/Hypbits');
 });
+<<<<<<< HEAD
 
 // Route::view("/Dashboard","index");
 Route::get("/Dashboard",[Dashboard::class,"getDashboard"])->name("Dashboard");
+=======
+// Route::view("/Dashboard","index");
+Route::get("/Dashboard",[Transaction::class,"getDashboard"]);
+// Route::view("/Clients","myclients");
+// Route::view("/Transactions","mytransactions");
+// Route::view("/Routers","myRouter");
+>>>>>>> origin/main
 Route::view("/Routers/New","newrouter");
 Route::get('/Login', function () {
     if (session('error')) {
         session()->flash("error",session('error'));
     }
     return redirect('/Hypbits');
+<<<<<<< HEAD
 }) ->name("Login");
 
 // Special for Hypbits
@@ -184,6 +204,30 @@ Route::post("addClient",[Clients::class,'processNewClient'])->name("clients.adds
 Route::post("addClientPppoe",[Clients::class,'processClientPPPoE'])->name("clients.addppoe");
 // the clients controller route
 Route::get("/Clients",[Clients::class,'getClientData'])->name("myclients");
+=======
+});
+// Route::view("/sms","adminsms");
+// Route::view("/Login","login");
+// Special for Hypbits
+Route::view("/Hypbits","Login.login");
+Route::view("/verify","Login.verify");
+// Route::view("/Clients/NewStatic","newClient");
+
+//login controller router
+Route::post("/proc_login",[login::class,"processLogin"]);
+Route::post("/verifycode",[Login::class,"processVerification"]);
+
+// save client route
+Route::post("addClient",[Clients::class,'processNewClient'])->name("clients.addstatic");
+// save minimum payment
+Route::post("/Client/Update/MinimumPay",[Clients::class,"updateMinPay"])->name("client.update.minimum_payment.static");
+// save client pppoe
+Route::post("addClientPppoe",[Clients::class,'processClientPPPoE'])->name("clients.addppoe");
+// the clients controller route
+Route::get("/Clients",[Clients::class,'getClientData']);
+// get the routers information
+Route::get("/Routers",[Clients::class,'getRouterData']);
+>>>>>>> origin/main
 // get the router information for the new client
 Route::get("/Clients/NewStatic",[Clients::class,"getRouterDataClients"]);
 Route::get("/Clients/NewPPPoE",[Clients::class,"getRouterDatappoe"])->name("newclient.pppoe");
@@ -234,6 +278,7 @@ Route::post("addRouter",[Clients::class,'addRouter']);
 
 // de-activate and activate user the user
 Route::get("/deactivate/{userid}",[Clients::class,"deactivate"]);
+<<<<<<< HEAD
 Route::get("/deactivate/{userid}/{db_name}",[Clients::class,"deactivate"]);
 Route::get("/activate/{userid}",[Clients::class,"activate"]);
 Route::get("/activate/{userid}/{db_name}",[Clients::class,"activate"]);
@@ -241,6 +286,13 @@ Route::get("/activate/{userid}/{db_name}",[Clients::class,"activate"]);
 // deactivate and activate the user api
 // Route::get("/deactivate_user/{userid}",[Clients::class,"deactivate2"]);
 // Route::get("/activate_user/{userid}",[Clients::class,"activate2"]);
+=======
+Route::get("/activate/{userid}",[Clients::class,"activate"]);
+
+// deactivate and activate the user api
+Route::get("/deactivate_user/{userid}",[Clients::class,"deactivate2"]);
+Route::get("/activate_user/{userid}",[Clients::class,"activate2"]);
+>>>>>>> origin/main
 
 // deactivate the user payment status
 Route::get("/deactivatePayment/{userid}", [Clients::class,"dePay"]);
@@ -250,6 +302,7 @@ Route::get("/activatePayment/{userid}", [Clients::class,"actPay"]);
 
 
 //TRANSACTIONS SECTION
+<<<<<<< HEAD
 // Route::get("/Transactions",[Transaction::class,"getTransactions"]);
 // Route::get("/Transactions/View/{trans_id}",[Transaction::class,"transDetails"]);
 // Route::get("/Assign/Transaction/{trans_id}/Client/{client_id}",[Transaction::class,"assignTransaction"]);
@@ -271,6 +324,19 @@ Route::get("/Routers/Delete/{routerid}",[Router_Cloud::class,"deleteRouter"]);
 
 // get the routers information
 Route::get("/Routers",[Router_Cloud::class,'getRouterData'])->name("my_routers");
+=======
+Route::get("/Transactions",[Transaction::class,"getTransactions"]);
+Route::get("/Transactions/View/{trans_id}",[Transaction::class,"transDetails"]);
+Route::get("/Assign/Transaction/{trans_id}/Client/{client_id}",[Transaction::class,"assignTransaction"]);
+Route::get("/confirmTransfer/{user_id}/{transaction_id}",[Transaction::class,"confirmTransfer"]);
+Route::post("/Transact",[Transaction::class,"mpesaTransactions"]);
+
+// Router section
+Route::get("/Router/View/{routerid}",[Router::class,"getRouterInfor"]);
+Route::get("/Routers/Delete/{routerid}",[Router::class,"deleteRouter"]);
+Route::get("/Router/Reboot/{routerid}",[Router::class,"reboot"]);
+Route::post("/updateRouter",[Router::class,"updateRoute"]);
+>>>>>>> origin/main
 
 // Sms section
 Route::get("/sms",[Sms::class,"getSms"]);
@@ -288,11 +354,15 @@ Route::post("/sendsms_routers",[Sms::class,"sendsms_routers"]);
 Route::get("/Accounts",[admin::class,"getAdmin"]);
 Route::post("/changePasswordAdmin", [admin::class,"updatePassword"]);
 Route::get("/Accounts/add",[admin::class,"addAdmin"]);
+<<<<<<< HEAD
 Route::get("/Accounts/delete/{admin_id}",[admin::class,"delete_admin"])->name("delete_admin");
+=======
+>>>>>>> origin/main
 Route::post("/addAdministrator", [admin::class,"addAdministrator"]);
 Route::get("/Admin/View/{admin_id}", [admin::class,"viewAdmin"]);
 Route::post("/updateAdministrator", [admin::class,"updateAdmin"]);
 Route::post("/update_dp", [admin::class,"upload_dp"]);
+<<<<<<< HEAD
 Route::post("/update_company_dp", [admin::class,"update_company_dp"]);
 Route::post("/update_admin", [admin::class,"update_admin"]);
 Route::post("/update_delete_option", [admin::class,"update_delete_option"]);
@@ -300,6 +370,11 @@ Route::get("/delete_pp/{admin_id}",[admin::class,"delete_pp"]);
 Route::get("/delete_pp_organization",[admin::class,"delete_pp_organization"]);
 Route::post("/update_organization_profile",[admin::class,"update_organization_profile"]);
 
+=======
+Route::post("/update_admin", [admin::class,"update_admin"]);
+Route::post("/update_delete_option", [admin::class,"update_delete_option"]);
+Route::get("/delete_pp/{admin_id}",[admin::class,"delete_pp"]);
+>>>>>>> origin/main
 
 // routes for the clients information
 Route::get("/ClientDashboard",[Clients_data::class,"getClientInfor"]);
@@ -387,7 +462,11 @@ Route::post("/wireless_settings",[Router::class,"wireless_settings"]);
 // statistics
 Route::get("/Client-Statistics",[Clients::class,'getClients_Statistics']);
 Route::post("/Client-due-demographics",[Clients::class,'clientsDemographics']);
+<<<<<<< HEAD
 // Route::get("/Transactions/Statistics",[Transaction::class,'transactionStatistics']);
+=======
+Route::get("/Transactions/Statistics",[Transaction::class,'transactionStatistics']);
+>>>>>>> origin/main
 
 // router logs
 Route::get("/Router/writeLogs/{router_id}",[Router::class,"writeRouterLogs"]);

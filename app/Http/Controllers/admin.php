@@ -32,6 +32,7 @@ class admin extends Controller
 
     //all administrator activities
     function getAdmin(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -39,6 +40,11 @@ class admin extends Controller
         if (session("Userids")) {
             $admin_id = session("Userids");
             $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '$admin_id' AND `organization_id` = '".session('organization_id')."' AND `deleted` = '0'");
+=======
+        if (session("Userids")) {
+            $admin_id = session("Userids");
+            $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '$admin_id' AND `deleted` = '0'");
+>>>>>>> origin/main
             $date = $admin_data[0]->last_time_login;
 
             // privileged
@@ -60,7 +66,11 @@ class admin extends Controller
             $dates2 = date("D dS M-Y  h:i:sa", $d);
             $delete_sms = "";
             $delete_trans = "";
+<<<<<<< HEAD
             $settings = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0'");
+=======
+            $settings = DB::select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0'");
+>>>>>>> origin/main
             if (count($settings) > 0) {
                 $delete_infor = $settings[0]->value;
                 $delete_infor = json_decode($delete_infor);
@@ -73,6 +83,7 @@ class admin extends Controller
                     }
                 }
             }
+<<<<<<< HEAD
 
 
             // get the data for the organization
@@ -86,16 +97,22 @@ class admin extends Controller
             // return $organization;
 
             return view("account",["admin_data" => $admin_data , "date_time" => $dates2, "delete_trans" => $delete_trans,"delete_sms"=>$delete_sms, "organization" => $organization[0]]);
+=======
+            return view("account",["admin_data" => $admin_data , "date_time" => $dates2, "delete_trans" => $delete_trans,"delete_sms"=>$delete_sms]);
+>>>>>>> origin/main
         }else{
             session()->flash("error","Please login again to proceed to view your profile");
             return redirect("/Login");
         }
     }
     function updatePassword(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         // insert the data into the database
         $username = $req->input('username');
         $admin_id = $req->input('admin_id');
@@ -110,10 +127,27 @@ class admin extends Controller
                 // this means the username is present
                 DB::table("admin_tables")->where("admin_id",$admin_id)->update(["admin_password" => $confirm_password,"date_changed" => date("YmdHis")]);
                 session()->flash("success","You have successfully updated your password!");
+<<<<<<< HEAD
                 
                 $new_client = new Clients();
                 $txt = ":Admin ( ".session('Usernames')." ) successfully updated password"."!";
                 $new_client->log($txt);
+=======
+        
+                // log file capture error
+                // read the data 
+                $myfile = fopen(public_path("/logs/log.txt"), "r") or die("Unable to open file!");
+                $file_sizes = filesize(public_path("/logs/log.txt")) > 0?filesize(public_path("/logs/log.txt")):8190;
+                $existing_txt = fread($myfile,$file_sizes);
+                // return $existing_txt;
+                $myfile = fopen(public_path("/logs/log.txt"), "w") or die("Unable to open file!");
+                $date = date("dS M Y (H:i:sa)");
+                $txt = $date.":Admin ( ".session('Usernames')." ) successfully updated password "."!\n".$existing_txt;
+                // return $txt;
+                fwrite($myfile, $txt);
+                fclose($myfile);
+                // end of log file
+>>>>>>> origin/main
                 return redirect("/Accounts");
             }else {
                 // the admin is not present
@@ -127,12 +161,17 @@ class admin extends Controller
         }
     }
     function addAdmin(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // get all the usernames present 
         $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `deleted` = '0' AND `organization_id` = '".session('organization_id')."'");
+=======
+        // get all the usernames present 
+        $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `deleted` = '0'");
+>>>>>>> origin/main
         $username = [];
         $date = [];
         foreach ($admin_data as $key => $value) {
@@ -155,6 +194,7 @@ class admin extends Controller
                 array_push($date,$dates2);
             }
         }
+<<<<<<< HEAD
         return view("addadmin",["username" => $username, "admin_data" => $admin_data, "dates" => $date]);
     }
     function addAdministrator(Request $req){
@@ -163,6 +203,13 @@ class admin extends Controller
         $change_db->change_db();
 
         // return session("organization_id");
+=======
+        
+        return view("addadmin",["username" => $username, "admin_data" => $admin_data, "dates" => $date]);
+    }
+    function addAdministrator(Request $req){
+        // return $req;
+>>>>>>> origin/main
         // get the values
         $admin_name = $req->input('admin_name');
         $client_address = $req->input('client_address');
@@ -183,6 +230,7 @@ class admin extends Controller
             $admin_table->admin_username = $admin_username;
             $admin_table->admin_password = $admin_password;
             $admin_table->contacts = $client_address;
+<<<<<<< HEAD
             $admin_table->organization_id = session("organization_id");
             $admin_table->user_status = "1";
             $admin_table->priviledges = $privileges;
@@ -191,6 +239,26 @@ class admin extends Controller
             $new_client = new Clients();
             $txt = ":Admin ($admin_name) has been added by ( ".session('Usernames')." )"."!";
             $new_client->log($txt);
+=======
+            $admin_table->organization_id = "1";
+            $admin_table->user_status = "1";
+            $admin_table->priviledges = $privileges;
+            $admin_table->save();
+        
+            // log file capture error
+            // read the data 
+            $myfile = fopen(public_path("/logs/log.txt"), "r") or die("Unable to open file!");
+            $file_sizes = filesize(public_path("/logs/log.txt")) > 0?filesize(public_path("/logs/log.txt")):8190;
+            $existing_txt = fread($myfile,$file_sizes);
+            // return $existing_txt;
+            $myfile = fopen(public_path("/logs/log.txt"), "w") or die("Unable to open file!");
+            $date = date("dS M Y (H:i:sa)");
+            $txt = $date.":Admin ($admin_name) has been added by ( ".session('Usernames')." )"."!\n".$existing_txt;
+            // return $txt;
+            fwrite($myfile, $txt);
+            fclose($myfile);
+            // end of log file
+>>>>>>> origin/main
             session()->flash("success","The administrator has successfully been added.");
             return redirect("/Accounts/add");
         }
@@ -198,10 +266,13 @@ class admin extends Controller
     }
     function upload_dp(Request $req)
     {
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+>>>>>>> origin/main
         $req->validate([
             'mine_dp' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
         ]);
@@ -228,6 +299,7 @@ class admin extends Controller
         session()->flash('success',"Profile picture saved successfully!");
         return redirect("/Accounts");
     }
+<<<<<<< HEAD
     function update_company_dp(Request $req)
     {
         // change db
@@ -265,24 +337,40 @@ class admin extends Controller
         $change_db = new login();
         $change_db->change_db();
 
+=======
+    function update_admin(Request $req){
+>>>>>>> origin/main
         // return $req;
         $admin_id = $req->input('client_id');
         $update = DB::table("admin_tables")->where("admin_id",$admin_id)->update([
             "admin_fullname" => $req->input('fullName'),
+<<<<<<< HEAD
             "contacts" => $req->input('phone'),
             "email" => $req->input('email')
+=======
+            "CompanyName" => $req->input('company'),
+            "country" => $req->input('country'),
+            "contacts" => $req->input('phone'),
+            "email" => $req->input('email'),
+            "date_changed" => date("YmdHis")
+>>>>>>> origin/main
         ]);
         session()->flash('success',"You have successfully updated your information!");
         return redirect("/Accounts");
     }
     // function update delete options
     function update_delete_option(Request $req){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // return $req;
         $settings = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0';");
+=======
+        // return $req;
+        $settings = DB::select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0';");
+>>>>>>> origin/main
         if (count($settings) > 0) {
             // get fields and check for the two delete options
             $delete_options = json_decode($settings[0]->value);
@@ -294,13 +382,21 @@ class admin extends Controller
             // merge options
             array_push($options,$option1,$option2);
             // update the setting table where the keyword is delete
+<<<<<<< HEAD
             $update = DB::connection("mysql2")->table('settings')->where("keyword","delete")->update([
+=======
+            $update = DB::table('settings')->where("keyword","delete")->update([
+>>>>>>> origin/main
                 "value" => json_encode($options),
                 "date_changed" => date("YmdHis")
             ]);
             session()->flash('success',"Update has been done successfully!");
             return redirect("/Accounts");
+<<<<<<< HEAD
         }else{
+=======
+        }else {
+>>>>>>> origin/main
             // get fields and check for the two delete options
             // $delete_options = json_decode($settings[0]->value);
             // option 1 delete message records
@@ -310,7 +406,11 @@ class admin extends Controller
             $option2 = array("name" => "delete_transaction","period" => $req->input('delete_transactions'));
             // merge options
             array_push($options,$option1,$option2);
+<<<<<<< HEAD
             DB::connection("mysql2")->table('settings')->insert([
+=======
+            DB::table('settings')->insert([
+>>>>>>> origin/main
                 "keyword" => "delete",
                 "value" => json_encode($options),
                 "status" => "1",
@@ -320,6 +420,7 @@ class admin extends Controller
             return redirect("/Accounts");
         }
     }
+<<<<<<< HEAD
 
     /**
      * Checks if a folder exist and return canonicalized absolute pathname (long version)
@@ -347,6 +448,29 @@ class admin extends Controller
         $change_db = new login();
         $change_db->change_db();
 
+=======
+    /**
+   * Checks if a folder exist and return canonicalized absolute pathname (long version)
+   * @param string $folder the path being checked.
+   * @return mixed returns the canonicalized absolute pathname on success otherwise FALSE is returned
+   */
+  function folder_exist($folder)
+  {
+      // Get canonicalized absolute pathname
+      $path = realpath($folder);
+  
+      // If it exist, check if it's a directory
+      if($path !== false AND is_dir($path))
+      {
+          // Return canonicalized absolute pathname
+          return $path;
+      }
+  
+      // Path/folder does not exist
+      return false;
+  }
+    function viewAdmin($admin_id){
+>>>>>>> origin/main
         $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '$admin_id' AND `deleted` = '0'");
         if (count($admin_data) > 0) {
             return view("viewadmin", ["admin_data" => $admin_data]);
@@ -355,12 +479,16 @@ class admin extends Controller
             return redirect("/Accounts/add");
         }
     }
+<<<<<<< HEAD
 
     function updateAdmin(Request $req){
         // change db
         $change_db = new login();
         $change_db->change_db();
 
+=======
+    function updateAdmin(Request $req){
+>>>>>>> origin/main
         // return $req;
         $admin_id = $req->input('admin_id');
         $privileges = $req->input('privileges');
@@ -379,6 +507,7 @@ class admin extends Controller
         session()->flash('success',"Administrator data updates successfully!");
         return redirect("/Admin/View/$admin_id");
     }
+<<<<<<< HEAD
 
     function delete_admin($admin_id){
         // get the administrator`s name
@@ -400,10 +529,14 @@ class admin extends Controller
         $change_db = new login();
         $change_db->change_db();
 
+=======
+    function deactivateAdmin($admin_id){
+>>>>>>> origin/main
         // return $admin_id;
         DB::update("UPDATE `admin_tables` SET `activated` = '0', `user_status` = '0' WHERE `admin_id` = ?",[$admin_id]);
         session()->flash("success","The administrator has successfully deactivated.");
         return redirect("/Accounts/add");
+<<<<<<< HEAD
     }
 
     function delete_pp($admin_id){
@@ -411,6 +544,11 @@ class admin extends Controller
         $change_db = new login();
         $change_db->change_db();
 
+=======
+
+    }
+    function delete_pp($admin_id){
+>>>>>>> origin/main
         // return $admin_id;
         $client_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '$admin_id' AND `deleted` = '0'");
         // return $client_data;
@@ -426,6 +564,7 @@ class admin extends Controller
         session()->flash('success',"Profile picture deleted successfully!");
         return redirect("/Accounts");
     }
+<<<<<<< HEAD
 
     function delete_pp_organization(){
         // change db
@@ -462,4 +601,6 @@ class admin extends Controller
         session()->flash("success","Organization details have been successfully updated!");
         return redirect("/Accounts");
     }
+=======
+>>>>>>> origin/main
 }

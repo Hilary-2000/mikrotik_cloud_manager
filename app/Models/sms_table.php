@@ -9,5 +9,8 @@ class sms_table extends Model
 {
     use HasFactory;
     public $timestamps = false;
+<<<<<<< HEAD
     // protected $connection = "mysql2";
+=======
+>>>>>>> origin/main
 }

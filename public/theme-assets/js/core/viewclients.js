@@ -190,7 +190,11 @@ cObj("tolastNav").onclick = function() {
 }
 
 function getRouterInterfaces() {
+<<<<<<< HEAD
     sendDataGet("GET","/Organization/get_interfaces/"+organization_details.organization_id+"/"+this.value+"",cObj("interface_holder"),cObj("interface_load"));
+=======
+    sendDataGet("GET","/router/"+this.value+"",cObj("interface_holder"),cObj("interface_load"));
+>>>>>>> origin/main
 }
 cObj("edit_epiration").onclick = function () {
     cObj("change_exp_date_windoe").classList.toggle("d-none");

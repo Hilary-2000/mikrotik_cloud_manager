@@ -136,6 +136,7 @@
 
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true"
         data-img="/theme-assets/images/backgrounds/02.jpg">
+<<<<<<< HEAD
         <div class="navbar-header" style="height: 120px">
           <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
               <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
@@ -146,6 +147,17 @@
               <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
           </ul>
       </div>
+=======
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
+                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand "
+                        href="/Dashboard"><img class="brand-logo w-100 mb-1 " alt="Chameleon admin logo"
+                            src="/theme-assets/images/logo.jpeg" />
+                    </a></li>
+                <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
+            </ul>
+        </div>
+>>>>>>> origin/main
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 <li class="nav-item"><a href="/Dashboard"><i class="ft-home"></i><span
@@ -267,6 +279,10 @@
                         <li class="nav-item">
                           <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                         </li>
+<<<<<<< HEAD
+=======
+        
+>>>>>>> origin/main
                         <li class="nav-item">
                           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
                         </li>
@@ -278,10 +294,13 @@
                         <li class="nav-item">
                           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">General Settings</button>
                         </li>
+<<<<<<< HEAD
                         
                         <li class="nav-item">
                           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#company-profile-edit">Company Profile</button>
                         </li>
+=======
+>>>>>>> origin/main
         
                       </ul>
                       <div class="tab-content pt-2">
@@ -296,7 +315,11 @@
         
                           <div class="row my-2">
                             <div class="col-lg-3 col-md-4 label">Company</div>
+<<<<<<< HEAD
                             <div class="col-lg-9 col-md-8">{{$organization->organization_name ? $organization->organization_name :"Null"}}</div>
+=======
+                            <div class="col-lg-9 col-md-8">{{$admin_data[0]->CompanyName ?$admin_data[0]->CompanyName:"Null"}}</div>
+>>>>>>> origin/main
                           </div>
         
                           <div class="row my-2">
@@ -305,6 +328,14 @@
                           </div>
         
                           <div class="row my-2">
+<<<<<<< HEAD
+=======
+                            <div class="col-lg-3 col-md-4 label">Country</div>
+                            <div class="col-lg-9 col-md-8">{{$admin_data[0]->country ?$admin_data[0]->country:"Null"}}</div>
+                          </div>
+        
+                          <div class="row my-2">
+>>>>>>> origin/main
                             <div class="col-lg-3 col-md-4 label">Last time Login</div>
                             <div class="col-lg-9 col-md-8">{{$date_time ?$date_time:"Null"}}</div>
                           </div>
@@ -367,6 +398,30 @@
                               </div>
                             </div>
         
+<<<<<<< HEAD
+=======
+                            <div class="row mb-3">
+                              <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                              <div class="col-md-8 col-lg-9">
+                                <input name="company" type="text" class="form-control" id="company" value="{{$admin_data[0]->CompanyName ?$admin_data[0]->CompanyName:""}}" placeholder="Company Name" >
+                              </div>
+                            </div>
+        
+                            {{-- <div class="row mb-3">
+                              <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
+                              <div class="col-md-8 col-lg-9">
+                                <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
+                              </div>
+                            </div> --}}
+        
+                            <div class="row mb-3">
+                              <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                              <div class="col-md-8 col-lg-9">
+                                <input name="country" type="text" class="form-control" id="Country" value="{{$admin_data[0]->country ?$admin_data[0]->country:""}}" placeholder="Country" >
+                              </div>
+                            </div>
+        
+>>>>>>> origin/main
         
                             <div class="row mb-3">
                               <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
@@ -388,6 +443,7 @@
                           </form><!-- End Profile Edit Form -->
         
                         </div>
+<<<<<<< HEAD
                         <div class="tab-pane fade profile-edit pt-3" id="company-profile-edit">
         
                           <div class="container">
@@ -472,6 +528,8 @@
                           </form><!-- End Profile Edit Form -->
         
                         </div>
+=======
+>>>>>>> origin/main
         
                         <div class="tab-pane fade" id="profile-settings">
                           <!-- Settings Form -->
@@ -515,10 +573,17 @@
                               </div>
                             </div>
                             <div class="text-center">
+<<<<<<< HEAD
                               <button type="submit" {{$readonly}} class="btn btn-primary">Save Changes</button>
                             </div>
                           </form><!-- End settings Form -->
                           <div class="container d-none">
+=======
+                              <button type="submit" {{$readonly}} class="btn btn-primary disabled">Save Changes</button>
+                            </div>
+                          </form><!-- End settings Form -->
+                          <div class="container">
+>>>>>>> origin/main
                             <p><strong>Export user data</strong></p>
                             <a href="/Clients/Export" class="btn btn-secondary text-bolder {{$readonly}} disabled"><i class="ft-command"> </i>Export</a>
                             <hr>
@@ -586,7 +651,11 @@
                 class="float-md-left d-block d-md-inline-block"><?php echo date('Y'); ?> &copy; Copyright Hypbits
                 Enterprises</span>
             <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
+<<<<<<< HEAD
                 <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com"
+=======
+                <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com/sims/"
+>>>>>>> origin/main
                         target="_blank"> Ladybird Softech Co.</a></li>
             </ul>
         </div>
@@ -625,12 +694,15 @@
       document.getElementById("close_window_btn").onclick = function () {
         document.getElementById("change_dp_window").classList.add("d-none");
       }
+<<<<<<< HEAD
       document.getElementById("update_company_profile_btn").onclick = function () {
         document.getElementById("change_company_dp_window").classList.remove("d-none");
       }
       document.getElementById("close_company_profile_dp_window_btn").onclick = function () {
         document.getElementById("change_company_dp_window").classList.add("d-none");
       }
+=======
+>>>>>>> origin/main
     </script>
     <script>
       var milli_seconds = 1200;

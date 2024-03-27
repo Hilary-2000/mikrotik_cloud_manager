@@ -4,7 +4,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<<<<<<< HEAD
     {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
+=======
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+>>>>>>> origin/main
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="description" content="My ISP is the number one kenyan webserver software that helps you manage and monitor your webserver.">
     <meta name="keywords" content="admin template, Client template, dashboard template, gradient admin template, responsive client template, webapp, eCommerce dashboard, analytic dashboard">
@@ -169,6 +173,7 @@
     <!-- ////////////////////////////////////////////////////////////////////////////-->
 
 
+<<<<<<< HEAD
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
@@ -176,6 +181,13 @@
                         href="/Dashboard">
                         <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
                             src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
+=======
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
+                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand " href="/Dashboard"><img class="brand-logo w-100 mb-1 "
+                            alt="Chameleon admin logo" src="/theme-assets/images/logo.jpeg" />
+>>>>>>> origin/main
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
             </ul>
@@ -374,11 +386,15 @@
                                         </div>
                                     </div>
                                     <div class="table-responsive"  id="transDataReciever">
+<<<<<<< HEAD
                                         <div class="container text-center my-2">
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
                                                 src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
                                         </div>
                                         {{-- <table class="table">
+=======
+                                        <table class="table">
+>>>>>>> origin/main
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -416,7 +432,11 @@
                                                     <td><a href="#" class="btn btn-sm btn-primary text-bolder" data-toggle="tooltip" title="View this transaction"><i class="ft-eye"></i></a></td>
                                                 </tr>
                                             </tbody>
+<<<<<<< HEAD
                                         </table> --}}
+=======
+                                        </table>
+>>>>>>> origin/main
                                     </div>
                                     <nav aria-label="Page navigation example" id="tablefooter">
                                         <ul class="pagination" id="datatable_paginate">
@@ -464,21 +484,34 @@
     <footer style="margin-bottom: 0% !important" class="footer footer-static footer-light navbar-border navbar-shadow">
     <div  class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block"><?php echo date("Y"); ?> &copy; Copyright Hypbits Enterprises</span>
         <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
+<<<<<<< HEAD
             <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com" target="_blank"> Ladybird Softech Co.</a></li>
+=======
+            <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com/sims/" target="_blank"> Ladybird Softech Co.</a></li>
+>>>>>>> origin/main
         </ul>
     </div>
 </footer>
     <!-- ////////////////////////// -->
 
     <!-- BEGIN VENDOR JS-->
+<<<<<<< HEAD
     <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+=======
+    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+>>>>>>> origin/main
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
     
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN CHAMELEON  JS-->
+<<<<<<< HEAD
     <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
     <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+=======
+    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+>>>>>>> origin/main
     <!-- END CHAMELEON  JS-->
 
     {{-- the sms javascript --}}
@@ -611,7 +644,11 @@
         autocomplete(document.getElementById("myInput"), client_account, client_contacts, client_named);
         autocomplete(document.getElementById("myInput2"), client_contacts, client_account, client_named);
     </script>
+<<<<<<< HEAD
     <script src="/theme-assets/js/core/sms.js" type="text/javascript"></script>
+=======
+    <script src="theme-assets/js/core/sms.js" type="text/javascript"></script>
+>>>>>>> origin/main
     <script>
       var milli_seconds = 1200;
       setInterval(() => {

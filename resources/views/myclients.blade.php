@@ -135,12 +135,19 @@
 
 
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+<<<<<<< HEAD
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
                         href="/Dashboard">
                         <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
                             src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
+=======
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
+                <li class="nav-item mr-auto p-0 w-75" style="width: fit-content"><a class="navbar-brand " href="/Dashboard"><img class="brand-logo w-100 mb-1 "
+                            alt="Chameleon admin logo" src="/theme-assets/images/logo.jpeg" />
+>>>>>>> origin/main
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
             </ul>
@@ -418,12 +425,17 @@
                                         </div>
                                     </div>
                                     <div class="table-responsive" id="transDataReciever">
+<<<<<<< HEAD
                                         <div class="container text-center my-2">
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
                                                 src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
                                         </div>
                                         {{-- <table class="table"> --}}
                                             {{-- <thead>
+=======
+                                        <table class="table">
+                                            <thead>
+>>>>>>> origin/main
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Full Names</th>
@@ -431,8 +443,13 @@
                                                     <th>Location</th>
                                                     <th>Action</th>
                                                 </tr>
+<<<<<<< HEAD
                                             </thead> --}}
                                             {{-- <tbody>
+=======
+                                            </thead>
+                                            <tbody>
+>>>>>>> origin/main
                                                 <tr>
                                                     <th scope="row">1</th>
                                                     <td>Mark Otto <span class="badge badge-success"> </span></td>
@@ -455,7 +472,11 @@
                                                     <td><a href="#" class="btn btn-sm btn-primary text-bolder" data-toggle="tooltip" title="View this User"><i class="ft-eye"></i></a> <a href="#" class="btn btn-sm btn-secondary text-bolder" data-toggle="tooltip" title="Edit this User"><i class="ft-edit"></i></a> <a href="#" class="btn btn-sm btn-warning text-bolder"  data-toggle="tooltip" title="Disable this User"><i class="ft-alert-octagon"></i></a> </td>
                                                 </tr>
                                             </tbody>
+<<<<<<< HEAD
                                         </table> --}}
+=======
+                                        </table>
+>>>>>>> origin/main
                                     </div>
                                     <nav aria-label="Page navigation example" id="tablefooter">
                                         <ul class="pagination" id="datatable_paginate">
@@ -502,7 +523,11 @@
     <footer style="margin-bottom: 0% !important" class="footer footer-static footer-light navbar-border navbar-shadow">
     <div  class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block"><?php echo date("Y"); ?> &copy; Copyright Hypbits Enterprises</span>
         <ul class="list-inline float-md-right d-block d-md-inline-blockd-none d-lg-block mb-0">
+<<<<<<< HEAD
             <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com" target="_blank"> Ladybird Softech Co.</a></li>
+=======
+            <li class="list-inline-item">Created By<a class="my-1" href="https://ladybirdsmis.com/sims/" target="_blank"> Ladybird Softech Co.</a></li>
+>>>>>>> origin/main
         </ul>
     </div>
 </footer>

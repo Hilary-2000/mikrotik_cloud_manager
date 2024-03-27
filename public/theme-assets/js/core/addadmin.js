@@ -20,12 +20,20 @@ window.onload = function() {
     // show that the username is already used
     var admin_username = document.getElementById("admin_username");
     admin_username.onkeyup = function () {
+<<<<<<< HEAD
         var values = this.value.toUpperCase().trim();
+=======
+        var values = this.value.toUpperCase();
+>>>>>>> origin/main
         if (values.length > 0){
             var present = 0;
             for (let index = 0; index < username.length; index++) {
                 const element = username[index].toUpperCase();
+<<<<<<< HEAD
                 if (element == values) {
+=======
+                if (element.includes(values)) {
+>>>>>>> origin/main
                     present = 1;
                     break;
                 }
@@ -95,12 +103,21 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 10 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
+<<<<<<< HEAD
             var status = "<span class='badge badge-success'> </span>";
             if (arrays[index][7] == "0") {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Admins/deactivate_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+=======
+                var status = "<span class='badge badge-success'> </span>";
+                if (arrays[index][7] == "0") {
+                    // if the user is active
+                    status = "<span class='badge badge-danger'> </span>";
+                }
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Admin/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/admin/deactivate/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
     }else{
@@ -113,7 +130,11 @@ function displayRecord(start, finish, arrays) {
                 status = "<span class='badge badge-danger'> </span>";
             }
             console.log(arrays[index][7]);
+<<<<<<< HEAD
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Admins/deactivate_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+=======
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Admin/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/admin/deactivate/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
         fins = total;
@@ -692,7 +713,10 @@ cObj("accounts_option_readonly").onchange = function () {
     checkChecked();
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 function hasJsonStructure(str) {
     if (typeof str !== 'string') return false;
     try {

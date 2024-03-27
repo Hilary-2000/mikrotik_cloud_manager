@@ -334,8 +334,13 @@ function sortByRegDate() {
         checkedUnchecked();
     }
 }
+<<<<<<< HEAD
 
 /***SOrt by expiration date */
+=======
+/***SOrt by expiration date */
+
+>>>>>>> origin/main
 var sort_by_expirations = 0;
 function sortByExpDate() {
     rowsColStudents = sortAsc(rowsColStudents, 7);
@@ -462,7 +467,11 @@ function displayRecord(start, finish, arrays) {
                 assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
             }
             var location = (arrays[index][14] != null && arrays[index][14].length > 0) ? "<a class='text-danger' href = 'https://www.google.com/maps/place/" + arrays[index][14] + "' target = '_blank'><u>Locate Client</u> </a>" : "";
+<<<<<<< HEAD
             tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Organization/ViewClient/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][11].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][5]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Organization/ViewClient/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Deactivate/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a></td></tr>";
+=======
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Clients/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][11].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][5]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
     } else {
@@ -505,7 +514,11 @@ function displayRecord(start, finish, arrays) {
             }
             var location = (arrays[index][14] != null && arrays[index][14].length > 0) ? "<a class='text-danger' href = 'https://www.google.com/maps/place/" + arrays[index][14] + "' target = '_blank'><u>Locate Client</u> </a>" : "";
             // console.log(location);
+<<<<<<< HEAD
             tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Organization/ViewClient/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][11].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][5]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Organization/ViewClient/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Deactivate/"+organization_details.organization_id+"/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a></td></tr>";
+=======
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Clients/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][11].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][5]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a></td></tr>";
+>>>>>>> origin/main
             counter++;
         }
         fins = total;

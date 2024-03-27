@@ -10,12 +10,18 @@ class Clients_data extends Controller
 {
     // functions to display the students data
     function getClientInfor(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
         // get the clients information
         $client_id = session('client_id');
         $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+=======
+        // get the clients information
+        $client_id = session('client_id');
+        $client_data = DB::select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+>>>>>>> origin/main
         $date_data  = $client_data[0]->clients_reg_date;
         $year = substr($date_data,0,4);
         $month = substr($date_data,4,2);
@@ -39,12 +45,17 @@ class Clients_data extends Controller
     }
     // get the client transaction information
     function getTransaction(){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $client_id = session('client_id');
         $trans_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `transaction_acc_id` = '$client_id' AND `deleted` = '0'");
+=======
+        $client_id = session('client_id');
+        $trans_data = DB::select("SELECT * FROM `transaction_tables` WHERE `transaction_acc_id` = '$client_id' AND `deleted` = '0'");
+>>>>>>> origin/main
         $dates = [];
         foreach ($trans_data as  $value) {
             // get the dates
@@ -63,11 +74,15 @@ class Clients_data extends Controller
         return view("clienttrans",["transData" => $trans_data,"dates" => $dates]);
     }
     function viewPayment($paymentId){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         $payment_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `transaction_id` = '$paymentId' AND `deleted` = '0'");
+=======
+        $payment_data = DB::select("SELECT * FROM `transaction_tables` WHERE `transaction_id` = '$paymentId' AND `deleted` = '0'");
+>>>>>>> origin/main
         $payment = $payment_data[0];
         $dates = $payment->transaction_date;
         $date_data  = $dates;
@@ -83,6 +98,7 @@ class Clients_data extends Controller
         return view("viewpay",["payments" => $payment,"dates" => $dat]);
     }
     function confirm_mpesa($mpesa_id){
+<<<<<<< HEAD
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -95,6 +111,12 @@ class Clients_data extends Controller
         $change_db = new login();
         $change_db->change_db();
         
+=======
+        $mpesa_data = DB::select("SELECT * FROM `transaction_tables` WHERE `transaction_mpesa_id` = '$mpesa_id' AND `transaction_status` = '0' AND `deleted` = '0'");
+        return $mpesa_data;
+    }
+    function change_password(Request $req){
+>>>>>>> origin/main
         // check if the new password are the same
         $new_password = $req->input('new_password');
         $repeat_password = $req->input('new_password');
@@ -102,7 +124,11 @@ class Clients_data extends Controller
         if ($new_password == $repeat_password) {
             // proceed and check if the old password is correct
             $client_id = session('client_id');
+<<<<<<< HEAD
             $client_datas = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `client_password` = '$old_password' AND `deleted` = '0'");
+=======
+            $client_datas = DB::select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `client_password` = '$old_password' AND `deleted` = '0'");
+>>>>>>> origin/main
             if (count($client_datas) > 0) {
                 // update the client data
                 session()->flash("success","You have successfully changed your passwords!");
