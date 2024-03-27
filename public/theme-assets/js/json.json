@@ -1,0 +1,32 @@
+[
+    {
+        "option": "My Clients",
+        "view": true,
+        "readonly": true
+    },
+    {
+        "option": "Transactions",
+        "view": true,
+        "readonly": true
+    },
+    {
+        "option": "Expenses",
+        "view": true,
+        "readonly": true
+    },
+    {
+        "option": "My Routers",
+        "view": true,
+        "readonly": true
+    },
+    {
+        "option": "SMS",
+        "view": true,
+        "readonly": true
+    },
+    {
+        "option": "Account and Profile",
+        "view": true,
+        "readonly": true
+    }
+]
