@@ -25,29 +25,25 @@ class Sms extends Controller
         return [(count($client_data) > 0 ? $client_data[0]->client_id:0),ucwords(strtolower($client_name))];
     }
     //get the function for the sms
-    function getSms(){
-        // change db
-        $change_db = new login();
-        $change_db->change_db();
-
-        $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' ORDER BY `sms_id` DESC LIMIT 1000");
+    function get_sms(){
+        $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' ORDER BY `sms_id` DESC LIMIT 1000");
         // get the clients names
         $client_names = [];
         $dates = [];
         foreach ($sms_data as $value) {
             // get the clients data
-            $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$value->account_id'");
-            $client_name = $value->recipient_phone;
+            $organization_data = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = '$value->account_id'");
+            $organization_name = $value->recipient_phone;
 
-            if (count($client_data) > 0) {
-                $client_name = $client_data[0]->client_name;
+            if (count($organization_data) > 0) {
+                $organization_name = $organization_data[0]->organization_name;
             }else{
                 // $client_name = (count($client_data)>0) ? $client_data[0]->client_name: $value->recipient_phone;
                 $phone_db = (strlen($value->recipient_phone) == 12) ? substr($value->recipient_phone,3,9) : substr($value->recipient_phone,1,9);
                 $user_data_return = $this->getOwnerPhone($value->account_id,$phone_db);
-                $client_name = $value->recipient_phone;
+                $organization_name = $value->recipient_phone;
             }
-            array_push($client_names,$client_name);
+            array_push($client_names,$organization_name);
             // get the payment dates
             // return $client_name;
             
@@ -65,27 +61,27 @@ class Sms extends Controller
         // return count($client_names);
         // GET ALL THE SMS SENT TODAY
         $today = date("Ymd");
-        $sms_today = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '$today%'");
+        $sms_today = DB::select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '$today%'");
         $sms_count = $sms_today[0]->Total;
         // GET FOR THE LAST ONE WEEK
         $last_week = date("YmdHis",strtotime("-7 days"));
-        $lastweek_sms = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` > $last_week;");
+        $lastweek_sms = DB::select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` > $last_week;");
         $sms_week = $lastweek_sms[0]->Total;
         // GET ALL SMS SENT BY THE SYSTEM
-        $total_sms = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0'");
+        $total_sms = DB::select("SELECT COUNT(*) AS 'Total' FROM `sms_tables` WHERE `deleted`= '0'");
         $totalsms = $total_sms[0]->Total;
 
         // get the clients name username and phonenumber
-        $clients_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' ORDER BY `client_id` DESC");
+        $organizations_data = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
         $clients_name = [];
         $clients_acc = [];
         $clients_phone = [];
-        for ($index=0; $index < count($clients_data); $index++) {
-            array_push($clients_name,ucwords(strtolower($clients_data[$index]->client_name)));
-            array_push($clients_acc,$clients_data[$index]->client_account);
-            array_push($clients_phone,$clients_data[$index]->clients_contacts);
+        for ($index=0; $index < count($organizations_data); $index++) {
+            array_push($clients_name,ucwords(strtolower($organizations_data[$index]->organization_name)));
+            array_push($clients_acc,$organizations_data[$index]->account_no);
+            array_push($clients_phone,$organizations_data[$index]->organization_main_contact);
         }
-        return view("adminsms",["sms_data" =>$sms_data,"client_names" => $client_names, "dates" => $dates, "sms_count" => $sms_count, "last_week" => $sms_week,"total_sms" => $totalsms,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
+        return view("SMS.index",["sms_data" =>$sms_data,"client_names" => $client_names, "dates" => $dates, "sms_count" => $sms_count, "last_week" => $sms_week,"total_sms" => $totalsms,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
     }
 
     function sms_balance(){
@@ -107,7 +103,7 @@ class Sms extends Controller
         $apikey = $sms_api_key;
         $shortcode = $sms_shortcode;
         // get the sms balance
-        $finalURL = "https://mysms.celcomafrica.com/api/services/getbalance/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID);
+        $finalURL = "https://isms.celcomafrica.com/api/services/getbalance/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID);
         $ch = \curl_init();
         \curl_setopt($ch, CURLOPT_URL, $finalURL);
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -120,12 +116,12 @@ class Sms extends Controller
     }
 
     // get the sms id
-    function getSMSData($sms_id){
-        // change db
-        $change_db = new login();
-        $change_db->change_db();
-
-        $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
+    function get_sms_data($sms_id){
+        $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
+        if (count($sms_data) == 0) {
+            session()->flash("error","Invalid SMS!");
+            return redirect("/SMS");
+        }
         
         $date_data = $sms_data[0]->date_sent;;
         $year = substr($date_data,0,4);
@@ -138,22 +134,18 @@ class Sms extends Controller
         $dates2 = date("D dS M Y  h:i:sa", $d);
 
         $account_id = $sms_data[0]->account_id;
-        $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$account_id'");
-        $client_name = (count($client_data)>0)? $client_data[0]->client_name: "Unknown";
+        $organization = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = '$account_id'");
+        $organization_name = (count($organization)>0)? $organization[0]->organization_name: "Unknown";
         $sms_type = $sms_data[0]->sms_type;
         // get the sms type
         $sms_type = ($sms_type == "1") ? "Transaction" : "Notification";
-        return view("smsinfor",["sms_data" => $sms_data,"date" => $dates2, "client_name" => $client_name, "sms_type" => $sms_type]);
+        return view("SMS.view",["sms_data" => $sms_data,"date" => $dates2, "client_name" => $organization_name, "sms_type" => $sms_type]);
     }
 
-    function delete($sms_id){
-        // change db
-        $change_db = new login();
-        $change_db->change_db();
-
-        $data = DB::connection("mysql2")->delete("DELETE FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
+    function delete_sms_data($sms_id){
+        $data = DB::delete("DELETE FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
         session()->flash("success_sms","Message successfully deleted");
-        return redirect("/sms");
+        return redirect("/SMS");
     }
     function compose(){
         // change db
@@ -177,17 +169,13 @@ class Sms extends Controller
         $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted`= '0'");
         return view("compose",["client_names" => $client_names,"client_contacts" => $client_contacts,"client_account" => $client_account,"router_infor" => $router_data]);
     }
-    function sendsms(Request $req){
-        // change db
-        $change_db = new login();
-        $change_db->change_db();
-
+    function send_sms(Request $req){
         // GET THE SMS KEYS FROM THE DATABASE
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
         $sms_api_key = $sms_keys[0]->value;
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
         $sms_partner_id = $sms_keys[0]->value;
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
         $sms_shortcode = $sms_keys[0]->value;
         // GET THE VALUES
         $select_recipient = $req->input('select_recipient');
@@ -244,7 +232,7 @@ class Sms extends Controller
         }elseif ($select_recipient == 2) {
             // send to active clients
             // get the number of the active clients
-            $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_status` = 1");
+            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_status` = 1");
             if (count($client_data) > 0) {
                 $phone_number = "";
                 // we proceed and get the client data
@@ -262,7 +250,7 @@ class Sms extends Controller
         }elseif ($select_recipient == 3) {
             // send to active clients
             // get the number of the active clients
-            $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_status` = 0");
+            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_status` = 0");
             if (count($client_data) > 0) {
                 $phone_number = "";
                 // we proceed and get the client data
@@ -280,7 +268,7 @@ class Sms extends Controller
         }elseif ($select_recipient == 4) {
             // send to active clients
             // get the number of the active clients
-            $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0'");
+            $client_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0'");
             if (count($client_data) > 0) {
                 $phone_number = "";
                 // we proceed and get the client data
@@ -308,7 +296,7 @@ class Sms extends Controller
             $mobile = $phone_number; // Bulk messages can be comma separated
             $message = $messages;
             
-            $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
+            $finalURL = "https://isms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
             $ch = \curl_init();
             \curl_setopt($ch, CURLOPT_URL, $finalURL);
             \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -333,7 +321,7 @@ class Sms extends Controller
             if (count($client_phone) > 1) {
                 for ($i=0; $i < count($client_phone); $i++) { 
                     // get the user id of the number from the database
-                    $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$client_phone[$i]'");
+                    $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$client_phone[$i]'");
                     $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
                     // if the message status is one the message is already sent to the user
                     $sms_table = new sms_table();
@@ -348,7 +336,7 @@ class Sms extends Controller
                 }
             }else {
                 // get the user id of the number from the database
-                $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$phone_number'");
+                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$phone_number'");
                 $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
                 // if the message status is one the message is already sent to the user
                 $sms_table = new sms_table();
@@ -461,7 +449,7 @@ class Sms extends Controller
             $mobile = $phone_number; // Bulk messages can be comma separated
             $message = $messages;
             
-            $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
+            $finalURL = "https://isms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
             $ch = \curl_init();
             \curl_setopt($ch, CURLOPT_URL, $finalURL);
             \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1100,12 +1088,8 @@ class Sms extends Controller
     }
 
     function resend_sms($sms_id){
-        // change db
-        $change_db = new login();
-        $change_db->change_db();
 
-        $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
-        // return $sms_data;
+        $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_id` = '$sms_id'");
         if (count($sms_data) > 0) {
             // get the sms data it contains the client data
             $messages = $sms_data[0]->sms_content;
@@ -1114,23 +1098,23 @@ class Sms extends Controller
             $sms_type = $sms_data[0]->sms_type;
             $message_status = 0;
             // get the data to display for the client list
-            $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0';");
+            $organization = DB::select("SELECT * FROM `organizations`");
             $client_names = [];
-            foreach ($user_data as $key => $value) {
-                array_push($client_names,$value->client_name);
+            foreach ($organization as $key => $value) {
+                array_push($client_names,$value->organization_name);
             }
             $client_contacts = [];
-            foreach ($user_data as $key => $value) {
-                array_push($client_contacts,$value->clients_contacts);
+            foreach ($organization as $key => $value) {
+                array_push($client_contacts,$value->organization_main_contact);
             }
             $client_account = [];
-            foreach ($user_data as $key => $value) {
-                array_push($client_account,$value->client_account);
+            foreach ($organization as $key => $value) {
+                array_push($client_account,$value->account_no);
             }        
-            return view("compose",["client_names" => $client_names,"client_contacts" => $client_contacts,"client_account" => $client_account,"messages" => $messages,"phone_number" => $phone_number]);
+            return view("SMS.compose",["client_names" => $client_names,"client_contacts" => $client_contacts,"client_account" => $client_account,"messages" => $messages,"phone_number" => $phone_number]);
         }else {
             session()->flash("error_sms","Message to resend not found");
-            return redirect("/sms");
+            return redirect("/SMS");
         }
     }
     
@@ -1188,7 +1172,7 @@ class Sms extends Controller
                 $mobile = $recipient_phone; // Bulk messages can be comma separated
                 $message = $sms_content;
                 
-                $finalURL = "https://mysms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
+                $finalURL = "https://isms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
                 $ch = \curl_init();
                 \curl_setopt($ch, CURLOPT_URL, $finalURL);
                 \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

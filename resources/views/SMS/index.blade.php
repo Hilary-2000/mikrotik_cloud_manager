@@ -4,13 +4,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description"
-        content="My ISP is the number one kenyan webserver software that helps you manage and monitor your webserver.">
-    <meta name="keywords"
-        content="admin template, Client template, dashboard template, gradient admin template, responsive client template, webapp, eCommerce dashboard, analytic dashboard">
+    <meta name="description" content="My ISP is the number one kenyan webserver software that helps you manage and monitor your webserver.">
+    <meta name="keywords" content="admin template, Client template, dashboard template, gradient admin template, responsive client template, webapp, eCommerce dashboard, analytic dashboard">
     <meta name="author" content="ThemeSelect">
-    <title>Hypbits - My Transactions</title>
+    <title>Hypbits - SMS</title>
     <link rel="apple-touch-icon" href="/theme-assets/images/logo2.jpeg">
     <link rel="shortcut icon" href="/theme-assets/images/logo2.jpeg">
     <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i%7CComfortaa:300,400,700" rel="stylesheet">
@@ -62,8 +61,9 @@
         }
         return "";
     }
+    
     // get the readonly value
-    $readonly = readOnly($priviledges,"Transactions");
+    $readonly = readOnly($priviledges,"SMS");
 
     function isJson($string) {
         return ((is_string($string) &&
@@ -114,15 +114,12 @@
     }
 
 </style>
+<body class="vertical-layout vertical-menu 2-columns  menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
 
-<body class="vertical-layout vertical-menu 2-columns  menu-expanded fixed-navbar" data-open="click"
-    data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
-
-    <!-- fixed-top-->
-        <x-navbar/>
+    <x-navbar/>
     <!-- ////////////////////////////////////////////////////////////////////////////-->
-    
-    
+            
+            
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
@@ -134,7 +131,7 @@
             <div class="content-wrapper-before"></div>
             <div class="content-header row">
                 <div class="content-header-left col-md-4 col-12 mb-2">
-                    <h3 class="content-header-title">My Transactions</h3>
+                    <h3 class="content-header-title">SMS</h3>
                 </div>
                 <div class="content-header-right col-md-8 col-12">
                     <div class="breadcrumbs-top float-md-right">
@@ -142,7 +139,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/Dashboard">Dashboard</a>
                                 </li>
-                                <li class="breadcrumb-item active">My Transactions
+                                <li class="breadcrumb-item active">SMS
                                 </li>
                             </ol>
                         </div>
@@ -155,7 +152,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Transaction Table</h4>
+                                <h4 class="card-title">SMS Table</h4>
                                 <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
@@ -166,23 +163,41 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card-header">
-                                <p>- Stats & Reports!</p>
-                                {{-- <a href="/TransactionSync" class="btn btn-primary {{$readonly}}"><i class="ft-refresh-ccw"></i> Sync Transaction</a> --}}
-                                <a href="/Transactions/Statistics" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a>
-                                <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span>
-                            </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
-                                    <div class="row">
+                                    <div class="container border border-secondary rounded shadow-sm w-100 m-0 my-2 p-1">
+                                        <h5 class="card-title">SMS Statistics</h5>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <span>Sms sent today: <span class="text-primary">{{$sms_count}}</span></span><br>
+                                                <span>Sms Sent Last week: <span class="text-primary">{{$last_week}}</span></span><br>
+                                                <span>Total SMS Sent: <span class="text-primary">{{$total_sms}}</span></span><br>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="button" id="show_sms_balance_btn" class="btn btn-primary btn-sm">Show Balance</button>
+                                                <p>Sms Balance: <span></span>: <span id="show_sms_balance">0 SMS</span><small class="text-primary d-none" id="show_sms_loader"> Loading...</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if(session('success_sms'))
+                                        <p class='text-success'>{{session('success_sms')}}</p>
+                                    @endif
+                                    @if(session('error_sms'))
+                                        <p class='text-danger'>{{session('error_sms')}}</p>
+                                    @endif
+                                    <div class="w-20">
+                                        <a href="/sms/system_sms" class="btn btn-secondary text-bolder {{$readonly}}">Customize SMS</a>
+                                        <span data-toggle="tooltip" title="SMS Reports" class="btn btn-info" id="sms_reports_btn"><i class="ft-file-text"></i></span>
+                                    </div>
+                                    <div class="row  my-2">
                                         <div class="col-md-12 border border-primary rounded p-1 hide" id="show_generate_reports_window">
                                             <h6 class="text-center">Generate Reports</h6>
-                                            <form action="{{route("generate_reports")}}" target="_blank" method="GET">
+                                            <form action="/SMS/generateReports" target="_blank" method="GET">
                                                 {{-- @csrf --}}
                                                 <div class="row">
                                                     <div class="col-md-3 " id="date_option">
-                                                        <label for="transaction_date_option" class="form-label">Select Transaction date Options</label>
-                                                        <select name="transaction_date_option" id="transaction_date_option" class="form-control">
+                                                        <label for="sms_date_option" class="form-label">Select SMS sent date:</label>
+                                                        <select name="sms_date_option" id="sms_date_option" class="form-control">
                                                             <option value="" hidden>Select an Option</option>
                                                             <option value="select date">Select a Date</option>
                                                             <option id="default_reg_date" selected value="all dates">All Dates</option>
@@ -190,31 +205,51 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 hide" id="select_from_date_win">
-                                                        <label for="from_select_date" class="form-label">From</label>
+                                                        <label for="from_select_date" class="form-label">From:</label>
                                                         <input type="date" name="from_select_date" id="from_select_date" value="<?php echo date("Y-m-d",strtotime("-7 days"));?>" max="<?php echo date("Y-m-d");?>" class="form-control">
                                                     </div>
                                                     <div class="col-md-3 hide" id="select_to_date_win">
-                                                        <label for="to_select_date" class="form-label">To</label>
+                                                        <label for="to_select_date" class="form-label">To:</label>
                                                         <input type="date" name="to_select_date" id="to_select_date" value="<?php echo date("Y-m-d");?>" max="<?php echo date("Y-m-d");?>" class="form-control">
                                                     </div>
                                                     <div class="col-md-3 hide" id="select_date_win">
-                                                        <label for="select_registration_date" class="form-label">Select Date</label>
+                                                        <label for="select_registration_date" class="form-label">Select Date:</label>
                                                         <input type="date" name="select_registration_date" id="select_registration_date" value="<?php echo date("Y-m-d");?>" max="<?php echo date("Y-m-d");?>" class="form-control">
                                                     </div>
                                                     <div class="col-md-3 " id="select_router_window">
-                                                        <label for="select_user_option" class="form-label">Select User</label>
+                                                        <label for="select_user_option" class="form-label">Select User Options:</label>
                                                         <select name="select_user_option" id="select_user_option" class="form-control">
                                                             <option value="" hidden>Select Router</option>
                                                             <option selected value="All">All</option>
-                                                            <option value="specific_user">Specific User Transactions</option>
+                                                            <option value="specific_user">Specific User by Account No</option>
+                                                            <option value="specific_user_phone">Specific User by Phone No</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6 hide" id="client_status_opt">
-                                                        <label for="myInput" class="form-label">Type the Client Name, Account Number or Phone Number </label><div class="autocomplete">
+                                                        <label for="myInput" class="form-label">Type the Client Name, Account Number or Phone Number <small class="text-primary">{Populate Acc No.}</small> </label><div class="autocomplete">
                                                         <input id="myInput" type="text" class="form-control"
                                                             name="client_account"
                                                             placeholder="Phone number, Account Number, Name">
                                                         </div>
+                                                    </div>
+                                                    <div class="col-md-6 hide" id="client_status_phone_no">
+                                                        <label for="myInput2" class="form-label">Type the Client Name, Account Number or Phone Number <small class="text-primary">{Populate Phone No.}</small> </label><div class="autocomplete">
+                                                        <input id="myInput2" type="text" class="form-control"
+                                                            name="client_phone"
+                                                            placeholder="Phone number, Account Number, Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label for="contain_text_option" class="form-label">Select Text Option:</label>
+                                                        <select name="contain_text_option" id="contain_text_option" class="form-control">
+                                                            <option value="" hidden>Select Text Option</option>
+                                                            <option selected value="All">All</option>
+                                                            <option value="text_containing">Display Text Containing</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 hide" id="text_containing_window">
+                                                        <label for="text_keyword" class="form-label">Type the Message keyword here</label>
+                                                        <input type="text" name="text_keyword" id="text_keyword" class="form-control" placeholder="Text containing">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button>
@@ -223,32 +258,43 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <p class="card-text">In this table below Transaction information can be
-                                        displayed.</p>
-                                        @if (session('success'))
-                                            <p class="success">{{ session('success') }}</p>
-                                        @endif
-                                    <p><span class="text-bold-600">Transaction Table:</span></p>
+                                    <p class="card-text">In this table all sms sent by the system are displayed.</p>
+                                    <p><span class="text-bold-600">SMS Table:</span></p>
                                     <div class="row">
                                         <div class="col-md-6 form-group">
-                                            <input type="text" name="search" id="searchkey"
-                                                class="form-control rounded-lg p-1" placeholder="Search here ..">
+                                            <input type="text" name="search" id="searchkey" class="form-control rounded-lg p-1" placeholder="Search here ..">
                                         </div>
-                                        <div class="col-md-6 row">
-                                            <div class="col-md-2">
-                                                <button class="btn btn-sm btn-primary" id="show_totals"><i class="ft-eye"></i> Show Totals</button>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <p class="card-text text-right d-none" id="totals_window">
-                                                    Recieved A Month Ago: <span class="text-primary">Kes {{ $month[0]->Total ? $month[0]->Total : 0 }}</span> <br>
-                                                    Recieved Two Weeks Ago: <span class="text-primary">Kes {{ $twoweeks[0]->Total ? $twoweeks[0]->Total : 0 }}</span> <br>
-                                                    Recieved Week Ago: <span class="text-primary">Kes {{ $week[0]->Total ? $week[0]->Total : 0 }}</span> <br>
-                                                    Recieved today: <span class="text-primary">Kes {{ $today[0]->Total ? $today[0]->Total : 0 }}</span> <br>
-                                                </p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <a href="/sms/compose" class="btn btn-info text-bolder float-right {{$readonly}}"><i class="ft-plus"> Write Message</i></a>
                                         </div>
                                     </div>
-                                    <div class="table-responsive" id="transDataReciever">
+                                    <div class="container border border-secondary rounded p-1 hide" id="action_for_selected_window">
+                                        <h6 class="text-center">Action for Selected SMS</h6>
+                                        <div class="row">
+                                            <div class="col-md-3 border-right border-secondary">
+                                                <label for="select_all_clients" class="form-label">Select All</label>
+                                                <input type="checkbox" name="select_all_clients" id="select_all_clients">
+                                                <br>
+                                                <span id="client_select_counts" class="text-info">0 SMS(s) Selected</span>
+                                            </div>
+                                            <form action="/Delete_bulk_sms" method="POST" class="col-md-3 border-right border-secondary my-1">
+                                                @csrf
+                                                <input type="hidden" name="hold_user_id_data" id="hold_user_id_data">
+                                                <button class="btn btn-sm btn-danger" {{$readonly}} id="delete_clients_id" type="button"><i class="ft-trash"></i> Delete</button>
+                                                <div class="container hide" id="delete_clients_window">
+                                                    <p><b>Are you sure you want to delete <span id="delete_number_clients">0</span> SMS(s)</b>?</p>
+                                                    <button class="btn btn-danger" {{$readonly}} type="submit">Yes</button>
+                                                    <button class="btn btn-secondary" id="no_dont_delete_selected" type="button">No</button>
+                                                </div>
+                                            </form>
+                                            <form class="col-md-3" action="/Resend_bulk_sms" method="POST" class="col-md-3 my-1">
+                                                @csrf
+                                                <input type="hidden" name="hold_user_id_data" id="hold_user_id_data_2">
+                                                <button class="btn btn-sm btn-info" {{$readonly}} type="submit"><i class="fa-solid fa-paper-plane"></i> Re-send SMS</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive"  id="transDataReciever">
                                         <div class="container text-center my-2">
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
                                                 src="/theme-assets/images/logo.jpeg"/>
@@ -256,7 +302,7 @@
                                     </div>
                                     <nav aria-label="Page navigation example" id="tablefooter">
                                         <ul class="pagination" id="datatable_paginate">
-                                            <li class="page-item" id="tofirstNav">
+                                            <li class="page-item"  id="tofirstNav">
                                                 <a class="page-link" href="#" aria-label="Fisrt">
                                                     <span aria-hidden="true">&laquo; &laquo;</span>
                                                     <span class="sr-only">First</span>
@@ -268,8 +314,7 @@
                                                     <span class="sr-only">Previous</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item"><button disabled class="page-link"
-                                                    id="pagenumNav">Page: 1</button></li>
+                                            <li class="page-item"><button disabled class="page-link" id="pagenumNav">Page: 1</button></li>
                                             <li class="page-item">
                                                 <a class="page-link" href="#" aria-label="Next" id="tonextNav">
                                                     <span aria-hidden="true">&raquo;</span>
@@ -277,16 +322,13 @@
                                                 </a>
                                             </li>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Last Page"
-                                                    id="tolastNav">
+                                                <a class="page-link" href="#" aria-label="Last Page"  id="tolastNav">
                                                     <span aria-hidden="true">&raquo;&raquo;</span>
                                                     <span class="sr-only">Next</span>
                                                 </a>
                                             </li>
                                         </ul>
-                                        <p class="card-text text-xxs">Showing from <span class="text-primary"
-                                                id="startNo">1</span> to <span class="text-secondary"
-                                                id="finishNo">10</span> records of <span id="tot_records">56</span></p>
+                                        <p class="card-text text-xxs">Showing from <span class="text-primary" id="startNo">1</span> to <span class="text-secondary"  id="finishNo">10</span> records of <span  id="tot_records">56</span></p>
                                     </nav>
                                 </div>
                             </div>
@@ -294,44 +336,37 @@
                     </div>
                 </div>
                 <!-- Basic Tables end -->
-
+               
 
             </div>
         </div>
     </div>
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-    <!-- The footer -->
+
+    {{-- footer --}}
         <x-footer/>
-    {{-- <x-footerRouteAdmin > --}}
-    <!-- ////////////////////////// -->
+    {{-- footer --}}
 
     <!-- BEGIN VENDOR JS-->
-    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
-
+    
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN CHAMELEON  JS-->
-    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
-    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
-    <!-- BEGIN PAGE LEVEL JS-->
-    {{--  --}}
-    <!-- END PAGE LEVEL JS-->
 
-    {{-- GET THE TRANSACTION DATA --}}
+    {{-- the sms javascript --}}
     <script>
-        var router_data = @json($transaction_data ?? '');
-        var today = @json($today ?? '');
-        // console.log(today);
-        var account_names = @json($account_name ?? '');
-        var transaction_date = @json($trans_dates ?? '');
-
-        var client_names = @json($clients_name ?? '');
+        var sms_data = @json($sms_data ?? '');
+        var client_names = @json($client_names ?? '');
+        var dates = @json($dates ?? '');
+        // console.log(sms_data);
+        var client_named = @json($clients_name ?? '');
         var client_contacts = @json($clients_phone ?? '');
         var client_account = @json($clients_acc ?? '');
     </script>
-
     <script>
         function autocomplete(inp, arr, arr2, arr3) {
             /*the autocomplete function takes two arguments,
@@ -446,14 +481,13 @@
         }
 
         /*An array containing all the country names in the world:*/
-        var countries = client_contacts;
+        // var countries = client_contacts;
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-        autocomplete(document.getElementById("myInput"), client_account, client_contacts, client_names);
+        autocomplete(document.getElementById("myInput"), client_account, client_contacts, client_named);
+        autocomplete(document.getElementById("myInput2"), client_contacts, client_account, client_named);
     </script>
-
-    {{-- script to create tables in the transaction table --}}
-    <script src="theme-assets/js/core/transactions.js"></script>
+    <script src="/theme-assets/js/core/organization/sms.js" type="text/javascript"></script>
     <script>
       var milli_seconds = 1200;
       setInterval(() => {
@@ -464,5 +498,4 @@
       }, 1000);
     </script>
 </body>
-
 </html>

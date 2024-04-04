@@ -76,7 +76,7 @@ function displayRecord(start, finish, arrays) {
                     // if the user is active
                     status = "<span class='badge badge-danger'> </span>";
                 }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder disabled "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
             counter++;
         }
     }else{
@@ -88,7 +88,7 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder disabled "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
             counter++;
         }
         fins = total;

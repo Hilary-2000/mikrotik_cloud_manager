@@ -22,6 +22,7 @@ use App\Http\Controllers\Router_Cloud;
 use App\Http\Controllers\SharedTables;
 use App\Http\Controllers\Transactions;
 use Facade\Ignition\Support\Packagist\Package;
+use Illuminate\Mail\Transport\Transport;
 use Symfony\Component\Mime\Crypto\SMime;
 
 /*
@@ -137,8 +138,16 @@ Route::get("/Packages/Activate/{package_id}",[Packages::class,"activate_package"
 Route::get("/Transactions",[Transactions::class, "display_transaction"])->name("Transactions");
 Route::get("Transactions/View/{organization_id}",[Transactions::class,"view_transactions"])->name("view_transactions");
 Route::get("/Transactions/Statistics",[Transactions::class,'transaction_statistics']);
+Route::get("/Transactions/Assign/{organization_id}/{transaction_id}",[Transactions::class, "assign_transaction"])->name("assign_transaction");
+Route::get("/Transactions/ConfirmTransfer/{organization_id}/{transaction_id}",[Transactions::class,"confirm_transfer"])->name("confirm_transfer");
+Route::post("/HBS/Transact",[Transactions::class,"mpesa_transactions"])->name("mpesa_transactions");
+Route::get("/Transport/Report",[Transactions::class,"generate_reports"])->name("generate_reports");
 
-
+Route::get("/SMS",[Sms::class,"get_sms"])->name("SMS");
+Route::get("/SMS/View/{sms_id}",[Sms::class,"get_sms_data"])->name("view_sms");
+Route::get("/SMS/Delete/{sms_id}",[Sms::class,"delete_sms_data"])->name("delete_sms");
+Route::get("/SMS/Resend/{sms_id}",[Sms::class,"resend_sms"])->name("resend_sms");
+Route::post("/SMS/Send",[Sms::class,"send_sms"])->name("send_sms");
 
 
 
@@ -273,16 +282,16 @@ Route::get("/Routers/Delete/{routerid}",[Router_Cloud::class,"deleteRouter"]);
 Route::get("/Routers",[Router_Cloud::class,'getRouterData'])->name("my_routers");
 
 // Sms section
-Route::get("/sms",[Sms::class,"getSms"]);
-Route::get("/sms/View/{smsid}", [Sms::class,"getSMSData"]);
-Route::get("/sms/delete/{smsid}", [Sms::class,"delete"]);
-Route::get("/sms/compose",[Sms::class,"compose"]);
-Route::post("/sendsms",[Sms::class,"sendsms"]);
-Route::get("/sms/system_sms",[Sms::class,"customsms"]);
-Route::post("/save_sms_content",[Sms::class,"save_sms_content"]);
-Route::get("/sms_balance",[Sms::class,"sms_balance"]);
-Route::get("/sms/resend/{sms_id}",[Sms::class,"resend_sms"]);
-Route::post("/sendsms_routers",[Sms::class,"sendsms_routers"]);
+// Route::get("/sms",[Sms::class,"getSms"]);
+// Route::get("/sms/View/{smsid}", [Sms::class,"getSMSData"]);
+// Route::get("/sms/delete/{smsid}", [Sms::class,"delete"]);
+// Route::get("/sms/compose",[Sms::class,"compose"]);
+// Route::post("/sendsms",[Sms::class,"sendsms"]);
+// Route::get("/sms/system_sms",[Sms::class,"customsms"]);
+// Route::post("/save_sms_content",[Sms::class,"save_sms_content"]);
+// Route::get("/sms_balance",[Sms::class,"sms_balance"]);
+// Route::get("/sms/resend/{sms_id}",[Sms::class,"resend_sms"]);
+// Route::post("/sendsms_routers",[Sms::class,"sendsms_routers"]);
 
 // accounts and profile
 Route::get("/Accounts",[admin::class,"getAdmin"]);

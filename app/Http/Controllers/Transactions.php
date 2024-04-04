@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\reports\PDF;
+use App\Models\sms_table;
+use App\Models\transaction_table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,6 +13,7 @@ class Transactions extends Controller
 {
     //get all the transaction
     function display_transaction(){
+        
         // change db
         $change_db = new login();
         $change_db->change_db();
@@ -24,12 +28,12 @@ class Transactions extends Controller
             $client_name = "Invalid Org!";
             if (count($organizations) > 0) {
                 $client_name = $organizations[0]->organization_name;
-                $transaction_data[$index]->transaction_acc_id = $organizations[0]->client_id;
+                $transaction_data[$index]->transaction_acc_id = $organizations[0]->organization_id;
             }else {
                 // get the client name from the account linked to that transaction
                 $organizations = DB::connection("mysql")->select("SELECT * FROM `organizations` WHERE `organization_id` = '".$transaction_data[$index]->transaction_acc_id."'");
                 $client_name = count($organizations) > 0 ? $organizations[0]->organization_name : "Invalid Org!";
-                $transaction_data[$index]->transaction_acc_id = count($organizations) > 0 ? $organizations[0]->client_id : $transaction_data[$index]->transaction_acc_id;
+                $transaction_data[$index]->transaction_acc_id = count($organizations) > 0 ? $organizations[0]->organization_id : $transaction_data[$index]->transaction_acc_id;
             }
             array_push($account_names,$client_name);
 
@@ -306,6 +310,59 @@ class Transactions extends Controller
         return view("Transactions.trans-stats",["transaction_stats_weekly" => $transaction_stats_weekly,"transaction_records_weekly" => $transaction_records_weekly,"transaction_stats_monthly" => $transaction_stats_monthly,"transaction_records_monthly" => $transaction_records_monthly,"transaction_yearly_stats" => $transaction_yearly_stats,"transaction_yearly_records" => $transaction_yearly_records]);
     }
 
+    // assign transaction
+    function assign_transaction($organization_id, $transaction_id){
+        $organizations = new Organization();
+        $exp_date = $organizations->get_expiry($organization_id);
+        $expiry_date = $exp_date['date'];
+
+        $transaction_detail = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$transaction_id'");
+        $organization_data = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = '$organization_id'");
+
+        // organization expiry date
+        $dates = date("D dS M Y  h:i:sa", strtotime($expiry_date));
+
+        // get package name
+        $package_data = DB::select("SELECT * FROM `packages` WHERE `package_id` = '".$organization_data[0]->package_name."'");
+        $organization_data[0]->package_name = count($package_data) > 0 ? $package_data[0]->package_name." - (Kes ". number_format($package_data[0]->amount_paid).")" : "Null";
+
+        // Transaction date
+        $dates2 = date("D dS M Y  h:i:sa", strtotime($transaction_detail[0]->transaction_date));
+        return view("Transactions.accept-transfer",["organization_data" => $organization_data, "transaction_details" => $transaction_detail,"transaction_id" => $transaction_id, "expiration_date" => $dates, "transaction_date" => $dates2]);
+    }
+
+    function confirm_transfer($organization_id, $transaction_id){
+
+        $organization_data = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = '$organization_id'");
+        $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$transaction_id'");
+        // update the transaction status to 1 and the transaction account id and account number to 1
+        $amount = ($transaction_data[0]->transacion_amount) + ($organization_data[0]->wallet);
+
+        // update the users wallet and the transaction account id account number and the transaction status and return the confirmation message
+        DB::table('organizations')
+        ->where('organization_id', $organization_id)
+        ->update([
+            'wallet' => $amount
+        ]);
+
+        // update the transaction details
+        // transaction status, transaction acc number acc id
+        DB::table('transaction_tables')
+        ->where('transaction_id', $transaction_id)
+        ->update([
+            'transaction_acc_id' => $organization_id,
+            'transaction_status' => "1",
+            'date_changed' => date("YmdHis")
+        ]);
+                
+        $new_client = new Clients();
+        $txt = ":Fund successfully transfered by  ".session('Usernames')." to ".$organization_data[0]->organization_name."!";
+        // $new_client->log($txt);
+        // end of log file
+        session()->flash("success","You have successfully transfered the funds to ".$organization_data[0]->organization_name."");
+        return redirect(route("view_transactions", [$transaction_id]));
+    }
+
     function addDays($date,$days){
         $date = date_create($date);
         date_add($date,date_interval_create_from_date_string($days." day"));
@@ -322,4 +379,398 @@ class Transactions extends Controller
         date_add($date,date_interval_create_from_date_string($years." Year"));
         return date_format($date,"YmdHis");
     }
+    function mpesa_transactions(Request $response){
+        // get the database for the business shortcode
+		$mpesaResponse = $response;
+        
+        // echo $mpesaResponse;
+         $jsonMpesaResponse = $mpesaResponse;
+         if(isset($jsonMpesaResponse)){
+            //  check the account number to know the user
+            $acc_no = trim($jsonMpesaResponse['BillRefNumber']);
+            $ipo = 0;
+
+            // ipo is used to check if its hypbits clients
+            $organization_data = DB::select("SELECT * FROM `organizations` WHERE `account_no` = '$acc_no';");
+            $phone_number = $jsonMpesaResponse['MSISDN'];
+
+            $organization_id = 0;
+            $organization_transaction_id = 0;
+            $transaction_status = "0";
+            if (count($organization_data) > 0) {
+                $transaction_status = "1";
+                $wallet = $organization_data[0]->wallet + ($jsonMpesaResponse['TransAmount'] * 1);
+                $organization_id = $organization_data[0]->organization_id;
+                $organization_transaction_id = $organization_id;
+
+                // update the wallet amount and send the sms to the user
+                DB::table("organizations")->where('organization_id', $organization_data[0]->organization_id)->update(["wallet" => $wallet]);
+                
+                // check if the user phone number is same to the one stored in the database
+                $phone_db = (strlen($organization_data[0]->organization_main_contact) == 12) ? substr($organization_data[0]->organization_main_contact,3,9) : substr($organization_data[0]->organization_main_contact,1,9);
+                
+                // get the sms keys
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
+                $sms_api_key = $sms_keys[0]->value;
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
+                $sms_partner_id = $sms_keys[0]->value;
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
+                $sms_shortcode = $sms_keys[0]->value;
+
+
+                $partnerID = $sms_partner_id;
+                $apikey = $sms_api_key;
+                $shortcode = $sms_shortcode;
+                $mobile = "";
+                $message = "";
+                $sms_type = 1;
+
+                $mobile = "254$phone_db"; // Bulk messages can be comma separated
+                // send sms
+                $message_contents = $this->get_sms();
+                $message = $message_contents[1]->messages[0]->message;
+
+                if ($message) {
+                    // replace false with message above
+                    $trans_amount = $jsonMpesaResponse['TransAmount'];
+                    $message = $this->message_content($message,$organization_id,$trans_amount);
+
+                    // send_sms($conn,$row['clients_contacts'],$message,$row['client_id']);
+                    $finalURL = "https://isms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
+                    $ch = \curl_init();
+                    \curl_setopt($ch, CURLOPT_URL, $finalURL);
+                    \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    $response = \curl_exec($ch);
+                    \curl_close($ch);
+                    $res = json_decode($response);
+
+                    if (isset($res->responses[0])) {
+                        $values = $res->responses[0];
+                        // return $values;
+                        // return $res;
+                        $message_status = 0;
+                        foreach ($values as  $key => $value) {
+                            // echo $key;
+                            if ($key == "response-code") {
+                                if ($value == "200") {
+                                    // if its 200 the message is sent delete the
+                                    $message_status = 1;
+                                }
+                            }
+                        }
+                        
+                        // if the message status is one the message is already sent to the user
+                        $sms_table = new sms_table();
+                        $sms_table->sms_content = $message;
+                        $sms_table->date_sent = date("YmdHis");
+                        $sms_table->recipient_phone = $mobile;
+                        $sms_table->sms_status = $message_status;
+                        $sms_table->account_id = $organization_transaction_id;
+                        $sms_table->sms_type = $sms_type;
+                        $sms_table->save();
+                    }
+                }
+            }else {
+                // if the user is not known
+                // send the sms showing that the transaction is pending
+
+                // get the sms keys
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
+                $sms_api_key = $sms_keys[0]->value;
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
+                $sms_partner_id = $sms_keys[0]->value;
+                $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
+                $sms_shortcode = $sms_keys[0]->value;
+
+
+                $partnerID = $sms_partner_id;
+                $apikey = $sms_api_key;
+                $shortcode = $sms_shortcode;
+                $mobile = $jsonMpesaResponse['MSISDN'];
+                $message_contents = $this->get_sms();
+                $message = $message_contents[1]->messages[1]->message;
+                if ($message) {// replace false with message
+                    $trans_amount = $jsonMpesaResponse['TransAmount'];
+                    $message = $this->message_content($message,$organization_id,$trans_amount);
+                    // send the sms
+                    $finalURL = "https://isms.celcomafrica.com/api/services/sendsms/?apikey=" . urlencode($apikey) . "&partnerID=" . urlencode($partnerID) . "&message=" . urlencode($message) . "&shortcode=$shortcode&mobile=$mobile";
+                    $ch = \curl_init();
+                    \curl_setopt($ch, CURLOPT_URL, $finalURL);
+                    \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    $response = \curl_exec($ch);
+                    \curl_close($ch);
+                    $res = json_decode($response);
+                    
+                    // return $res;
+                    $values = (isset($res->responses[0])) ? $res->responses[0] : $res->success ;
+                    
+                    if ((isset($res->responses[0]))) {
+                        if ($values != "false") {
+                            $message_status = 0;
+                            foreach ($values as  $key => $value) {
+                                // echo $key;
+                                if ($key == "response-code") {
+                                    if ($value == "200") {
+                                        // if its 200 the message is sent delete the
+                                        $message_status = 1;
+                                    }
+                                }
+                            }
+                
+                            // save to the database the transaction made
+                            $sms_table = new sms_table();
+                            $sms_table->sms_content = $message;
+                            $sms_table->date_sent = date("YmdHis");
+                            $sms_table->recipient_phone = $mobile;
+                            $sms_table->sms_status = $message_status;
+                            $sms_table->account_id = "0";
+                            $sms_table->sms_type = "1";
+                            $sms_table->save();
+                        }
+                    }
+                }
+            }
+
+            // save the data in the transaction table
+            $clientelle = str_replace("'","_",$jsonMpesaResponse['FirstName']);
+            $transTable = new transaction_table();
+            $transTable->transaction_mpesa_id = $jsonMpesaResponse['TransID'];
+            $transTable->transaction_date = $jsonMpesaResponse['TransTime'];
+            $transTable->transacion_amount = $jsonMpesaResponse['TransAmount'];
+            $transTable->phone_transacting = $jsonMpesaResponse['MSISDN'];
+            $transTable->transaction_account = $jsonMpesaResponse['BillRefNumber'];
+            $transTable->transaction_acc_id = $organization_transaction_id;
+            $transTable->transaction_status = $transaction_status;
+            $transTable->transaction_short_code = $jsonMpesaResponse['BusinessShortCode'];
+            $transTable->fullnames = $clientelle;
+            $transTable->save();
+        
+                
+            $new_client = new Clients();
+            $txt = ": Funds successfully received from ".$jsonMpesaResponse['FirstName']." paid for INVALID account number ".$jsonMpesaResponse['BillRefNumber']."!";
+            if (count($organization_data) > 0) {
+                $txt = ": Funds successfully received from ".$jsonMpesaResponse['FirstName']." paid for ".ucwords(strtolower($organization_data[0]->organization_name))." account number ".$jsonMpesaResponse['BillRefNumber']."!";
+            }
+            // $new_client->log_db($txt,$organization[0]->organization_database);
+            // end of log file
+            return [$txt];
+        }
+    }
+    function generate_reports(Request $req){
+        // return $req;
+        $transaction_date_option = $req->input('transaction_date_option');
+        $from_select_date = $req->input('from_select_date');
+        $to_select_date = $req->input('to_select_date');
+        $select_registration_date = $req->input('select_registration_date');
+        $select_user_option = $req->input('select_user_option');
+        $client_account = $req->input('client_account');
+
+        // sort in two options of the client specific or a group
+        $title = "";
+        $transaction_data = [];
+        if ($select_user_option == "All") {
+            if ($transaction_date_option == "all dates") {
+                $title = "All Transactions done!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
+            }elseif ($transaction_date_option == "select date") {
+                $title = "All Transactions on ".date("D dS M Y", strtotime($select_registration_date))."!";
+                $date = date("Ymd",strtotime($select_registration_date));
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC");
+            }elseif ($transaction_date_option == "between dates") {
+                $from = date("YmdHis",strtotime($from_select_date));
+                $to = date("Ymd",strtotime($to_select_date))."235959";
+                $title = "All Transactions done between (".date("D dS M Y", strtotime($from_select_date)).") and (".date("D dS M Y",strtotime($to_select_date)).")!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$from,$to]);
+            }else{
+                $title = "All Transactions done!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' ORDER BY `transaction_id` DESC");
+            }
+        }elseif ($select_user_option == "specific_user") {
+            $client_names = $this->getClientName($client_account);
+            if ($transaction_date_option == "all dates") {
+                $title = "All ".$client_names." Transactions done!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
+            }elseif ($transaction_date_option == "select date") {
+                $title = "All ".$client_names."`s Transactions done on ".date("D dS M Y",strtotime($select_registration_date))."!";
+                $date = date("Ymd",strtotime($select_registration_date));
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` LIKE '".$date."%' ORDER BY `transaction_id` DESC",[$client_account]);
+            }elseif ($transaction_date_option == "between dates") {
+                $from = date("YmdHis",strtotime($from_select_date));
+                $to = date("Ymd",strtotime($to_select_date))."235959";
+                $title = "All ".$client_names."`s Transactions done between (".date("D dS M Y",strtotime($from_select_date)).") AND (".date("D dS M Y",strtotime($to_select_date)).")!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? AND `transaction_date` BETWEEN ? AND ? ORDER BY `transaction_id` DESC",[$client_account,$from,$to]);
+            }else{
+                $title = "All ".$client_names." Transactions done!";
+                $transaction_data = DB::select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_account` = ? ORDER BY `transaction_id` DESC",[$client_account]);
+            }
+        }
+
+        // GET THE TRANSACTION INFORMATION
+        $new_transaction_data = [];
+        $assigned = 0;
+        $un_assigned = 0;
+        $assigned_amount = 0;
+        $un_assigned_amount = 0;
+        for ($index=0; $index < count($transaction_data); $index++) { 
+            if ($transaction_data[$index]->transaction_status) {
+                $assigned++;
+                $assigned_amount += $transaction_data[$index]->transacion_amount;
+            }else {
+                $un_assigned++;
+                $un_assigned_amount += $transaction_data[$index]->transacion_amount;
+            }
+            $data = array(
+                $transaction_data[$index]->transaction_mpesa_id,
+                $this->getClientNames($transaction_data[$index]->transaction_account,$transaction_data[$index]->transaction_acc_id)." {".$transaction_data[$index]->transaction_account."}",
+                $transaction_data[$index]->phone_transacting,
+                $transaction_data[$index]->transacion_amount,
+                $transaction_data[$index]->transaction_date,
+                $transaction_data[$index]->fullnames,
+                ($transaction_data[$index]->transaction_status == "1" ? "Assigned" : "Un-Assigned")
+            );
+            array_push($new_transaction_data,$data);
+        }
+
+        // create pdf
+        $pdf = new PDF("P","mm","A4");
+        if (session("organization_logo")) {
+            $pdf->setCompayLogo("../../../../../../../../..".public_path(session("organization_logo")));
+            $pdf->set_company_name(session("organization")->organization_name);
+            $pdf->set_school_contact(session("organization")->organization_main_contact);
+        }
+        $pdf->set_document_title($title);
+        $pdf->AddPage();
+        $pdf->SetFont('Times', 'B', 10);
+        $pdf->SetMargins(5,5);
+        $pdf->Cell(40, 10, "Statistics", 0, 0, 'L', false);
+        $pdf->Ln();
+        $pdf->Cell(40, 5, "", 0, 0, 'L', false);
+        $pdf->Cell(30, 5, "Records", 0, 0, 'L', false);
+        $pdf->Cell(30, 5, "Amount", 0, 1, 'L', false);
+        $pdf->SetFont('Times', 'I', 9);
+        $pdf->Cell(40, 5, "Un-Assigned Payments :", 0, 0, 'L', false);
+        $pdf->Cell(30, 5, $un_assigned . " Payment(s)", 0, 0, 'L', false);
+        $pdf->Cell(30, 5, "Kes ".number_format($un_assigned_amount), 0, 1, 'L', false);
+        $pdf->Cell(40, 5, "Assigned Payments :", 0, 0, 'L', false);
+        $pdf->Cell(30, 5, $assigned . " Payment(s)", 0,0, 'L', false);
+        $pdf->Cell(30, 5, "Kes ".number_format($assigned_amount), 0, 1, 'L', false);
+        $pdf->Cell(40, 5, "Total :", 'T', 0, 'L', false);
+        $pdf->Cell(30, 5, ($un_assigned+$assigned) . " Payment(s)", 'T', 0, 'L', false);
+        $pdf->Cell(30, 5, "Kes ".number_format($un_assigned_amount + $assigned_amount), 'T', 0, 'L', false);
+        $pdf->Ln();
+        $pdf->SetFont('Helvetica', 'BU', 9);
+        $pdf->Cell(200,8,"Payment(s) Table",0,1,"C",false);
+        $pdf->SetFont('Helvetica', 'B', 7);
+        $width = array(6,20,40,20,20,40,40,15);
+        $header = array('No', 'M-Pesa Code', 'Linked To {Acc Paid To}', 'Phone Number', 'Amount','Date','M-Pesa Fullname', 'Status');
+        $pdf->transactionReports($header,$new_transaction_data,$width);
+        $pdf->Output("I","transaction_data.pdf",false);
+
+    }
+    function getClientNames($account_no,$organization_id){
+        // change db
+        $change_db = new login();
+        $change_db->change_db();
+
+        // return by organization data
+        $organizations_data = DB::select("SELECT * FROM `organizations` WHERE `account_no` = ?",[$account_no]);
+        if (count($organizations_data) > 0) {
+            return ucwords(strtolower($organizations_data[0]->organization_name));
+        }
+
+        // return by organization
+        $organizations_data = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        $organization_name = count($organizations_data) > 0 ? $organizations_data[0]->organization_name : "Null";
+        return ucwords(strtolower($organization_name));
+    }
+
+    // get sms
+	function get_sms(){
+        $data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
+        return json_decode($data[0]->value);
+	}
+	function message_content($data,$organization_id,$trans_amount) {
+
+        $organization_data = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = '$organization_id'");
+        if (count($organization_data) > 0) {
+            $organizations = new Organization();
+            $exp_date = $organizations->get_expiry($organization_id);
+            $expiry_date = $exp_date['date'];
+
+            // expiry date
+            $exp_date = ($expiry_date);
+
+            // package details
+            $package_details = DB::select("SELECT * FROM `packages` WHERE `package_id` = ?",[$organization_data[0]->organization_id]);
+            $package_name = count($package_details) > 0 ? "{".$package_details[0]->package_name. " @ Kes ". number_format($package_details[0]->amount_paid)." after every ".$package_details[0]->package_period."}" : "Null";
+
+            $reg_date = $organization_data[0]->date_joined;
+            $monthly_payment = $package_name;
+            $full_name = $organization_data[0]->organization_name;
+            $f_name = ucfirst(strtolower((explode(" ",$full_name)[0])));
+            $address = $organization_data[0]->organization_address;
+            $contacts = $organization_data[0]->organization_main_contact;
+            $account_no = $organization_data[0]->account_no;
+            $wallet = $organization_data[0]->wallet;
+            $trans_amount = isset($trans_amount)?$trans_amount:"Null";
+            
+            // edited
+            $today = date("dS-M-Y");
+            $now = date("H:i:s");
+            $time = $exp_date;
+            $exp_date = date("dS-M-Y",strtotime($exp_date));
+            $exp_time = date("H:i:s",strtotime($time));
+            $reg_date = date("dS-M-Y",strtotime($reg_date));
+            $data = str_replace("[client_name]", $full_name, $data);
+            $data = str_replace("[client_f_name]", $f_name, $data);
+            $data = str_replace("[client_addr]", $address, $data);
+            $data = str_replace("[exp_date]", $exp_date." at ".$exp_time, $data);
+            $data = str_replace("[reg_date]", $reg_date, $data);
+            $data = str_replace("[package_name]", "Ksh ".$monthly_payment, $data);
+            $data = str_replace("[client_phone]", $contacts, $data);
+            $data = str_replace("[acc_no]", $account_no, $data);
+            $data = str_replace("[client_wallet]", "Ksh ".$wallet, $data);
+            $data = str_replace("[trans_amnt]", "Ksh ".$trans_amount, $data);
+            $data = str_replace("[today]", $today, $data);
+            $data = str_replace("[now]", $now,$data);
+            return $data;
+        }else {
+            // null data
+            $exp_date = "Null";
+            $reg_date = "Null";
+            $monthly_payment = "Null";
+            $full_name = "Null";
+            $f_name = ucfirst(strtolower((explode(" ",$full_name)[0])));
+            $address = "Null";
+            $contacts = "Null";
+            $account_no = "Null";
+            $wallet = "Null";
+            $trans_amount = isset($trans_amount)?$trans_amount:"Null";
+
+            // edited
+            $today = date("dS-M-Y");
+            $now = date("H:i:s");
+            $time = $exp_date;
+            $exp_date = date("dS-M-Y",strtotime($exp_date));
+            $exp_time = date("H:i:s",strtotime($time));
+            $reg_date = date("dS-M-Y",strtotime($reg_date));
+
+            // replace the string data
+            $data = str_replace("[client_name]", $full_name, $data);
+            $data = str_replace("[client_f_name]", $f_name, $data);
+            $data = str_replace("[client_addr]", $address, $data);
+            $data = str_replace("[exp_date]", $exp_date." at ".$exp_time, $data);
+            $data = str_replace("[reg_date]", $reg_date, $data);
+            $data = str_replace("[package_name]", "Ksh ".$monthly_payment, $data);
+            $data = str_replace("[client_phone]", $contacts, $data);
+            $data = str_replace("[acc_no]", $account_no, $data);
+            $data = str_replace("[client_wallet]", "Ksh ".$wallet, $data);
+            $data = str_replace("[trans_amnt]", "Ksh ".$trans_amount, $data);
+            $data = str_replace("[today]", $today, $data);
+            $data = str_replace("[now]", $now,$data);
+            return $data;
+        }
+	}
 }

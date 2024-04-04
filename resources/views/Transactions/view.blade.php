@@ -149,16 +149,16 @@
                                                 <div class="row my-1">
                                                     <div class="col-sm-6"><strong>Transaction status:</strong></div>
                                                     <div class="col-sm-6">
-                                                        <a href="#" {{$readonly}} class="btn btn-sm btn-success d-none">Assigned</a>
-                                                        <p class="text-success"><b>Assigned!</b></p>
+                                                        <a href="#" {{$readonly}} class="btn btn-sm btn-success">Assigned</a>
+                                                        {{-- <p class="text-success"><b>Assigned!</b></p> --}}
                                                     </div>
                                                 </div>
                                             @else
                                                 <div class="row my-1">
                                                     <div class="col-sm-6"><strong>Transaction status:</strong></div>
                                                     <div class="col-sm-6"><a href="#assign_transaction"
-                                                            class="btn btn-sm btn-danger d-none {{$readonly}}">Assign?</a>
-                                                            <p class="text-danger"><b>Not-Assigned!</b></p>
+                                                            class="btn btn-sm btn-danger {{$readonly}}">Assign?</a>
+                                                            {{-- <p class="text-danger"><b>Not-Assigned!</b></p> --}}
                                                     </div>
                                                 </div>
                                             @endif
@@ -237,8 +237,8 @@
                 </div>
                 <!-- Basic Tables end -->
                 {{-- Assign transaction --}}
-                {{-- @if ($transaction_data[0]->transaction_status == 0) --}}
-                @if (false)
+                @if ($transaction_data[0]->transaction_status == 0)
+                {{-- @if (false) --}}
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -273,7 +273,7 @@
                                         <div class="table-responsive" id="transDataReciever">
                                             <div class="container text-center my-2">
                                                 <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
-                                                    src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
+                                                    src="/theme-assets/images/logo.jpeg"/>
                                             </div>
                                         </div>
                                         <nav aria-label="Page navigation example" id="tablefooter">

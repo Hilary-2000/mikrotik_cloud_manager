@@ -70,10 +70,17 @@ class login extends Controller
                 \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 $response = \curl_exec($ch);
                 \curl_close($ch);
-                $res = json_decode($response);
-                // return $res;
-                $values = $res->responses[0] ? $res->responses[0] : [];
-                // return $values;
+                $res = json_decode($response,true);
+
+                // check for the error!
+                if (isset($res['response-code'])) {
+                    if ($res['response-code'] == 1003) {
+                        session()->flash('error',"SMS ERROR : ".$res['response-description']);
+                        return redirect("/Login");
+                    }
+                }
+
+                $values = $res['responses'][0] ? $res['responses'][0] : [];
                 foreach ($values as  $key => $value) {
                     // echo $key;
                     if ($key == "response-code") {
