@@ -147,28 +147,29 @@ class Sms extends Controller
         session()->flash("success_sms","Message successfully deleted");
         return redirect("/SMS");
     }
-    function compose(){
+    
+    function Compose(){
         // change db
         $change_db = new login();
         $change_db->change_db();
 
         // get user data
-        $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0';");
+        $organization_data = DB::select("SELECT * FROM `organizations`");
         $client_names = [];
-        foreach ($user_data as $key => $value) {
-            array_push($client_names,$value->client_name);
+        foreach ($organization_data as $key => $value) {
+            array_push($client_names,$value->organization_name);
         }
         $client_contacts = [];
-        foreach ($user_data as $key => $value) {
-            array_push($client_contacts,$value->clients_contacts);
+        foreach ($organization_data as $key => $value) {
+            array_push($client_contacts,$value->organization_main_contact);
         }
         $client_account = [];
-        foreach ($user_data as $key => $value) {
-            array_push($client_account,$value->client_account);
+        foreach ($organization_data as $key => $value) {
+            array_push($client_account,$value->account_no);
         }
-        $router_data = DB::connection("mysql2")->select("SELECT * FROM `router_tables` WHERE `deleted`= '0'");
-        return view("compose",["client_names" => $client_names,"client_contacts" => $client_contacts,"client_account" => $client_account,"router_infor" => $router_data]);
+        return view("SMS.compose",["client_names" => $client_names,"client_contacts" => $client_contacts,"client_account" => $client_account,"router_infor" => []]);
     }
+
     function send_sms(Request $req){
         // GET THE SMS KEYS FROM THE DATABASE
         $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
@@ -206,7 +207,7 @@ class Sms extends Controller
                 $send_sms = 1;
             }else{
                 session()->flash("error_sms","Please provide a number to send the sms");
-                return redirect("/sms/compose");
+                return redirect(route("Compose"));
             }
         }elseif ($select_recipient == 5){
             // select the client
@@ -227,7 +228,7 @@ class Sms extends Controller
                 $send_sms = 1;
             }else{
                 session()->flash("error_sms","Please provide a number to send the sms");
-                return redirect("/sms/compose");
+                return redirect(route("Compose"));
             }
         }elseif ($select_recipient == 2) {
             // send to active clients
@@ -245,7 +246,7 @@ class Sms extends Controller
                 $send_sms = 1;
             }else{
                 session()->flash("error_sms","No active clients at the moment");
-                return redirect("/sms/compose");
+                return redirect(route("Compose"));
             }
         }elseif ($select_recipient == 3) {
             // send to active clients
@@ -263,7 +264,7 @@ class Sms extends Controller
                 $send_sms = 1;
             }else{
                 session()->flash("error_sms","No inactive clients at the moment");
-                return redirect("/sms/compose");
+                return redirect(route("Compose"));
             }
         }elseif ($select_recipient == 4) {
             // send to active clients
@@ -281,7 +282,7 @@ class Sms extends Controller
                 $send_sms = 1;
             }else{
                 session()->flash("error_sms","You have no clients to send messages at the moment");
-                return redirect("/sms/compose");
+                return redirect(route("Compose"));
             }
         }
 
@@ -321,8 +322,9 @@ class Sms extends Controller
             if (count($client_phone) > 1) {
                 for ($i=0; $i < count($client_phone); $i++) { 
                     // get the user id of the number from the database
-                    $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$client_phone[$i]'");
-                    $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
+                    $user_data = DB::select("SELECT * FROM `organizations` WHERE `organization_main_contact` = '$client_phone[$i]'");
+                    $client_id = (count($user_data) > 0) ? $user_data[0]->organization_id : 0;
+                    
                     // if the message status is one the message is already sent to the user
                     $sms_table = new sms_table();
                     $sms_table->sms_content = $messages;
@@ -336,8 +338,8 @@ class Sms extends Controller
                 }
             }else {
                 // get the user id of the number from the database
-                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `clients_contacts` = '$phone_number'");
-                $client_id = (count($user_data) > 0) ? $user_data[0]->client_id : 0;
+                $user_data = DB::select("SELECT * FROM `organizations` WHERE `organization_main_contact` = '$phone_number'");
+                $client_id = (count($user_data) > 0) ? $user_data[0]->organization_id : 0;
                 // if the message status is one the message is already sent to the user
                 $sms_table = new sms_table();
                 $sms_table->sms_content = $messages;
@@ -350,7 +352,10 @@ class Sms extends Controller
                 // save the clients data one by one
             }
             session()->flash("message_success","Message has been successfully sent to the client");
-            return redirect("/sms/compose");
+            return redirect(route("Compose"));
+        }else{
+            session()->flash("error_sms","An error occured, Can`t send message!");
+            return redirect(route("Compose"));
         }
     }
     function sendsms_routers(Request $req){
@@ -506,15 +511,15 @@ class Sms extends Controller
             return redirect("/sms/compose");
         }
     }
-    function customsms(){
+    function customize(){
         // change db
         $change_db = new login();
         $change_db->change_db();
 
-        $sms_data = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
+        $sms_data = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
         $message_content =  json_decode($sms_data[0]->value);
         // return $message_content;
-        return view("customsms",["sms_data"=>$message_content]);
+        return view("SMS.customsms",["sms_data"=>$message_content]);
     }
     function save_sms_content (Request $req){
         // change db
@@ -523,7 +528,7 @@ class Sms extends Controller
 
         // return $req->input();
         // save it in settings
-        $sms_content = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
+        $sms_content = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
         // if we have some data we update the data
         if (count($sms_content) > 0) {
             $message_content =  json_decode($sms_content[0]->value);
@@ -531,134 +536,134 @@ class Sms extends Controller
             if ($req->input('date_before')) {
                 $message_content[0]->messages[0]->message = $req->input("message_contents");
                 // return $message_content;
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");;
+                return redirect(route("customize"));
             }elseif($req->input('deday')){
                 $message_content[0]->messages[1]->message = $req->input("message_contents");
                 // return $message_content;
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('after_due_date')) {
                 $message_content[0]->messages[2]->message = $req->input("message_contents");
                 // return $req->input();
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('correct_acc_no')) {
                 $message_content[1]->messages[0]->message = $req->input("message_contents");// return $req->input();
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input("incorrect_acc_no")) {
                 $message_content[1]->messages[1]->message = $req->input("message_contents");
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('account_renewed')) {
                 $message_content[2]->messages[0]->message = $req->input("message_contents");
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('account_extended')) {
                 // return $message_content[2]->messages[1]->message;
                 $message_content[2]->messages[1]->message = $req->input("message_contents");
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('welcome_sms')) {
                 // return $message_content[3]->messages[0]->message;
                 $message_content[3]->messages[0]->message = $req->input("message_contents");
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('account_deactivated')) {
                 $message_content[2]->messages[2]->message = $req->input("message_contents");
-                DB::connection("mysql2")->table('settings')
+                DB::table('settings')
                 ->where('keyword', 'Messages')
                 ->update([
                     'value' => $message_content,
                     'date_changed' => date("YmdHis")
                 ]);
-                return redirect("/sms/system_sms");
+                return redirect(route("customize"));
             }elseif ($req->input('refferer_msg')) {
                 // return $message_content;
                 if(isset($message_content[1]->messages[2]->message)){
                     $message_content[1]->messages[2]->message = $req->input('message_contents');
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }else{
                     $msgs = array("Name" => "refferer_msg","message" => $req->input('message_contents'));
                     // return $msgs;
                     array_push($message_content[1]->messages,$msgs);
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('below_min_amnt')) {
                 // return $message_content;
                 if(isset($message_content[1]->messages[3]->message)){
                     $message_content[1]->messages[3]->message = $req->input('message_contents');
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }else{
                     $msgs = array("Name" => "refferer_msg","message" => $req->input('message_contents'));
                     // return $msgs;
                     array_push($message_content[1]->messages,$msgs);
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('welcome_client_sms')) {
                 // return $message_content[4];
@@ -674,26 +679,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1){
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" =>"welcome_client_sms", "message" => $req->input('message_contents'));
                         array_push($message_content[4]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the array
@@ -704,13 +709,13 @@ class Sms extends Controller
                     $message = array("Name" => $req->input('welcome_client_sms'), "message" => $req->input('message_contents'));
                     array_push($message_content[4]->messages,$message);
                     // return $message_content;
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('rcv_coracc_billsms')) {
                 if(isset($message_content[4])){
@@ -725,26 +730,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" =>"rcv_coracc_billsms", "message" => $req->input('message_contents'));
                         array_push($message_content[4]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the array
@@ -755,13 +760,13 @@ class Sms extends Controller
                     $message = array("Name" => $req->input('rcv_coracc_billsms'), "message" => $req->input('message_contents'));
                     array_push($message_content[4]->messages,$message);
                     // return $message_content;
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('rcv_incoracc_billsms')) {
                 // return $req->input();
@@ -777,26 +782,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" =>"rcv_incoracc_billsms", "message" => $req->input('message_contents'));
                         array_push($message_content[4]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the array
@@ -807,13 +812,13 @@ class Sms extends Controller
                     $message = array("Name" => $req->input('rcv_incoracc_billsms'), "message" => $req->input('message_contents'));
                     array_push($message_content[4]->messages,$message);
                     // return $message_content;
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('rcv_belowmin_billsms')) {
                 // return $req->input();
@@ -829,26 +834,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" =>"rcv_belowmin_billsms", "message" => $req->input('message_contents'));
                         array_push($message_content[4]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the array
@@ -859,13 +864,13 @@ class Sms extends Controller
                     $message = array("Name" => $req->input('rcv_belowmin_billsms'), "message" => $req->input('message_contents'));
                     array_push($message_content[4]->messages,$message);
                     // return $message_content;
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('msg_reminder_bal')) {
                 // return $req->input();
@@ -881,26 +886,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" =>"msg_reminder_bal", "message" => $req->input('message_contents'));
                         array_push($message_content[4]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the array
@@ -911,13 +916,13 @@ class Sms extends Controller
                     $message = array("Name" => $req->input('msg_reminder_bal'), "message" => $req->input('message_contents'));
                     array_push($message_content[4]->messages,$message);
                     // return $message_content;
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('account_frozen')) {
                 // return $req->input();
@@ -933,26 +938,26 @@ class Sms extends Controller
                     }
                     // return $message_content;
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" => $req->input('account_frozen'), "message" => $req->input('message_contents'));
                         array_push($message_content[5]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the std class
@@ -964,13 +969,13 @@ class Sms extends Controller
                     array_push($message_content,$message);
                     // return $message_content;
 
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                 }
             }elseif ($req->input('account_unfrozen')) {
                 // return $req->input();
@@ -985,26 +990,26 @@ class Sms extends Controller
                         }
                     }
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" => $req->input('account_unfrozen'), "message" => $req->input('message_contents'));
                         array_push($message_content[5]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the std class
@@ -1016,13 +1021,13 @@ class Sms extends Controller
                     array_push($message_content,$message);
                     // return $message_content;
 
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }elseif ($req->input('future_account_freeze')) {
                 // return $req->input();
@@ -1037,26 +1042,26 @@ class Sms extends Controller
                         }
                     }
                     if ($present == 1) {
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                     if ($present == 0) {
                         // add the message to the messages list
                         $data = array("Name" => $req->input('future_account_freeze'), "message" => $req->input('message_contents'));
                         array_push($message_content[5]->messages,$data);
                         // return $message_content;
-                        DB::connection("mysql2")->table('settings')
+                        DB::table('settings')
                         ->where('keyword', 'Messages')
                         ->update([
                             'value' => $message_content,
                             'date_changed' => date("YmdHis")
                         ]);
-                        return redirect("/sms/system_sms");
+                        return redirect(route("customize"));
                     }
                 }else{
                     // create the std class
@@ -1069,13 +1074,13 @@ class Sms extends Controller
                     array_push($message_content,$message);
                     // return $message_content;
 
-                    DB::connection("mysql2")->table('settings')
+                    DB::table('settings')
                     ->where('keyword', 'Messages')
                     ->update([
                         'value' => $message_content,
                         'date_changed' => date("YmdHis")
                     ]);
-                    return redirect("/sms/system_sms");
+                    return redirect(route("customize"));
                 }
             }
             // DO NOT ADD MORE FROM THESE AREA.
@@ -1083,7 +1088,7 @@ class Sms extends Controller
             // OTHERWISE ITS GOING TO BE MESSY
         }else{
             // is we dont have any data we insert the data
-            return redirect("/sms/system_sms");
+            return redirect(route("customize"));
         }
     }
 
@@ -1131,12 +1136,12 @@ class Sms extends Controller
 
         $message_count = count($hold_user_id_data);
         // delete the smses
-        for ($index=0; $index < count($hold_user_id_data); $index++) { 
-            DB::connection("mysql2")->delete("DELETE FROM `sms_tables` WHERE `sms_id` = ?",[$hold_user_id_data[$index]]);
+        for ($index=0; $index < count($hold_user_id_data); $index++) {
+            DB::delete("DELETE FROM `sms_tables` WHERE `sms_id` = ?",[$hold_user_id_data[$index]]);
         }
 
         session()->flash("success_sms",$message_count." messages have been deleted successfully!");
-        return redirect("/sms");
+        return redirect(route("SMS"));
     }
 
     function Resend_bulk_sms(Request $req){
@@ -1149,15 +1154,15 @@ class Sms extends Controller
         $hold_user_id_data = json_decode($hold_user_id_data);
 
         // GET THE SMS KEYS FROM THE DATABASE
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_api_key'");
         $sms_api_key = $sms_keys[0]->value;
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_partner_id'");
         $sms_partner_id = $sms_keys[0]->value;
-        $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
+        $sms_keys = DB::select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'sms_shortcode'");
         $sms_shortcode = $sms_keys[0]->value;
 
         for ($index=0; $index < count($hold_user_id_data); $index++) { 
-            $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `sms_id` = '".$hold_user_id_data[$index]."'");
+            $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `sms_id` = '".$hold_user_id_data[$index]."'");
             if (count($sms_data) > 0) {
                 $recipient_phone = $sms_data[0]->recipient_phone;
                 $sms_content = $sms_data[0]->sms_content;
@@ -1180,8 +1185,8 @@ class Sms extends Controller
                 $response = \curl_exec($ch);
                 \curl_close($ch);
                 $res = json_decode($response);
-                // return $res;
                 $values = $res->responses[0];
+
                 // return $values;
                 foreach ($values as  $key => $value) {
                     // echo $key;
@@ -1192,6 +1197,7 @@ class Sms extends Controller
                         }
                     }
                 }
+
                 // if the message status is one the message is already sent to the user
                 $sms_table = new sms_table();
                 $sms_table->sms_content = $sms_content;
@@ -1205,7 +1211,7 @@ class Sms extends Controller
         }
 
         session()->flash("success_sms",count($hold_user_id_data)." messages have been re-sent successfully!");
-        return redirect("/sms");
+        return redirect(route("SMS"));
     }
 
     function generateReports(Request $req){
@@ -1232,19 +1238,19 @@ class Sms extends Controller
                 if ($sms_date_option == "select date") {
                     $title = "SMS sent on ".date("D dS M Y",strtotime($select_registration_date));
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' ORDER BY `sms_id` DESC");
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent between ".date("D dS M Y",strtotime($from_select_date))." and ".date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ?  ORDER BY `sms_id` DESC",[$from,$to]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ?  ORDER BY `sms_id` DESC",[$from,$to]);
                 }else{
                     $title = "All SMS sent";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` ORDER BY `sms_id` DESC");
                 }
             }elseif($select_user_option == "specific_user"){
                 // get the user data
-                $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ?",[$client_account]);
+                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ?",[$client_account]);
                 if (count($user_data) < 1) {
                     return "<p style='color:red;'>This account number is invalid</p>";
                 }
@@ -1253,15 +1259,15 @@ class Sms extends Controller
                 if ($sms_date_option == "select date") {
                     $title = "SMS sent to ".$client_name." on ".date("D dS M Y",strtotime($select_registration_date));
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `account_id` = ? ORDER BY `sms_id` DESC",[$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `account_id` = ? ORDER BY `sms_id` DESC",[$client_id]);
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent to ".$client_name." between ".date("D dS M Y",strtotime($from_select_date))." to ". date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `account_id` = ? ORDER BY `sms_id` DESC",[$from,$to,$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `account_id` = ? ORDER BY `sms_id` DESC",[$from,$to,$client_id]);
                 }else{
                     $title = "All SMS sent to ".$client_name.".";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `account_id` = ? ORDER BY `sms_id` DESC",[$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `account_id` = ? ORDER BY `sms_id` DESC",[$client_id]);
                 }
             }elseif($select_user_option == "specific_user_phone"){
                 // get the user data
@@ -1269,17 +1275,17 @@ class Sms extends Controller
                     $title = "SMS sent to ".$client_phone." on ".date("D dS M Y",strtotime($select_registration_date));
                     $client_phone = $client_phone*=1;
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC");
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent to ".$client_phone." between ".date("D dS M Y",strtotime($from_select_date))." to ". date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
                     $client_phone = $client_phone*=1;
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC",[$from,$to]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC",[$from,$to]);
                 }else{
                     $title = "All SMS sent to ".$client_phone.".";
                     $client_phone = $client_phone*=1;
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `recipient_phone` LIKE '%".$client_phone."%' ORDER BY `sms_id` DESC");
                 }
             }
         }elseif ($contain_text_option == "text_containing") {
@@ -1287,19 +1293,19 @@ class Sms extends Controller
                 if ($sms_date_option == "select date") {
                     $title = "SMS sent on ".date("D dS M Y",strtotime($select_registration_date));
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent between ".date("D dS M Y",strtotime($from_select_date))." and ".date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `sms_content` LIKE '%".$text_keyword."%'  ORDER BY `sms_id` DESC",[$from,$to]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `sms_content` LIKE '%".$text_keyword."%'  ORDER BY `sms_id` DESC",[$from,$to]);
                 }else{
                     $title = "All SMS sent";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
                 }
             }elseif($select_user_option == "specific_user"){
                 // get the user data
-                $user_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ? ",[$client_account]);
+                $user_data = DB::select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_account` = ? ",[$client_account]);
                 if (count($user_data) < 1) {
                     return "<p style='color:red;'>This account number is invalid</p>";
                 }
@@ -1308,15 +1314,15 @@ class Sms extends Controller
                 if ($sms_date_option == "select date") {
                     $title = "SMS sent to ".$client_name." on ".date("D dS M Y",strtotime($select_registration_date));
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$client_id]);
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent to ".$client_name." between ".date("D dS M Y",strtotime($from_select_date))." to ". date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$from,$to,$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$from,$to,$client_id]);
                 }else{
                     $title = "All SMS sent to ".$client_name.".";
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$client_id]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `account_id` = ? AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$client_id]);
                 }
             }elseif($select_user_option == "specific_user_phone"){
                 // get the user data
@@ -1324,17 +1330,17 @@ class Sms extends Controller
                     $title = "SMS sent to ".$client_phone." on ".date("D dS M Y",strtotime($select_registration_date));
                     $client_phone = $client_phone*=1;
                     $select_registration_date = date("Ymd",strtotime($select_registration_date));
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` LIKE '".$select_registration_date."%' AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
                 }elseif ($sms_date_option == "between dates") {
                     $title = "SMS sent to ".$client_phone." between ".date("D dS M Y",strtotime($from_select_date))." to ". date("D dS M Y",strtotime($to_select_date));
                     $from = date("YmdHis",strtotime($from_select_date));
                     $to = date("Ymd",strtotime($to_select_date))."235959";
                     $client_phone = $client_phone*=1;
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$from,$to]);
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `date_sent` BETWEEN ? AND ? AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC",[$from,$to]);
                 }else{
                     $title = "All SMS sent to ".$client_phone.".";
                     $client_phone = $client_phone*=1;
-                    $sms_data = DB::connection("mysql2")->select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
+                    $sms_data = DB::select("SELECT * FROM `sms_tables` WHERE `deleted`= '0' AND `recipient_phone` LIKE '%".$client_phone."%' AND `sms_content` LIKE '%".$text_keyword."%' ORDER BY `sms_id` DESC");
                 }
             }
             $title.=" containing \"".$text_keyword."\"";

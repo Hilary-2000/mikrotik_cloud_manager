@@ -52,13 +52,16 @@ class Transactions extends Controller
 
         // return $dates_infor;
         $todayDate = date("YmdHis");
-        $weekAgo = date("YmdHis",strtotime("-7 days"));
-        $twoWeeksAgo = date("YmdHis",strtotime("-14 days"));
         $amonthAgo = date("YmdHis",strtotime("-1 Month"));
-        $sums = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` LIKE '$date%';");
-        $week = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$weekAgo' AND '$todayDate';");
-        $twoWeek = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$twoWeeksAgo' AND '$todayDate';");
-        $months = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$amonthAgo' AND '$todayDate';");
+        $three_months = date("YmdHis",strtotime("-3 Month"));
+        $six_months = date("YmdHis",strtotime("-4 Month"));
+        $twelve_months = date("YmdHis",strtotime("-12 Month"));
+
+        $today = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` LIKE '$date%';");
+        $last_month = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$amonthAgo' AND '$todayDate';");
+        $last_three_months = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$three_months' AND '$todayDate';");
+        $last_six_months = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$six_months' AND '$todayDate';");
+        $last_year = DB::connection("mysql")->select("SELECT sum(`transacion_amount`) AS 'Total' FROM `transaction_tables` WHERE `transaction_date` BETWEEN '$twelve_months' AND '$todayDate';");
 
         // get the clients name username and phonenumber
         $clients_data = DB::connection("mysql")->select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
@@ -71,7 +74,7 @@ class Transactions extends Controller
             array_push($clients_phone,$clients_data[$index]->organization_main_contact);
         }
         // return $transaction_data;
-        return view("Transactions.index",["transaction_data" => $transaction_data, "today" => $sums,"week" => $week,"month" => $months,"twoweeks" => $twoWeek ,"account_name" => $account_names,"trans_dates" => $dates_infor,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
+        return view("Transactions.index",["transaction_data" => $transaction_data, "today" => $today,"last_month" => $last_month,"last_three_months" => $last_three_months,"last_six_months" => $last_six_months, "last_year" => $last_year ,"account_name" => $account_names,"trans_dates" => $dates_infor,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
     }
 
     // view transactions

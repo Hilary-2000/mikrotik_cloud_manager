@@ -95,7 +95,7 @@ date_default_timezone_set('Africa/Nairobi');
     <!-- ////////////////////////////////////////////////////////////////////////////-->
 
 
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "

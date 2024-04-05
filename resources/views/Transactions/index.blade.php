@@ -123,7 +123,7 @@
     <!-- ////////////////////////////////////////////////////////////////////////////-->
     
     
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
         <div class="navigation-background">
@@ -239,12 +239,17 @@
                                                 <button class="btn btn-sm btn-primary" id="show_totals"><i class="ft-eye"></i> Show Totals</button>
                                             </div>
                                             <div class="col-md-10">
-                                                <p class="card-text text-right d-none" id="totals_window">
-                                                    Recieved A Month Ago: <span class="text-primary">Kes {{ $month[0]->Total ? $month[0]->Total : 0 }}</span> <br>
-                                                    Recieved Two Weeks Ago: <span class="text-primary">Kes {{ $twoweeks[0]->Total ? $twoweeks[0]->Total : 0 }}</span> <br>
-                                                    Recieved Week Ago: <span class="text-primary">Kes {{ $week[0]->Total ? $week[0]->Total : 0 }}</span> <br>
+                                                <div class="card-text text-right d-none" id="totals_window"><br>
+                                                    Recieved A Year Ago: <span class="text-primary">Kes {{ $last_year[0]->Total ? $last_year[0]->Total : 0 }}</span>
+                                                    <hr>
+                                                    Recieved Six Months Ago: <span class="text-primary">Kes {{ $last_six_months[0]->Total ? $last_six_months[0]->Total : 0 }}</span>
+                                                    <hr>
+                                                    Recieved Three Months Ago: <span class="text-primary">Kes {{ $last_three_months[0]->Total ? $last_three_months[0]->Total : 0 }}</span> <br>
+                                                    <hr>
+                                                    Recieved A Month Ago: <span class="text-primary">Kes {{ $last_month[0]->Total ? $last_month[0]->Total : 0 }}</span> <br>
+                                                    <hr>
                                                     Recieved today: <span class="text-primary">Kes {{ $today[0]->Total ? $today[0]->Total : 0 }}</span> <br>
-                                                </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -306,14 +311,14 @@
     <!-- ////////////////////////// -->
 
     <!-- BEGIN VENDOR JS-->
-    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
 
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN CHAMELEON  JS-->
-    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
-    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
     <!-- BEGIN PAGE LEVEL JS-->
     {{--  --}}
@@ -453,7 +458,7 @@
     </script>
 
     {{-- script to create tables in the transaction table --}}
-    <script src="theme-assets/js/core/transactions.js"></script>
+    <script src="/theme-assets/js/core/transactions.js"></script>
     <script>
       var milli_seconds = 1200;
       setInterval(() => {

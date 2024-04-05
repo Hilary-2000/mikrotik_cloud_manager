@@ -82,7 +82,7 @@
         }
     @endphp
 
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         {{-- MENU COMPONENT --}}
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
@@ -269,16 +269,16 @@
                                             @endif
                                                 <div class="media-left pr-1">
                                                     <span class="avatar avatar-md avatar-online">
-                                                        <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                        <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                         <i></i>
                                                     </span>
                                                 </div>
                                                 <div class="media-body w-100">
                                                     <span class="list-group-item-heading">{{$transaction_data[$i]->transaction_mpesa_id}} |Kes  {{$transaction_data[$i]->transacion_amount}} |
                                                     </span>
-                                                    <small>{{$trans_dates[$i]}}</small>
+                                                    <small>{{$transaction_data[$i]->transaction_date}}</small>
                                                     <p class="list-group-item-text mb-0">
-                                                        <span class="blue-grey lighten-2 font-small-3"> Account: <span class="text-primary">{{$trans_fullname[$i]}}</span> </span>
+                                                        <span class="blue-grey lighten-2 font-small-3"> Account: <span class="text-primary">{{$transaction_data[$i]->organization_name}}</span> </span>
                                                     </p>
                                                 </div>
                                             </a>
@@ -287,7 +287,7 @@
                                         <a href="#" class="media border-0">
                                             <div class="media-left pr-1">
                                                 <span class="avatar avatar-md avatar-online">
-                                                    <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                    <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                     <i></i>
                                                 </span>
                                             </div>
@@ -304,7 +304,7 @@
                                     {{-- <a href="#" class="media border-0">
                                         <div class="media-left pr-1">
                                             <span class="avatar avatar-md avatar-online">
-                                                <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                 <i></i>
                                             </span>
                                         </div>
@@ -348,20 +348,20 @@
                                                 <a href="#" class="media border-0">
                                             @endif
                                                 <div class="media-left pr-1">
-                                                    <span class="avatar avatar-md {{($client_data[$i]->client_status == "1") ? 'avatar-online' : 'avatar-busy'}}">
-                                                        <img class="media-object rounded-circle" src="theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
+                                                    <span class="avatar avatar-md {{($client_data[$i]->organization_status == "1") ? 'avatar-online' : 'avatar-busy'}}">
+                                                        <img class="media-object rounded-circle" src="/theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
                                                         <i></i>
                                                     </span>
                                                 </div>
                                                 <div class="media-body w-100">
-                                                    <span class="list-group-item-heading">{{$client_data[$i]->client_name}}
+                                                    <span class="list-group-item-heading">{{$client_data[$i]->organization_name}}
         
                                                     </span>
                                                     <ul class="list-unstyled users-list m-0 float-right">
-                                                        <span class="text-xxs text-infor"><i class="ft-map-pin"></i> <small>{{$client_data[$i]->client_address}}</small></span>
+                                                        <span class="text-xxs text-infor"><i class="ft-map-pin"></i> <small>{{$client_data[$i]->organization_address}}</small></span>
                                                     </ul>
                                                     <p class="list-group-item-text mb-0">
-                                                        <span class="blue-grey lighten-2 font-small-3">{{$client_data[$i]->max_upload_download}}</span>
+                                                        <span class="blue-grey lighten-2 font-small-3">{{$client_data[$i]->package_name}}</span>
                                                     </p>
                                                 </div>
                                             </a>
@@ -372,7 +372,7 @@
                                     {{-- <a href="#" class="media border-0">
                                         <div class="media-left pr-1">
                                             <span class="avatar avatar-md avatar-online,away,busy">
-                                                <img class="media-object rounded-circle" src="theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
+                                                <img class="media-object rounded-circle" src="/theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
                                                 <i></i>
                                             </span>
                                         </div>
@@ -404,14 +404,14 @@
 
     
     <!-- BEGIN VENDOR JS-->
-    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
     
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN CHAMELEON  JS-->
-    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
-    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
     <!-- BEGIN PAGE LEVEL JS-->
     <script>

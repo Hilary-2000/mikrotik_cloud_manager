@@ -124,7 +124,7 @@
     <!-- ////////////////////////////////////////////////////////////////////////////-->
             
             
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
         <div class="navigation-background">
@@ -175,7 +175,7 @@
                                     @if (session('success'))
                                         <p class="text-success">{{ session('success') }}</p>
                                     @endif
-                                    <a href="/sms" class="btn btn-infor"><i class="fas fa-arrow-left"></i>
+                                    <a href="{{route("SMS")}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i>
                                         Back to list</a>
                                     @if ($errors->any())
                                         <h6 style="color: orangered">Errors</h6>
@@ -196,7 +196,7 @@
                                 </div>
                                 <div class="card-body">
                                     {{-- write a message --}}
-                                    <form class="row" method="POST" action="/sendsms">
+                                    <form class="row" method="POST" action="{{route("send_sms")}}">
                                         @csrf
                                         <div class="col-md-6">
                                             <label for="select_recipient" class="form-control-label">Select
@@ -253,101 +253,6 @@
                 </div>
             </div>
             <!-- Basic Tables end -->
-            {{-- send for the routers --}}
-            <div class="content-body {{ isset($messages) ? 'd-none' : '' }}">
-                <!-- Basic Tables start -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Send Message to clients per router
-                                </h4>
-                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                <div class="heading-elements">
-                                    <ul class="list-inline mb-0">
-                                        <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                        {{-- <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li> --}}
-                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                        <!-- <li><a data-action="close"><i class="ft-x"></i></a></li> -->
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-content collapse show">
-                                <div class="card-body">
-                                    @if (session('success'))
-                                        <p class="text-success">{{ session('success') }}</p>
-                                    @endif
-                                    <a href="/sms" class="btn btn-infor"><i class="fas fa-arrow-left"></i>
-                                        Back to list</a>
-                                    @if ($errors->any())
-                                        <h6 style="color: orangered">Errors</h6>
-                                        <ul class="text-danger" style="color: orangered">
-                                            @foreach ($errors->all() as $item)
-                                                <li>{{ $item }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-
-                                    @if (session('error_sms'))
-                                        <p class="text-danger">{{ session('error_sms') }}</p>
-                                    @endif
-                                    @if (session('message_success'))
-                                        <p class="text-success">{{ session('message_success') }}</p>
-                                    @endif
-
-                                </div>
-                                <div class="card-body">
-                                    {{-- write a message --}}
-                                    <form class="row" method="POST" action="/sendsms_routers">
-                                        @csrf
-                                        <div class="col-md-6">
-                                            <label for="select_router" class="form-control-label">Select
-                                                Router</label>
-                                                @if (isset($router_infor))
-                                                    <select name="select_router" id="select_router"
-                                                        class="form-control" required>
-                                                        <option value="" hidden>Select an option</option>
-                                                    @for ($i = 0; $i < count($router_infor); $i++)
-                                                        <option value="{{$router_infor[$i]->router_id}}" >{{$router_infor[$i]->router_name}}</option>
-                                                        {{-- {{"<option value=".$router_infor[$i]->router_id." >".$router_infor[$i]->router_id."</option>"}} --}}
-                                                    @endfor
-                                                    </select>
-                                                @else
-                                                    <p class="text-secondary">No routers found! Please add a router to proceed</p>
-                                                @endif
-                                        </div>
-                                        <div class="col-md-6"
-                                            id="number_lists">
-                                            <label for="select_client_group" class="form-control-label">Client Group</label>
-                                            <select name="select_client_group" id="select_client_group" class="form-control" required>
-                                                <option value="" hidden>Select an option</option>
-                                                <option value="0">In-Active</option>
-                                                <option value="1">Active</option>
-                                                <option value="all">All</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 my-1">
-                                            <label for="messages" class="form-control-label">Write Message <small>(162
-                                                    characters cost 1 unit of sms)</small></label>
-                                            <textarea name="messages" class="form-control" id="messages" cols="30" rows="2" placeholder="Write your message here"
-                                                required>{{ isset($messages) ? $messages : '' }}</textarea>
-                                        </div>
-                                        <div class="col-md-6 my-1">
-                                            <button {{$readonly}} type="submit" class="btn btn-primary"><i
-                                                    class="fa-solid fa-paper-plane"></i> Send Message</button>
-                                        </div>
-                                        <div class="col-md-6 my-1">
-                                            <a href="/sms" class="btn btn-danger"><i class="fa-solid fa-xmark"></i>
-                                                Cancel</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- end of send for the routers --}}
         </div>
     </div>
     </div>

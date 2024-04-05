@@ -44,7 +44,7 @@
     <!-- ////////////////////////////////////////////////////////////////////////////-->
 
 
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
         <div class="navigation-background">
@@ -213,18 +213,18 @@
     <!-- ////////////////////////// -->
 
     <!-- BEGIN VENDOR JS-->
-    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
-        let table = new DataTable('#myTable');
+        // let table = new DataTable('#myTable');
     </script>
     <!-- BEGIN CHAMELEON  JS-->
-    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
-    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
 
     <!-- BEGIN CLIENT JS-->
-    {{-- <script src="theme-assets/js/core/my_organization.js"></script> --}}
+    {{-- <script src="/theme-assets/js/core/my_organization.js"></script> --}}
     <script>
       var milli_seconds = 1200;
       setInterval(() => {

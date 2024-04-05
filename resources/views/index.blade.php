@@ -132,7 +132,7 @@
         }
     @endphp
 
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <div class="navbar-header" style="height: 120px">
             <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
                 <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
@@ -339,7 +339,7 @@
                                             @endif
                                                 <div class="media-left pr-1">
                                                     <span class="avatar avatar-md avatar-online">
-                                                        <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                        <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -357,7 +357,7 @@
                                         <a href="#" class="media border-0">
                                             <div class="media-left pr-1">
                                                 <span class="avatar avatar-md avatar-online">
-                                                    <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                    <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                     <i></i>
                                                 </span>
                                             </div>
@@ -374,7 +374,7 @@
                                     {{-- <a href="#" class="media border-0">
                                         <div class="media-left pr-1">
                                             <span class="avatar avatar-md avatar-online">
-                                                <img class="media-object rounded-circle" src="theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
+                                                <img class="media-object rounded-circle" src="/theme-assets/logos/money-bag-512.jpg" alt="Generic placeholder image">
                                                 <i></i>
                                             </span>
                                         </div>
@@ -419,7 +419,7 @@
                                             @endif
                                                 <div class="media-left pr-1">
                                                     <span class="avatar avatar-md {{($client_data[$i]->client_status == "1") ? 'avatar-online' : 'avatar-busy'}}">
-                                                        <img class="media-object rounded-circle" src="theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
+                                                        <img class="media-object rounded-circle" src="/theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -442,7 +442,7 @@
                                     {{-- <a href="#" class="media border-0">
                                         <div class="media-left pr-1">
                                             <span class="avatar avatar-md avatar-online,away,busy">
-                                                <img class="media-object rounded-circle" src="theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
+                                                <img class="media-object rounded-circle" src="/theme-assets/logos/young-user-icon.jpg" alt="Generic placeholder image">
                                                 <i></i>
                                             </span>
                                         </div>
@@ -480,14 +480,14 @@
 
     
     <!-- BEGIN VENDOR JS-->
-    <script src="theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
     
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN CHAMELEON  JS-->
-    <script src="theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
-    <script src="theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
     <!-- BEGIN PAGE LEVEL JS-->
     <script>

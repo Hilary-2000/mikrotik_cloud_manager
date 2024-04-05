@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\admin_table;
+use App\Models\admin_table_mikrotik_cloud;
 use File;
+
 date_default_timezone_set('Africa/Nairobi');
 
 class admin extends Controller
@@ -38,16 +40,8 @@ class admin extends Controller
 
         if (session("Userids")) {
             $admin_id = session("Userids");
-            $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '$admin_id' AND `organization_id` = '".session('organization_id')."' AND `deleted` = '0'");
+            $admin_data = DB::select("SELECT * FROM `admin_table_mikrotik_clouds` WHERE `admin_id` = '$admin_id'");
             $date = $admin_data[0]->last_time_login;
-
-            // privileged
-            $priviledges = $admin_data[0]->priviledges;
-            $show_hides = $this->showOption($priviledges,"Account and Profile");
-            if ($show_hides == "hide") {
-                session()->flash("danger","You cannot access the Account and Profile section. Contact your administrator!");
-                return redirect("/Dashboard");
-            }
 
             $date_data = $date;
             $year = substr($date_data,0,4);
@@ -60,7 +54,7 @@ class admin extends Controller
             $dates2 = date("D dS M-Y  h:i:sa", $d);
             $delete_sms = "";
             $delete_trans = "";
-            $settings = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0'");
+            $settings = DB::select("SELECT * FROM `settings` WHERE `keyword` = 'delete' AND `deleted` = '0'");
             if (count($settings) > 0) {
                 $delete_infor = $settings[0]->value;
                 $delete_infor = json_decode($delete_infor);
@@ -74,18 +68,7 @@ class admin extends Controller
                 }
             }
 
-
-            // get the data for the organization
-            $organization = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[session("organization_id")]);
-            
-            if (count($organization) == 0) {
-                // logout the user
-                session()->flash("error","You`ve been logged out because we have discovered some suspicious activity, Login and try again!");
-                return redirect("/");
-            }
-            // return $organization;
-
-            return view("account",["admin_data" => $admin_data , "date_time" => $dates2, "delete_trans" => $delete_trans,"delete_sms"=>$delete_sms, "organization" => $organization[0]]);
+            return view("Accounts.index",["admin_data" => $admin_data , "date_time" => $dates2, "delete_trans" => $delete_trans,"delete_sms"=>$delete_sms]);
         }else{
             session()->flash("error","Please login again to proceed to view your profile");
             return redirect("/Login");
@@ -114,16 +97,16 @@ class admin extends Controller
                 $new_client = new Clients();
                 $txt = ":Admin ( ".session('Usernames')." ) successfully updated password"."!";
                 $new_client->log($txt);
-                return redirect("/Accounts");
+                return redirect(route("Accounts"));
             }else {
                 // the admin is not present
-            session()->flash("error","You have provided wrong credentials Retry!");
-            return redirect("/Accounts");
+                session()->flash("error","You have provided wrong credentials Retry!");
+                return redirect(route("Accounts"));
             }
         }else {
             // redirect to the accounts page with an err0r
             session()->flash("error","Your username and passwords dont match");
-            return redirect("/Accounts");
+            return redirect(route("Accounts"));
         }
     }
     function addAdmin(){
@@ -132,7 +115,7 @@ class admin extends Controller
         $change_db->change_db();
 
         // get all the usernames present 
-        $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `deleted` = '0' AND `organization_id` = '".session('organization_id')."'");
+        $admin_data = DB::select("SELECT * FROM `admin_table_mikrotik_clouds` WHERE `admin_id` != '".session("Userids")."'");
         $username = [];
         $date = [];
         foreach ($admin_data as $key => $value) {
@@ -155,47 +138,54 @@ class admin extends Controller
                 array_push($date,$dates2);
             }
         }
-        return view("addadmin",["username" => $username, "admin_data" => $admin_data, "dates" => $date]);
+        return view("Accounts.addadmin",["username" => $username, "admin_data" => $admin_data, "dates" => $date]);
     }
     function addAdministrator(Request $req){
         // change db
         $change_db = new login();
         $change_db->change_db();
-
-        // return session("organization_id");
+        
         // get the values
         $admin_name = $req->input('admin_name');
         $client_address = $req->input('client_address');
         $admin_username = $req->input('admin_username');
         $admin_password = $req->input('admin_password');
-        $privileges = $req->input('privileges');
 
         // get the username if its already used
-        $admin_data = DB::select("SELECT * FROM `admin_tables` WHERE `admin_username` = '$admin_username' AND `deleted` = '0'");
-
+        $admin_data = DB::select("SELECT * FROM `admin_table_mikrotik_clouds` WHERE `admin_username` = '$admin_username'");
         if (count($admin_data) > 0) {
             // return an error showing thet the username has been used
             session()->flash("network_presence","Username provided is already used");
-            return redirect("/Accounts/add");
+            return redirect(route("AddAdmin"));
         }else {
-            $admin_table = new admin_table();
+            $admin_table = new admin_table_mikrotik_cloud();
             $admin_table->admin_fullname = $admin_name;
             $admin_table->admin_username = $admin_username;
             $admin_table->admin_password = $admin_password;
             $admin_table->contacts = $client_address;
-            $admin_table->organization_id = session("organization_id");
             $admin_table->user_status = "1";
-            $admin_table->priviledges = $privileges;
+            $admin_table->activated = "1";
             $admin_table->save();
                 
             $new_client = new Clients();
             $txt = ":Admin ($admin_name) has been added by ( ".session('Usernames')." )"."!";
             $new_client->log($txt);
             session()->flash("success","The administrator has successfully been added.");
-            return redirect("/Accounts/add");
+            return redirect(route("AddAdmin"));
         }
-
     }
+
+    function view_admin($admin_id){
+        $admin_data = DB::select("SELECT * FROM `admin_table_mikrotik_clouds` WHERE `admin_id` = '$admin_id'");
+        // return $admin_data;
+        if (count($admin_data) > 0) {
+            return view("Accounts.viewadmin", ["admin_data" => $admin_data]);
+        }else{
+            session()->flash("network_presence","In-valid User!");
+            return redirect(route("AddAdmin"));
+        }
+    }
+
     function upload_dp(Request $req)
     {
         // change db
@@ -226,7 +216,7 @@ class admin extends Controller
             "date_changed" => date("YmdHis")
         ]);
         session()->flash('success',"Profile picture saved successfully!");
-        return redirect("/Accounts");
+        return redirect(route("Accounts"));
     }
     function update_company_dp(Request $req)
     {
@@ -267,13 +257,13 @@ class admin extends Controller
 
         // return $req;
         $admin_id = $req->input('client_id');
-        $update = DB::table("admin_tables")->where("admin_id",$admin_id)->update([
+        $update = DB::table("admin_table_mikrotik_clouds")->where("admin_id",$admin_id)->update([
             "admin_fullname" => $req->input('fullName'),
             "contacts" => $req->input('phone'),
             "email" => $req->input('email')
         ]);
         session()->flash('success',"You have successfully updated your information!");
-        return redirect("/Accounts");
+        return redirect(route("Accounts"));
     }
     // function update delete options
     function update_delete_option(Request $req){
@@ -299,7 +289,7 @@ class admin extends Controller
                 "date_changed" => date("YmdHis")
             ]);
             session()->flash('success',"Update has been done successfully!");
-            return redirect("/Accounts");
+            return redirect(route("Accounts"));
         }else{
             // get fields and check for the two delete options
             // $delete_options = json_decode($settings[0]->value);
@@ -317,7 +307,7 @@ class admin extends Controller
                 "date_changed" => date("YmdHis")
             ]);
             session()->flash('success',"Update has been done successfully!");
-            return redirect("/Accounts");
+            return redirect(route("Accounts"));
         }
     }
 
@@ -366,33 +356,28 @@ class admin extends Controller
         $privileges = $req->input('privileges');
         $status = $req->input('status');
         // create a model to update the data
-        $update = DB::table("admin_tables")->where("admin_id",$admin_id)->update([
+        $update = DB::table("admin_table_mikrotik_clouds")->where("admin_id",$admin_id)->update([
             "admin_fullname" => $req->input('admin_name'),
             "admin_username" => $req->input('admin_username'),
             "admin_password" => $req->input('admin_password'),
             "contacts" => $req->input('client_address'),
             "user_status" => $req->input('status'),
             "date_changed" => date("YmdHis"),
-            "activated" => $status,
-            "priviledges" => $privileges
+            "activated" => $status
         ]);
         session()->flash('success',"Administrator data updates successfully!");
-        return redirect("/Admin/View/$admin_id");
+        return redirect(route("ViewAdmin", [$admin_id]));
     }
 
     function delete_admin($admin_id){
         // get the administrator`s name
-        $administrator_detail = DB::select("SELECT * FROM `admin_tables` WHERE `admin_id` = '".$admin_id."'");
+        $administrator_detail = DB::select("SELECT * FROM `admin_table_mikrotik_clouds` WHERE `admin_id` = '".$admin_id."'");
         $admin_name = count($administrator_detail) > 0 ? $administrator_detail[0]->admin_fullname : "NULL";
+        
         // delete the user admin and record that as a log
-        DB::delete("DELETE FROM `admin_tables` WHERE `admin_id` = '".$admin_id."'");
+        DB::delete("DELETE FROM `admin_table_mikrotik_clouds` WHERE `admin_id` = '".$admin_id."'");
         session()->flash("success","The administrator \"".$admin_name."\" has been deleted successfully!");
-
-        // 
-        $new_client = new Clients();
-        $txt = ":The administrator \"".$admin_name."\" has been deleted successfully! by ".session('Usernames')."!";
-        $new_client->log($txt);
-        return redirect("/Accounts/add");
+        return redirect(route("AddAdmin"));
     }
 
     function deactivateAdmin($admin_id){
@@ -401,9 +386,9 @@ class admin extends Controller
         $change_db->change_db();
 
         // return $admin_id;
-        DB::update("UPDATE `admin_tables` SET `activated` = '0', `user_status` = '0' WHERE `admin_id` = ?",[$admin_id]);
+        DB::update("UPDATE `admin_table_mikrotik_clouds` SET `activated` = '0', `user_status` = '0' WHERE `admin_id` = ?",[$admin_id]);
         session()->flash("success","The administrator has successfully deactivated.");
-        return redirect("/Accounts/add");
+        return redirect(route("AddAdmin"));
     }
 
     function delete_pp($admin_id){
@@ -424,7 +409,7 @@ class admin extends Controller
         ]);
         session(['dp_locale' => ""]);
         session()->flash('success',"Profile picture deleted successfully!");
-        return redirect("/Accounts");
+        return redirect(route("Accounts"));
     }
 
     function delete_pp_organization(){

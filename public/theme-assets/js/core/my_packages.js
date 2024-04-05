@@ -58,9 +58,9 @@ window.onload = function () {
             col.push(element['package_period'] != null ? element['package_period'] : "");
             col.push(element['date_created'] != null ? element['date_created'] : "");
             col.push(element['date_updated'] != null ? element['date_updated'] : "");
+            col.push(element['status'] != null ? element['status'] : 0);
             rowsColStudents.push(col);
         }
-        console.log(rowsColStudents);
         rowsNCols_original = rowsColStudents;
         cObj("tot_records").innerText = rows.length;
         // console.log(rowsNCols_original);
@@ -100,7 +100,7 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 50 records
         var counter = start + 1;
         for (let index = start; index < finish; index++) {
-            var status = "<span class='badge badge-success'> </span>";
+            var status = arrays[index][7] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>";
             tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td><a href='/Packages/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Package'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }
@@ -108,7 +108,7 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 50 records
         var counter = start + 1;
         for (let index = start; index < total; index++) {
-            var status = "<span class='badge badge-success'> </span>";
+            var status = arrays[index][7] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>";
             tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td><a href='/Packages/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Package'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }

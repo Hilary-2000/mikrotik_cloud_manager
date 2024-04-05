@@ -120,7 +120,7 @@
     <!-- ////////////////////////////////////////////////////////////////////////////-->
             
             
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="theme-assets/images/backgrounds/02.jpg">
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
         <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
         <div class="navigation-background">
@@ -186,7 +186,7 @@
                                         <p class='text-danger'>{{session('error_sms')}}</p>
                                     @endif
                                     <div class="w-20">
-                                        <a href="/sms/system_sms" class="btn btn-secondary text-bolder {{$readonly}}">Customize SMS</a>
+                                        <a href="{{route("customize")}}" class="btn btn-secondary text-bolder {{$readonly}}">Customize SMS</a>
                                         <span data-toggle="tooltip" title="SMS Reports" class="btn btn-info" id="sms_reports_btn"><i class="ft-file-text"></i></span>
                                     </div>
                                     <div class="row  my-2">
@@ -265,7 +265,7 @@
                                             <input type="text" name="search" id="searchkey" class="form-control rounded-lg p-1" placeholder="Search here ..">
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="/sms/compose" class="btn btn-info text-bolder float-right {{$readonly}}"><i class="ft-plus"> Write Message</i></a>
+                                            <a href="{{route("Compose")}}" class="btn btn-info text-bolder float-right {{$readonly}}"><i class="ft-plus"> Write Message</i></a>
                                         </div>
                                     </div>
                                     <div class="container border border-secondary rounded p-1 hide" id="action_for_selected_window">

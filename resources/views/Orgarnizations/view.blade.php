@@ -156,6 +156,15 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
+                                            <div class="col-md-8">
+                                                <p><b>Send SMS Status : </b></p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a href="{{route("DeactivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->send_sms == "1" ? "" : "d-none"}}">De-Activate</a>
+                                                <a href="{{route("ActivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->send_sms == "1" ? "d-none" : ""}}">Activate</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
                                             <div class="form-group w-100" id="discount_viewer">
                                                 <p for="discount" class="px-1"><b>Discount : {{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? "Kes ".number_format($organization_details->discount_amount) : $organization_details->discount_amount."%") : "Not-Set"}}</b> <button class="btn btn-sm btn-primary float-right" id="discount_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
                                             </div>
@@ -185,6 +194,9 @@
                                                 <input type="number" placeholder="Wallet Balance" class="form-control" value="{{$organization_details->wallet != null ? $organization_details->wallet : "0"}}" name="wallet_balance" id="wallet_balance">
                                                 <input type="submit" class="btn btn-success btn-sm my-2" value="Update">
                                             </form>
+                                        </div>
+                                        <div class="col-md-6 form-group row w-75 mx-auto py-2">
+                                            
                                         </div>
                                     </div>
                                     <hr>

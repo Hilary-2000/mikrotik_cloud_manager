@@ -66,14 +66,16 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 50 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+ucwords(arrays[index][1])+"<span class='badge badge-success'> </span></td><td>"+arrays[index][2]+" Free Trial</td><td>After "+arrays[index][3]+"</td><td>"+arrays[index][4]+"</td><td><a href='/BillingSms/ViewPackage/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var status = arrays[index][5] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>"
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+ucwords(arrays[index][1])+" "+status+"</td><td>"+arrays[index][2]+" Free Trial</td><td>After "+arrays[index][3]+"</td><td>"+arrays[index][4]+"</td><td><a href='/BillingSms/ViewPackage/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }
     }else{
         //create a table of the 50 records
         var counter = start+1;
         for (let index = start; index < total; index++) {
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+ucwords(arrays[index][1])+"<span class='badge badge-success'> </span></td><td>"+arrays[index][2]+" Free Trial</td><td>After "+arrays[index][3]+"</td><td>"+arrays[index][4]+"</td><td><a href='/BillingSms/ViewPackage/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var status = arrays[index][5] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>"
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+ucwords(arrays[index][1])+" "+status+"</td><td>"+arrays[index][2]+" Free Trial</td><td>After "+arrays[index][3]+"</td><td>"+arrays[index][4]+"</td><td><a href='/BillingSms/ViewPackage/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }
         fins = total;

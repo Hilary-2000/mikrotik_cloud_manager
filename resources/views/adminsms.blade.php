@@ -344,7 +344,7 @@
                                             <input type="text" name="search" id="searchkey" class="form-control rounded-lg p-1" placeholder="Search here ..">
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="/sms/compose" class="btn btn-info text-bolder float-right {{$readonly}}"><i class="ft-plus"> Write Message</i></a>
+                                            <a href="{{route("Compose")}}" class="btn btn-info text-bolder float-right {{$readonly}}"><i class="ft-plus"> Write Message</i></a>
                                         </div>
                                     </div>
                                     <div class="container border border-secondary rounded p-1 hide" id="action_for_selected_window">

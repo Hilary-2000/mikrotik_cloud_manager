@@ -2952,6 +2952,37 @@ class Organization extends Controller
         }
         return "";
     }
+
+    // activate and deactivate sms
+    function ActivateSMS($organization_id){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // update the status to activate
+        DB::update("UPDATE `organizations` SET `send_sms` = '1' WHERE `organization_id` = ?",[$organization_id]);
+        session()->flash("success","Organization successfully Activated!");
+        return redirect(route("ViewOrganization", [$organization_id]));
+    }
+
+    // activate and deactivate sms
+    function DeactivateSMS($organization_id){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // update the status to activate
+        DB::update("UPDATE `organizations` SET `send_sms` = '0' WHERE `organization_id` = ?",[$organization_id]);
+        session()->flash("success","Organization successfully Deactivated!");
+        return redirect(route("ViewOrganization", [$organization_id]));
+    }
+
     // get the clients statistics
     function get_clients_statistics($organization_id){
         // organization id

@@ -60,7 +60,7 @@ window.onload = function() {
 
             // add the clientname in the row list
             col.push(client_names[index]);
-            console.log(client_names.length);
+            // console.log(client_names.length);
             // add the dates also
             col.push(dates[index]);
             // var col = element.split(":");
@@ -242,7 +242,7 @@ function displayRecord(start, finish, arrays) {
             var transactiontype = (arrays[index][6] == 1) ? "Transaction" : "Notification";
             var status = (arrays[index][5] == "1") ? "<span class='badge badge-success'> </span>":"<span class='badge badge-danger'> </span>";
 
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id d-none' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/SMS/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/SMS/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }
     }else{
@@ -253,7 +253,7 @@ function displayRecord(start, finish, arrays) {
             var transactiontype = (arrays[index][6] == 1) ? "Transaction" : "Notification";
             var status = (arrays[index][5] == "1") ? "<span class='badge badge-success'> </span>":"<span class='badge badge-danger'> </span>";
 
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id d-none' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/SMS/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][4]+"'><input type='hidden' id='actions_value_"+arrays[index][4]+"' value='"+arrays[index][4]+"'> "+counter+"</th><td>"+arrays[index][8] +" "+status+"<br><small><a class='text-secondary' href='/Organization/View/"+arrays[index][0]+"'>{"+arrays[index][7] +"}</a></small></td><td><span data-toggle='tooltip' data-html='true' title='"+arrays[index][3]+"'>"+message+"</span></td><td>"+transactiontype+"</td><td><a href='/SMS/View/"+arrays[index][4]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Message'><i class='ft-eye'></i></a></td></tr>";
             counter++;
         }
         fins = total;
@@ -295,6 +295,9 @@ cObj("toprevNac").onclick = function() {
     }
     checkUnchecked();
     checkedUnchecked()
+}
+cObj("no_dont_delete_selected").onclick = function () {
+    cObj("delete_clients_id").click();
 }
 cObj("tofirstNav").onclick = function() {
     if (pagecountTransaction > 0) {
@@ -377,7 +380,7 @@ function checkName(keyword) {
 
 // get the sms balance
 cObj("show_sms_balance_btn").onclick = function () {
-    sendDataGet("GET","/sms_balance/",cObj("show_sms_balance"),cObj("show_sms_loader"));
+    sendDataGet("GET","/SMS/Balance/",cObj("show_sms_balance"),cObj("show_sms_loader"));
 }
 
 cObj("sms_reports_btn").onclick = function () {
