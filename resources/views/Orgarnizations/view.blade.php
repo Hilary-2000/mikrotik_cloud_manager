@@ -5,8 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="My ISP is the number one kenyan webserver software that helps you manage and monitor your webserver.">
-    <meta name="keywords" content="admin template, Client template, dashboard template, gradient admin template, responsive client template, webapp, eCommerce dashboard, analytic dashboard">
+    <meta name="description"
+        content="My ISP is the number one kenyan webserver software that helps you manage and monitor your webserver.">
+    <meta name="keywords"
+        content="admin template, Client template, dashboard template, gradient admin template, responsive client template, webapp, eCommerce dashboard, analytic dashboard">
     <meta name="author" content="ThemeSelect">
     <title>HBS - View Organization</title>
     <link rel="apple-touch-icon" href="/theme-assets/images/logo2.jpeg">
@@ -25,18 +27,18 @@
     <link rel="stylesheet" type="text/css" href="/theme-assets/css/core/menu/menu-types/vertical-menu.css">
     <link rel="stylesheet" type="text/css" href="/theme-assets/css/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="/theme-assets/css/pages/dashboard-ecommerce.css">
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- END Page Level CSS-->
     <!-- BEGIN Custom CSS-->
     <!-- END Custom CSS-->
 </head>
-
 <style>
-    .hide{
-        display: none;
-    }
+  .hide{
+    display: none;
+  }
+  .showBlock{
+    display: block;
+  }
 </style>
-
 <body class="vertical-layout vertical-menu 2-columns  menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
 
     <!-- fixed-top-->
@@ -99,7 +101,37 @@
                                     @if (session('error'))
                                         <p class='text-danger'>{{ session('error') }}</p>
                                     @endif
+                                    <div class="container">
+                                      <div class="modal fade text-left hide" id="delete_column_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="padding-right: 17px;" aria-modal="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                              <div class="modal-content">
+                                                  <div class="modal-header bg-danger white">
+                                                  <h4 class="modal-title white" id="myModalLabel11">Confirm Delete Of "{{ucwords(strtolower($organization_details->organization_name))}}".</h4>
+                                                  <input type="hidden" id="delete_columns_ids">
+                                                  <button id="hide_delete_column" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">×</span>
+                                                  </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <div class="container">
+                                                          <p class="text-dark"><b>Are you sure you want to delete "{{ucwords(strtolower($organization_details->organization_name))}}" ?</b></p>
+                                                          <b>Note</b><br>
+                                                          <p>- All "{{ucwords(strtolower($organization_details->organization_name))}}" data will be deleted.</p>
+                                                          <p>- This action is irreversible.</p>
+                                                      </div>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="button" id="close_this_window_delete" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
+                                                      <a href="{{route("DeleteOrganization",[$organization_details->organization_id])}}" class="btn btn-primary my-1 "><i class="ft-trash"></i> Delete</a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
                                     <div class="container row ">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-danger btn-sm my-1" id="DeleteTable"><i class="ft-trash"></i></button>
+                                        </div>
                                         <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
                                             <div class="col-md-6">
                                                 <p><b>Last Payment Date : </b><span class="badge bg-secondary">Readonly</span></p>
@@ -250,7 +282,7 @@
                                             </div>
                                             <div class="col-md-4 form-group">
                                                 <label for="business_short_code" class="form-control-label"><b>Organization Paybill Number</b> <span class="text-danger">{Double check your paybill! When captured incorrectly the customer`s transactions won`t be captured automatically!}</span></label>
-                                                <input required type="text" min="0" name="business_short_code" id="business_short_code"
+                                                <input type="text" min="0" name="business_short_code" id="business_short_code"
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->BusinessShortCode}}">
                                             </div>
                                         </div>
@@ -316,6 +348,7 @@
     <!-- BEGIN CHAMELEON  JS-->
     <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
     <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>
+    <script src="/theme-assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
     <script>
         var lenience_days_btn = document.getElementById("lenience_days_btn");
@@ -333,6 +366,24 @@
         discount_change_btn.onclick = function () {
             var discount_window = document.getElementById("discount_window");
             discount_window.classList.toggle("d-none");
+        }
+    </script>
+
+    <script>
+        document.getElementById("DeleteTable").onclick = function () {
+            document.getElementById("delete_column_details").classList.remove("hide");
+            document.getElementById("delete_column_details").classList.add("show");
+            document.getElementById("delete_column_details").classList.add("showBlock");
+        }
+
+        document.getElementById("close_this_window_delete").onclick = function () {
+            document.getElementById("delete_column_details").classList.add("hide");
+            document.getElementById("delete_column_details").classList.remove("show");
+            document.getElementById("delete_column_details").classList.remove("showBlock");
+        }
+
+        document.getElementById("hide_delete_column").onclick = function () {
+            document.getElementById("close_this_window_delete").click();
         }
     </script>
 

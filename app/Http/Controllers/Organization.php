@@ -28,6 +28,32 @@ class Organization extends Controller
         $last_acc_no = count($organizations) > 0 ? $organizations[0]->account_no : "N/A";
         return view("Orgarnizations.new",["packages" => $packages, "last_acc_no" => $last_acc_no]);
     }
+    
+    function DeleteOrganization($organization_id){
+        // drop database
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        $organization_name = "N/A";
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // if the organization is present delete its database
+        DB::statement("DROP DATABASE ".$organization_details[0]->organization_database.";");
+        $organization_name = ucwords(strtolower($organization_details[0]->organization_name));
+        
+        // delete the organization from the table.
+        DB::delete("DELETE FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+
+        // delete all users associated with the organization
+        DB::delete("DELETE FROM `admin_tables` WHERE `organization_id` = ?",[$organization_id]);
+
+        // return to the main page
+        session()->flash("success", "Organizations \"".$organization_name."\" have been deleted successfully!");
+        return redirect(route("Organizations"));
+
+    }
 
     function process_new(Request $request){
         // return $request;

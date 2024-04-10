@@ -89,6 +89,7 @@ Route::post("/Organization/UpdateClient/{organization_id}",[Organization::class,
 Route::get("/Organization/get_interfaces/{organization_id}/{router_id}",[Organization::class,'get_router_interface'])->name("get_router_interface");
 Route::get("/Organization/ActivateSMS/{organization_id}",[Organization::class,"ActivateSMS"])->name("ActivateSMS");
 Route::get("/Organization/DeactivateSMS/{organization_id}",[Organization::class,"DeactivateSMS"])->name("DeactivateSMS");
+Route::get("/Organization/Delete/{delete_id}",[Organization::class,"DeleteOrganization"])->name("DeleteOrganization");
 
 // statistics
 Route::get("/Organization/Client-Statistics/{organization_id}",[Organization::class,'get_clients_statistics'])->name("get_clients_statistics");

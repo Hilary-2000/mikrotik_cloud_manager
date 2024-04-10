@@ -214,7 +214,7 @@
                                     <div class="table-responsive" id="transDataReciever">
                                         <div class="container text-center my-2">
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
-                                                src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
+                                                src="/theme-assets/images/logo.jpeg"/>
                                         </div>
                                         {{-- <table class="table">
                                             <thead>
