@@ -19,6 +19,7 @@ class Organization extends Controller
     function get_organizations(){
         // select from organization.
         $organizations = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
+        // return $organizations;
         return view("Orgarnizations.index",["organizations" => $organizations]);
     }
 
@@ -228,6 +229,7 @@ class Organization extends Controller
             session()->flash("error", "Invalid organization!");
             return redirect(route("Organizations"));
         }
+        // return $organization_details[0];
 
         // get the rest of the account details
         $account_users = DB::select("SELECT * FROM `admin_tables` WHERE `organization_id` = ?",[$organization_id]);
