@@ -281,6 +281,29 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 form-group">
+                                                <label for="sms_sender" class="form-control-label"><b>SMS SENDER</b></label>
+                                                <select name="sms_sender" id="sms_sender" class="form-control">
+                                                    <option value="" hidden>Select Sender</option>
+                                                    <option {{$organization_details->sms_sender == "celcom" ? "selected" : ""}} value="celcom">Celcom Kenya</option>
+                                                    <option {{$organization_details->sms_sender == "afrokatt" ? "selected" : ""}} value="afrokatt">Afrokatt Kenya</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="sms_api_key" class="form-control-label"><b>Organization API KEY</b></label>
+                                                <input type="text" min="0" name="sms_api_key" id="sms_api_key"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_api_key}}">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="sms_shortcode" class="form-control-label"><b>Organization SHORTCODE / SENDER ID</b></label>
+                                                <input type="text" min="0" name="sms_shortcode" id="sms_shortcode"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_shortcode}}">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="sms_partner_id" class="form-control-label"><b>Organization PATNER ID</b></label>
+                                                <input type="text" min="0" name="sms_partner_id" id="sms_partner_id"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_partner_id}}">
+                                            </div>
+                                            <div class="col-md-4 form-group">
                                                 <label for="business_short_code" class="form-control-label"><b>Organization Paybill Number</b> <span class="text-danger">{Double check your paybill! When captured incorrectly the customer`s transactions won`t be captured automatically!}</span></label>
                                                 <input type="text" min="0" name="business_short_code" id="business_short_code"
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->BusinessShortCode}}">
