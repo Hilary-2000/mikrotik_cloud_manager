@@ -144,23 +144,35 @@
                                             <p class="card-text">Fill all fields to add the Administrator.</p>
                                             @csrf
                                             <div class="row">
-                                                <div class="col-md-6 form-group">
+                                                <div class="col-md-4 form-group">
                                                     <label for="admin_name" class="form-control-label">Fullname</label>
                                                     <input type="text" name="admin_name" id="admin_name" class="form-control rounded-lg p-1" placeholder="Admin Fullname .." required  >
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <label for="client_address" class="form-control-label">Contacts</label>
                                                     <input type="text" name="client_address" id="client_address" class="form-control rounded-lg p-1" placeholder="Administrator contacts" required  >
                                                 </div>
+                                                <div class="col-md-4">
+                                                    <label for="admin_email" class="form-control-label">Administrator E-mail</label>
+                                                    <input type="text" class="form-control" placeholder="e.g, mail@hypbits.com" id="admin_email" name="admin_email">
+                                                </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6 form-group">
+                                                <div class="col-md-4 form-group">
                                                     <label for="admin_username" class="form-control-label">Username <span class="text-danger" id="error_acc_no"></span></label>
                                                     <input type="text" name="admin_username" id="admin_username" class="form-control rounded-lg p-1" placeholder="Administrator Username" required  >
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <label for="admin_password" class="form-control-label">Password</label>
                                                     <input type="password" name="admin_password" id="admin_password" class="form-control rounded-lg p-1" placeholder="Administrator password" required >
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="user_status" class="form-control-label">Administrator Status</label>
+                                                    <select name="user_status" id="user_status" class="form-control">
+                                                        <option value="" hidden>Select status</option>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">In-active</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <input type="hidden" name="privileges" id="privileged" value="[{&quot;option&quot;:&quot;My Clients&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Transactions&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Expenses&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;My Routers&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;SMS&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Account and Profile&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false}]">

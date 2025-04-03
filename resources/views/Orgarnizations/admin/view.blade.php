@@ -165,7 +165,7 @@ date_default_timezone_set('Africa/Nairobi');
                                     <form action="{{route("update_administrators",[$organization_details->organization_id])}}" method="post">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-6 form-group">
+                                            <div class="col-md-4 form-group">
                                                 <label for="admin_name" class="form-control-label">Fullname</label>
                                                 <input type="text" name="admin_name" id="admin_name"
                                                     class="form-control rounded-lg p-1"
@@ -174,12 +174,16 @@ date_default_timezone_set('Africa/Nairobi');
                                                 <input type="hidden" name="admin_id"
                                                     value="{{ $admin_data[0]->admin_id }}">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label for="client_address" class="form-control-label">Contacts</label>
                                                 <input type="text" name="client_address" id="client_address"
                                                     value="{{ $admin_data[0]->contacts }}"
                                                     class="form-control rounded-lg p-1"
                                                     placeholder="Administrator contacts" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="admin_email" class="form-control-label">Administrator E-Mail</label>
+                                                <input type="text" class="form-control" value="{{ $admin_data[0]->email }}" name="admin_email" id="admin_email" placeholder="e.g, hypbits@gmail.com">
                                             </div>
                                         </div>
                                         <div class="row">

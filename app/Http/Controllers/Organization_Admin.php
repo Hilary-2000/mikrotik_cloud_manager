@@ -65,6 +65,8 @@ class Organization_Admin extends Controller
         $client_address = $req->input('client_address');
         $admin_username = $req->input('admin_username');
         $admin_password = $req->input('admin_password');
+        $admin_email = $req->input("admin_email");
+        $user_status = $req->input("user_status");
         $privileges = $req->input('privileges');
 
         // get the username if its already used
@@ -82,6 +84,8 @@ class Organization_Admin extends Controller
             $admin_table->contacts = $client_address;
             $admin_table->organization_id = $organization_id;
             $admin_table->user_status = "1";
+            $admin_table->activated = $user_status;
+            $admin_table->email = $admin_email;
             $admin_table->priviledges = $privileges;
             $admin_table->save();
                 
@@ -142,6 +146,7 @@ class Organization_Admin extends Controller
             "user_status" => $req->input('status'),
             "date_changed" => date("YmdHis"),
             "activated" => $status,
+            "email" => $req->input("admin_email"),
             "priviledges" => $privileges
         ]);
         session()->flash('success',"Administrator data updates successfully!");
