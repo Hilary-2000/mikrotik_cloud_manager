@@ -1278,7 +1278,7 @@ class Organization extends Controller
         // Return the difference in days as an integer
         return (int)$daysDiff;
     }
-
+    
     // import database
     function import_database($filePath,$dbname) {
         // Connect to MySQL server
@@ -1290,6 +1290,14 @@ class Organization extends Controller
         // Check connection
         if ($conn->connect_error) {
             // die("Connection failed: " . $conn->connect_error);
+            return false;
+        }
+
+        // Drop database if it exists
+        $dropDbSql = "DROP DATABASE IF EXISTS $dbname";
+        if ($conn->query($dropDbSql) === TRUE) {
+            // echo "Database dropped successfully<br>";
+        } else {
             return false;
         }
     
