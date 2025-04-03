@@ -71,6 +71,8 @@ class Organization extends Controller
         $client_package = $request->input("client_package");
         $privileges = $request->input("privileges");
         $register_main_user = $request->input("register_main_user");
+        $administrator_status = $request->input("administrator_status");
+        $administrator_email = $request->input("administrator_email");
 
         if ($register_main_user == "on") {
             // check if the administrator data has been set
@@ -190,7 +192,9 @@ class Organization extends Controller
             $admin_table->admin_password = $admin_password;
             $admin_table->contacts = $admin_contacts;
             $admin_table->organization_id = $org_id;
-            $admin_table->user_status = "1";
+            $admin_table->user_status = $administrator_status;
+            $admin_table->activated = $administrator_status;
+            $admin_table->email = $administrator_email;
             $admin_table->priviledges = $privileges;
             $admin_table->save();
         }
@@ -1278,7 +1282,7 @@ class Organization extends Controller
         // Return the difference in days as an integer
         return (int)$daysDiff;
     }
-    
+
     // import database
     function import_database($filePath,$dbname) {
         // Connect to MySQL server

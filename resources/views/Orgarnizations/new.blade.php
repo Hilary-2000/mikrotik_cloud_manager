@@ -194,6 +194,19 @@
                                                 <label for="admin_password" class="form-control-label"><b>Password</b></label>
                                                 <input type="password" name="admin_password" id="admin_password" class="form-control rounded-lg p-1" placeholder="Administrator password" >
                                             </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="administrator_status" class="form-control-label"><b>Administrator Contacts </b></label>
+                                                <select name="administrator_status" id="administrator_status" class="form-control">
+                                                    <option value="" hidden>Select Admin Status</option>
+                                                    <option value="1">Active</option>
+                                                    <option value="0">In-Active</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="administrator_email" class="form-control-label"><b>Administrator Email </b></label>
+                                                <input required type="text" min="0" name="administrator_email" id="administrator_email"
+                                                    class="form-control rounded-lg p-1" placeholder="e.g : mail@ladybirdsmis.com">
+                                            </div>
                                             <div class="col-md-12">
                                                 <input type="hidden" name="privileges" id="privileged" value="[{&quot;option&quot;:&quot;My Clients&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Transactions&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Expenses&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;My Routers&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;SMS&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Account and Profile&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false}]">
                                                 {{-- <input type="hidden" name="privileges" id="privileged"> --}}

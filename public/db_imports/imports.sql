@@ -128,7 +128,8 @@ INSERT INTO settings VALUES ('8', 'Messages', '[{\"Name\":\"Remind_payment\",\"m
 INSERT INTO settings VALUES ('9', 'delete', '[{\"name\":\"delete_sms\",\"period\":\"never\"},{\"name\":\"delete_transaction\",\"period\":\"never\"}]', '1', '20231221075837', '0');
 INSERT INTO settings VALUES ('10', 'expenses', '[{\"name\":\"Daily Expense\",\"index\":0}]', '1', '20230320161856', '0');
 INSERT INTO settings VALUES ('14', 'repeat_value', '{\"date\":\"20230414\",\"repeat_value\":3}', '1', '20230414102333', '0');
-INSERT INTO settings VALUES ('15', 'sstp_server', '{\"username\":\"MikrotikApi\",\"password\":\"2000Hilary\",\"ip_address\":\"18.226.170.63\",\"port\" : \"1982\"}', '1', '20230320161856', '0');
+INSERT INTO settings VALUES ('15', 'sstp_server', '{\"username\":\"SJpdcxixj\",\"password\":\"ncUTdImrLQHQAErjxp\",\"ip_address\":\"3.14.249.167\",\"port\" : \"1982\"}', '1', '20230320161856', '0');
+INSERT INTO settings VALUES ('16', 'sms_sender', 'celcom', '1', '20230320161856', '0');
 
 
 CREATE TABLE `sms_tables` (
@@ -195,17 +196,18 @@ CREATE TABLE `verification_codes` (
 
 CREATE TABLE `client_reports` (
   `report_id` int NOT NULL AUTO_INCREMENT,
-  `report_title` varchar(2000) DEFAULT NULL,
-  `report_description` mediumtext,
-  `problem` varchar(500) DEFAULT NULL,
-  `diagnosis` varchar(500) DEFAULT NULL,
-  `solution` varchar(500) DEFAULT NULL,
-  `closed_by` varchar(250) DEFAULT NULL,
-  `client_id` varchar(200) DEFAULT NULL,
-  `admin_reporter` varchar(200) DEFAULT NULL,
-  `admin_attender` varchar(200) DEFAULT NULL,
-  `report_date` varchar(200) DEFAULT NULL,
-  `resolve_time` varchar(200) DEFAULT NULL,
-  `status` varchar(200) DEFAULT NULL,
+  `report_code` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `report_title` varchar(2000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `report_description` mediumtext COLLATE utf8mb4_general_ci,
+  `problem` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `diagnosis` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `solution` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `closed_by` varchar(250) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `client_id` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `admin_reporter` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `admin_attender` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `report_date` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `resolve_time` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`report_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
