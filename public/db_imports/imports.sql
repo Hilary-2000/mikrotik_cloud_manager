@@ -70,6 +70,7 @@ CREATE TABLE `client_tables` (
   `last_changed` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '20220801185959',
   `date_changed` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '20230320161856',
   `deleted` int DEFAULT '0',
+  `authenticated` INT(1) NULL DEFAULT '1',
   PRIMARY KEY (`client_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
