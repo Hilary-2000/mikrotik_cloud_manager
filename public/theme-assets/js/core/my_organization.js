@@ -63,12 +63,11 @@ window.onload = function () {
             col.push(element['wallet'] != null ? element['wallet'] : "");
             col.push(element['discount_type'] != null ? element['discount_type'] : "");
             col.push(element['discount_amount'] != null ? element['discount_amount'] : "");
-            col.push(element['lenience'] != null ? element['lenience'] : "");
-            col.push(element['last_payment_date'] != null ? element['last_payment_date'] : "");
-            col.push(element['account_renewal_date'] != null ? element['account_renewal_date'] : "");
+            col.push(element['monthly_payment'] != null ? element['monthly_payment'] : "");
+            // col.push(element['last_payment_date'] != null ? element['last_payment_date'] : "");
+            // col.push(element['account_renewal_date'] != null ? element['account_renewal_date'] : "");
             rowsColStudents.push(col);
         }
-        console.log(rowsColStudents);
         rowsNCols_original = rowsColStudents;
         cObj("tot_records").innerText = rows.length;
         // console.log(rowsNCols_original);
@@ -102,27 +101,25 @@ function displayRecord(start, finish, arrays) {
     var fins = 0;
 
     //this is the table header to the start of the tbody
-    var tableData = "<table class='table'><thead><tr><th><span  title='Sort by date registered' id='sort_by_reg_date' style='cursor:pointer;'># <i class='ft-chevron-down'></i></span></th><th><span id ='sort_by_name'   title='Sort by Client Name' style='cursor:pointer;'>Full Names <i class='ft-chevron-down'></i></span></th><th><span id ='sort_by_acc_number'   title='Sort by Account Number' style='cursor:pointer;'>Account Number <i class='ft-chevron-down'></i></span></th><th>Location</th><th><span  id ='sort_by_expiration'   title='Sort by Last Payment Date' style='cursor:pointer;'>Last Payment Date <i class='ft-chevron-down'></i></span></th><th>Action</th></tr></thead><tbody>";
+    var tableData = "<table class='table'><thead><tr><th><span  title='Sort by date registered' id='sort_by_reg_date' style='cursor:pointer;'># <i class='ft-chevron-down'></i></span></th><th><span id ='sort_by_name'   title='Sort by Client Name' style='cursor:pointer;'>Full Names <i class='ft-chevron-down'></i></span></th><th><span id ='sort_by_acc_number'   title='Sort by Account Number' style='cursor:pointer;'>Account Number <i class='ft-chevron-down'></i></span></th><th>Location</th><th><span  id ='sort_by_expiration'   title='Sort by Last Payment Date' style='cursor:pointer;'>Monthly Payment <i class='ft-chevron-down'></i></span></th><th>Action</th></tr></thead><tbody>";
     if (finish < total) {
         fins = finish;
         //create a table of the 50 records
         var counter = start + 1;
         for (let index = start; index < finish; index++) {
             var status = "<span class='badge badge-success'> </span>";
-            var account_status = "<a href='/Organization/Deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a>";
+            var account_status = "<a href='/Organization/Deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder'  data-toggle='tooltip' title='Disable this Organization'><i class='ft-x'></i></a>";
             if (arrays[index][6] == 0) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
-                account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this User'><i class='ft-check'></i></a>";
+                account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this Organization'><i class='ft-check'></i></a>";
             }
-            var reffered = "";
             if (arrays[index][12] != null && arrays[index][12] != "") {
                 var mainData = arrays[index][12];
                 if (arrays[index][12].substr(0, 1) == "\"") {
                     mainData = mainData.substr(1, mainData.length - 2);
                     mainData = mainData.replace(/\\/g, "");
                 }
-                console.log(mainData);
                 if (hasJsonStructure(mainData)) {
                     var data = JSON.parse(mainData);
                     // get the client name
@@ -135,18 +132,9 @@ function displayRecord(start, finish, arrays) {
                             id = element[0];
                         }
                     }
-                    reffered = (data.monthly_payment > 0 && fullname != "Null") ?"<a href='/Organization/View/" + id + "' class='text-secondary'><span data-toggle='tooltip' title='Reffered by " + fullname + " {" + data.client_acc + "} @ Kes " + data.monthly_payment + "' class='badge badge-warning text-dark'>Reffered</span></a>":"";
                 }
             }
-            var assignment = "";
-            if (arrays[index][15] == "static") {
-                assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
-            } else if (arrays[index][15] == "pppoe") {
-                assignment = "<span class='badge text-light' style = 'background: rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
-            }
-            var location = (arrays[index][14] != null && arrays[index][14].length > 0) ? "<a class='text-danger' href = 'https://www.google.com/maps/place/" + arrays[index][14] + "' target = '_blank'><u>Locate Client</u> </a>" : "";
-            // console.log(location);
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][10].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][2]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + (arrays[index][15].length > 0 ? setDate(arrays[index][15]) : "Not-Set") + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
             counter++;
         }
     } else {
@@ -154,44 +142,27 @@ function displayRecord(start, finish, arrays) {
         var counter = start + 1;
         for (let index = start; index < total; index++) {
             var status = "<span class='badge badge-success'> </span>";
-            var account_status = "<a href='/Organization/Deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder'  data-toggle='tooltip' title='Disable this User'><i class='ft-x'></i></a>";
+            var account_status = "<a href='/Organization/Deactivate/" + arrays[index][0] + "' class='btn btn-sm btn-danger text-dark text-bolder'  data-toggle='tooltip' title='Disable this Organization'><i class='ft-x'></i></a>";
             if (arrays[index][6] == 0) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
-                account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this User'><i class='ft-check'></i></a>";
+                account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this Organization'><i class='ft-check'></i></a>";
             }
-            var reffered = "";
+            var discount = "";
             if (arrays[index][12] != null && arrays[index][12] != "") {
                 var mainData = arrays[index][12];
                 if (arrays[index][12].substr(0, 1) == "\"") {
                     mainData = mainData.substr(1, mainData.length - 2);
                     mainData = mainData.replace(/\\/g, "");
                 }
-                console.log(mainData);
-                if (hasJsonStructure(mainData)) {
-                    var data = JSON.parse(mainData);
-                    // get the client name
-                    var fullname = "Null";
-                    var id = 0;
-                    for (let ind = 0; ind < rowsNCols_original.length; ind++) {
-                        const element = rowsNCols_original[ind];
-                        if (element[11] == data.client_acc) {
-                            fullname = element[1];
-                            id = element[0];
-                        }
-                    }
-                    reffered = (data.monthly_payment > 0 && fullname != "Null") ?"<a href='/Organization/View/" + id + "' class='text-secondary'><span data-toggle='tooltip' title='Reffered by " + fullname + " {" + data.client_acc + "} @ Kes " + data.monthly_payment + "' class='badge badge-warning text-dark'>Reffered</span></a>":"";
+                
+                if (mainData == "number") {
+                    discount = "Kes "+arrays[index][13];
+                }else{
+                    discount = arrays[index][13]+"%";
                 }
             }
-            var assignment = "";
-            if (arrays[index][15] == "static") {
-                assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
-            } else if (arrays[index][15] == "pppoe") {
-                assignment = "<span class='badge text-light' style = 'background: rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
-            }
-            var location = (arrays[index][14] != null && arrays[index][14].length > 0) ? "<a class='text-danger' href = 'https://www.google.com/maps/place/" + arrays[index][14] + "' target = '_blank'><u>Locate Client</u> </a>" : "";
-            // console.log(location); 
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td>" + assignment + " <a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) + "</small></td><td>" + arrays[index][10].toUpperCase() + " " + reffered + "</td><td>" + ucwords(arrays[index][2]) + "<br><small class='d-none d-md-block'>" + location + "</small></td><td>" + (arrays[index][15].length > 0 ? setDate(arrays[index][15]) : "Not-Set") + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
             counter++;
         }
         fins = total;
@@ -207,7 +178,6 @@ function displayRecord(start, finish, arrays) {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-
     return tableData;
 }
 function ucwords(string) {
@@ -222,7 +192,7 @@ function ucwords(string) {
 }
 function ucword(string) {
     if (string != null) {
-        var cases = string.toLowerCase();
+        var cases = string+"".toLowerCase();
         // split the string to get the number of words present
         var final_word = cases.substr(0, 1).toUpperCase() + cases.substr(1);
         return final_word.trim();

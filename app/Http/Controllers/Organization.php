@@ -19,15 +19,13 @@ class Organization extends Controller
     function get_organizations(){
         // select from organization.
         $organizations = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
-        // return $organizations;
         return view("Orgarnizations.index",["organizations" => $organizations]);
     }
 
     function new_organizations(){
-        $packages = DB::select("SELECT * FROM `packages` WHERE `status` = '1';");
         $organizations = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC LIMIT 1;");
         $last_acc_no = count($organizations) > 0 ? $organizations[0]->account_no : "N/A";
-        return view("Orgarnizations.new",["packages" => $packages, "last_acc_no" => $last_acc_no]);
+        return view("Orgarnizations.new",["last_acc_no" => $last_acc_no]);
     }
     
     function DeleteOrganization($organization_id){
@@ -73,6 +71,9 @@ class Organization extends Controller
         $register_main_user = $request->input("register_main_user");
         $administrator_status = $request->input("administrator_status");
         $administrator_email = $request->input("administrator_email");
+        $free_trial_period = $request->input("free_trial_period");
+        $monthly_payment = $request->input("monthly_payment");
+        $registration_date = $request->input("registration_date");
 
         if ($register_main_user == "on") {
             // check if the administrator data has been set
@@ -166,11 +167,12 @@ class Organization extends Controller
         }
 
         // proceed and insert the organization details
-        $today = date("YmdHis");
         $status = "1";
-        $insert_org = DB::insert("INSERT INTO `organizations` (`organization_name`,`organization_address`,`organization_main_contact`,`organization_email`,`organization_database`,`account_no`,`last_payment_date`, `account_renewal_date`, `package_name`,`organization_status`)
-                                VALUES 
-                                (?,?,?,?,?,?,?,?,?,?)",[$organization_name, $organization_location, $organization_contacts, $organization_email, $organization_account, $organization_account, $today, $today, $client_package, $status]);
+        $free_trial_period = $request->input("free_trial_period");
+        $monthly_payment = $request->input("monthly_payment");
+        $registration_date = date("Ymd", strtotime($request->input("registration_date"))).date("His");
+        $insert_org = DB::insert("INSERT INTO `organizations` (`organization_name`,`organization_address`,`organization_main_contact`,`organization_email`,`organization_database`,`account_no`,`free_trial_period`, `monthly_payment`, `date_joined`, `organization_status`)
+                                VALUES (?,?,?,?,?,?,?,?,?,?)",[$organization_name, $organization_location, $organization_contacts, $organization_email, $organization_account, $organization_account, $free_trial_period, $monthly_payment, $registration_date, $status]);
                                 
 
         if ($register_main_user == "on") {
@@ -261,18 +263,6 @@ class Organization extends Controller
 
         // get the rest of the account details
         $account_users = DB::select("SELECT * FROM `admin_tables` WHERE `organization_id` = ?",[$organization_id]);
-        $package_used = DB::select("SELECT * FROM `packages` WHERE `package_id` = ?",[$organization_details[0]->package_name]);
-        $packages = DB::select("SELECT * FROM `packages` WHERE `status` = '1';");
-
-        // get expiry
-        $exp_date = $this->get_expiry($organization_id);
-        $expiry_date = $exp_date['date'];
-        
-        // get the organization view file
-        $today = date("YmdHis");
-        $lenience = $exp_date['success'] ? $this->dateDiffInDays($expiry_date,$today) : $exp_date['reason'];
-        $organization_details[0]->lenience = $exp_date['success'] ? ($lenience < 0 ? 0 : $lenience) : $exp_date['reason'];
-        $expiry_date = $exp_date['success'] ? date("D dS M Y @ h:i:sA",strtotime($exp_date['date'])) : $exp_date['reason'];
 
         // get the company stats
         $change_db = new login();
@@ -298,7 +288,7 @@ class Organization extends Controller
         $administrators = DB::select("SELECT * FROM `admin_tables` WHERE `organization_id` = ?",[$organization_id]);
         $administrator_count = count($administrators);
 
-        return view("Orgarnizations.view",["administrator_count" => $administrator_count, "transaction_count" => $transaction_count, "routers_count" => $routers_count, "sms_count" => $sms_count, "client_count" => $client_count, "expiry_date" => $expiry_date, "packages" => $packages, "organization_details" => $organization_details[0], "account_users" => $account_users, "package_used" => $package_used]);
+        return view("Orgarnizations.view",["administrator_count" => $administrator_count, "transaction_count" => $transaction_count, "routers_count" => $routers_count, "sms_count" => $sms_count, "client_count" => $client_count, "organization_details" => $organization_details[0], "account_users" => $account_users]);
     }
 
     function view_organization_clients($organization_id){
@@ -1258,11 +1248,13 @@ class Organization extends Controller
         $organization_contacts = $request->input("organization_contacts");
         $organization_email = $request->input("organization_email");
         $business_short_code = $request->input("business_short_code");
-        $client_package = $request->input("client_package");
+        $free_trial_period = $request->input("free_trial_period");
+        $monthly_payment = $request->input("monthly_payment");
+        $registration_date = date("Ymd", strtotime($request->input("registration_date"))).date("His");
 
         // update the organization
-        $update = DB::update("UPDATE `organizations` SET `organization_name` = ?, `BusinessShortCode` = ?, `organization_address` = ?, `organization_main_contact` = ?, `organization_email` = ?, `package_name` = ? WHERE `organization_id` = ?",
-        [$organization_name,$business_short_code,$organization_location,$organization_contacts,$organization_email,$client_package,$organization_id]);
+        $update = DB::update("UPDATE `organizations` SET `organization_name` = ?, `BusinessShortCode` = ?, `organization_address` = ?, `organization_main_contact` = ?, `organization_email` = ?, `free_trial_period` = ?, `monthly_payment` = ?, `date_joined` = ?  WHERE `organization_id` = ?",
+        [$organization_name,$business_short_code,$organization_location,$organization_contacts,$organization_email,$free_trial_period, $monthly_payment, $registration_date, $organization_id]);
         
         session()->flash("success","Organization information has been updated successfully!");
         return redirect(route("ViewOrganization",$organization_id));

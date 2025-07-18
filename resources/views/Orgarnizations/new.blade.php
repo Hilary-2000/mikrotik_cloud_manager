@@ -107,7 +107,7 @@
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_name" class="form-control-label"><b>Organization Name</b></label>
+                                                <label for="organization_name" class="form-control-label">Organization Name </label>
                                                 <input required type="text" name="organization_name" id="organization_name"
                                                     class="form-control rounded-lg p-1" placeholder="Organization name"
                                                     required
@@ -117,7 +117,7 @@
                                                     >
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_account" class="form-control-label"><b>Organization Account <span class="text-primary">( {{$last_acc_no}} )</span></b></label>
+                                                <label for="organization_account" class="form-control-label">Organization Account <span class="text-primary">( {{$last_acc_no}} )</span></label>
                                                 <input required type="text" min="0" name="organization_account" id="organization_account"
                                                     class="form-control rounded-lg p-1" placeholder="HBS101"
                                                     @if (session("organization_account"))
@@ -125,7 +125,7 @@
                                                     @endif>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_location" class="form-control-label"><b>Organization Location</b></label>
+                                                <label for="organization_location" class="form-control-label">Organization Location </label>
                                                 <input required type="text" name="organization_location" id="organization_location"
                                                     class="form-control rounded-lg p-1" placeholder="Organization Location e.x Mombasa"
                                                     required
@@ -135,7 +135,7 @@
                                                     >
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_contacts" class="form-control-label"><b>Organization Contacts </b></label>
+                                                <label for="organization_contacts" class="form-control-label">Organization Contacts </label>
                                                 <input required type="text" min="0" name="organization_contacts" id="organization_contacts"
                                                     class="form-control rounded-lg p-1" placeholder="Organization Contacts. e.x : 0720000000"
                                                     @if (session("organization_contacts"))
@@ -143,7 +143,7 @@
                                                     @endif>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_email" class="form-control-label"><b>Organization Email </b></label>
+                                                <label for="organization_email" class="form-control-label">Organization Email</label>
                                                 <input required type="text" min="0" name="organization_email" id="organization_email"
                                                     class="form-control rounded-lg p-1" placeholder="Organization E-Mails. e.x : hilaryme45@gmail.com"
                                                     @if (session("organization_email"))
@@ -151,13 +151,33 @@
                                                     @endif>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="client_package" class="form-control-label"><b>Package </b></label>
-                                                <select required name="client_package" id="client_package" class="form-control">
-                                                    <option value="" hidden>Select Package</option>
-                                                    @foreach ($packages as $package)
-                                                        <option {{session("client_package") == $package->package_id ? "selected" : ""}} value="{{$package->package_id}}" >{{$package->package_name." - Kes (".number_format($package->amount_paid).")"}}</option>
-                                                    @endforeach
+                                                <label for="free_trial_period" class="form-control-label">Free Trial Period </label>
+                                                <select required name="free_trial_period" id="free_trial_period" class="form-control">
+                                                    <option value="" hidden>Select Period</option>
+                                                    <option value="1 Month">1 Month</option>
+                                                    <option value="2 Month">2 Month</option>
+                                                    <option value="3 Month">3 Month</option>
+                                                    <option value="4 Month">4 Month</option>
+                                                    <option value="5 Month">5 Month</option>
+                                                    <option value="6 Month">6 Month</option>
+                                                    <option value="7 Month">7 Month</option>
+                                                    <option value="8 Month">8 Month</option>
+                                                    <option value="9 Month">9 Month</option>
+                                                    <option value="10 Month">10 Month</option>
+                                                    <option value="11 Month">11 Month</option>
+                                                    <option value="12 Month">12 Month</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="monthly_payment" class="form-control-label">Monthly Payment <i>(per 50 clients)</i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text">Kes </span></div>
+                                                    <input type="number" class="form-control" id="monthly_payment" name="monthly_payment" placeholder="E.g, 1000" value="1000">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="registration_date" class="form-control-label">Registration Date</label>
+                                                <input type="date" class="form-control" id="registration_date" name="registration_date" value="<?=date("Y-m-d")?>">
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <input type="checkbox" class="form-control-checkbox float-left" id="register_main_user" name="register_main_user">
@@ -169,7 +189,7 @@
                                                 <h6 class="text-center"><u>Register Main User</u></h6>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="admin_name" class="form-control-label"><b>Fullname</b></label>
+                                                <label for="admin_name" class="form-control-label">Fullname</label>
                                                 <input type="text" name="admin_name" id="admin_name" class="form-control rounded-lg p-1" placeholder="Admin Fullname .."  
                                                     @if (session("admin_name"))
                                                         value="{{session("admin_name")}}"
@@ -177,25 +197,25 @@
                                                 >
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="admin_contacts" class="form-control-label"><b>Contacts</b></label>
+                                                <label for="admin_contacts" class="form-control-label">Contacts</label>
                                                 <input type="text" name="admin_contacts" id="admin_contacts" class="form-control rounded-lg p-1" placeholder="Administrator contacts"  
                                                 @if (session("admin_contacts"))
                                                     value="{{session("admin_contacts")}}"
                                                 @endif>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="admin_username" class="form-control-label"><b>Username</b> <span class="text-danger" id="error_acc_no"></span></label>
+                                                <label for="admin_username" class="form-control-label">Username <span class="text-danger" id="error_acc_no"></span></label>
                                                 <input type="text" name="admin_username" id="admin_username" class="form-control rounded-lg p-1" placeholder="Administrator Username"  
                                                 @if (session("admin_username"))
                                                     value="{{session("admin_username")}}"
                                                 @endif>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="admin_password" class="form-control-label"><b>Password</b></label>
+                                                <label for="admin_password" class="form-control-label">Password </label>
                                                 <input type="password" name="admin_password" id="admin_password" class="form-control rounded-lg p-1" placeholder="Administrator password" >
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="administrator_status" class="form-control-label"><b>Administrator Contacts </b></label>
+                                                <label for="administrator_status" class="form-control-label">Administrator Contacts </label>
                                                 <select name="administrator_status" id="administrator_status" class="form-control">
                                                     <option value="" hidden>Select Admin Status</option>
                                                     <option value="1">Active</option>
@@ -203,7 +223,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="administrator_email" class="form-control-label"><b>Administrator Email </b></label>
+                                                <label for="administrator_email" class="form-control-label">Administrator Email </label>
                                                 <input required type="text" min="0" name="administrator_email" id="administrator_email"
                                                     class="form-control rounded-lg p-1" placeholder="e.g : mail@ladybirdsmis.com">
                                             </div>

@@ -127,109 +127,114 @@
                                               </div>
                                           </div>
                                       </div>
+
+                                      {{-- CHANGE DISCOUNT --}}
+                                      <div class="modal fade text-left hide" id="change_discounts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="padding-right: 17px;" aria-modal="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                              <div class="modal-content">
+                                                  <div class="modal-header bg-primary white">
+                                                    <h4 class="text-white">Set Discount</h4>
+                                                    <button id="hide_change_discounts" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="{{route("UpdateDiscount",$organization_details->organization_id)}}" method="POST" class="form-group w-100" id="discount_window">
+                                                        <hr>
+                                                        <h6 class="text-center">Set Discount</h6>
+                                                        @csrf
+                                                        <label for="discount_type" class="form-control-label">Discount</label>
+                                                        <select name="discount_type" id="discount_type" class="form-control">
+                                                            <option {{$organization_details->discount_type == "number" ? "selected" : ""}} value="number">Discount Price</option>
+                                                            <option {{$organization_details->discount_type == "percentage" ? "selected" : ""}} value="percentage">Discount Percentage</option>
+                                                        </select>
+                                                        <label for="discount_amount" class="form-control-label">Discount Amount</label>
+                                                        <input type="number" name="discount_amount" id="discount_amount" placeholder="Discount Balance" class="form-control" value="{{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? $organization_details->discount_amount : $organization_details->discount_amount) : "0"}}" >
+                                                        <input type="submit" class="btn btn-success btn-sm my-2 d-none" value="Set" id="update_discount_window">
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="button" id="close_change_discounts" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button class="btn btn-success" id="update_discounts" onclick="document.getElementById('update_discount_window').click();"> Update Discounts</button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      {{-- CHANGE WALLET --}}
+                                      <div class="modal fade text-left hide" id="change_wallet_window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="padding-right: 17px;" aria-modal="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                              <div class="modal-content">
+                                                  <div class="modal-header bg-primary white">
+                                                    <h4 class="text-white">Set Wallet</h4>
+                                                    <button id="hide_change_wallet" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="{{route("UpdateWallet",$organization_details->organization_id)}}" method="POST" class="form-group w-100" id="wallet_balance_window">
+                                                        <hr>
+                                                        <h6 class="text-center">Set Wallet Balance</h6>
+                                                        @csrf
+                                                        <label for="wallet_balance" class="form-control-label">Wallet</label>
+                                                        <input type="number" placeholder="Wallet Balance" class="form-control" value="{{$organization_details->wallet != null ? $organization_details->wallet : "0"}}" name="wallet_balance" id="wallet_balance">
+                                                        <input type="submit" class="btn btn-success btn-sm my-2 d-none" id="update_Wallet_amount" value="Update">
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="button" id="close_change_wallet" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button class="btn btn-success" onclick="document.getElementById('update_Wallet_amount').click();"> Update Wallet</button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
                                     </div>
                                     <div class="container row ">
                                         <div class="col-md-12">
                                             <button type="button" class="btn btn-danger btn-sm my-1" id="DeleteTable"><i class="ft-trash"></i></button>
                                         </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-6">
-                                                <p><b>Last Payment Date : </b><span class="badge bg-secondary">Readonly</span></p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p class="text-primary"><b>{{$organization_details->last_payment_date != null ? date("D dS M Y @ h:i:sA",strtotime($organization_details->last_payment_date)) : "Not-Set"}}</b></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-6">
-                                                <p><b>Account Renewal Date : </b><span class="badge bg-secondary">Readonly</span></p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p class="text-primary"><b>{{$organization_details->account_renewal_date != null ? date("D dS M Y @ h:i:sA",strtotime($organization_details->account_renewal_date)) : "Not-Set"}}</b></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-6">
-                                                <p><b>Date of Expiration : </b><span class="badge bg-secondary">Readonly</span></p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p class="text-primary"><b>{{$expiry_date}}</b></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-6">
-                                                <p><b>Organization Status : </b></p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <a href="{{route("DeactivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->organization_status == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                <a href="{{route("ActivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->organization_status == "1" ? "d-none" : ""}}">Activate</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="form-group w-100" id="lenience_days_viewer">
-                                                <p class="px-1"><b>Active Day Remaining : {{$organization_details->wallet != null ? number_format($organization_details->lenience) : "0"}} Day(s)</b> <button class="btn btn-sm btn-primary float-right" id="lenience_days_btn"><i class="ft-refresh-cw"></i> Change</button></p>
-                                            </div>
-                                            <form method="POST" action="{{route("UpdateLenience",$organization_details->organization_id)}}" class="form-group d-none w-100" id="lenience_days_window">
-                                                <hr>
-                                                <h6 class="text-center">Set Leniece Days</h6>
-                                                @csrf
-                                                <label for="linience_days" class="form-control-label"><b>Lenience Days</b></label>
-                                                <input type="number" placeholder="Leniece Days" class="form-control" name="linience_days" id="linience_days">
-                                                <input type="submit" class="btn btn-success btn-sm my-2" value="Update">
-                                            </form>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-6">
-                                                <p><b>Payment Status : </b></p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <a href="{{route("Deactivate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->payment_status == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                <a href="{{route("Activate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->payment_status == "1" ? "d-none" : ""}}">Activate</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="col-md-8">
-                                                <p><b>Send SMS Status : </b></p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <a href="{{route("DeactivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->send_sms == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                <a href="{{route("ActivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->send_sms == "1" ? "d-none" : ""}}">Activate</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="form-group w-100" id="discount_viewer">
-                                                <p for="discount" class="px-1"><b>Discount : {{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? "Kes ".number_format($organization_details->discount_amount) : $organization_details->discount_amount."%") : "Not-Set"}}</b> <button class="btn btn-sm btn-primary float-right" id="discount_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
-                                            </div>
-                                            <form action="{{route("UpdateDiscount",$organization_details->organization_id)}}" method="POST" class="form-group d-none w-100" id="discount_window">
-                                                <hr>
-                                                <h6 class="text-center">Set Discount</h6>
-                                                @csrf
-                                                <label for="discount_type" class="form-control-label"><b>Discount</b></label>
-                                                <select name="discount_type" id="discount_type" class="form-control">
-                                                    <option selected value="number">Discount Price</option>
-                                                    <option value="percentage">Discount Percentage</option>
-                                                </select>
-                                                <label for="discount_amount" class="form-control-label"><b>Discount</b></label>
-                                                <input type="number" name="discount_amount" id="discount_amount" placeholder="Discount Balance" class="form-control" value="{{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? $organization_details->discount_amount : $organization_details->discount_amount) : "0"}}" >
-                                                <input type="submit" class="btn btn-success btn-sm my-2" value="Set">
-                                            </form>
-                                        </div>
-                                        <div class="col-md-6 form-group border border-primary border-1 rounded row w-75 mx-auto py-2">
-                                            <div class="form-group w-100" id="wallet_balance_viewer">
-                                                <p for="wallet_balance" class="px-1"><b>Wallet : Kes {{$organization_details->wallet != null ? number_format($organization_details->wallet) : "0"}}</b> <button class="btn btn-sm btn-primary float-right" id="wallet_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
-                                            </div>
-                                            <form action="{{route("UpdateWallet",$organization_details->organization_id)}}" method="POST" class="form-group d-none w-100" id="wallet_balance_window">
-                                                <hr>
-                                                <h6 class="text-center">Set Wallet Balance</h6>
-                                                @csrf
-                                                <label for="wallet_balance" class="form-control-label"><b>Wallet</b></label>
-                                                <input type="number" placeholder="Wallet Balance" class="form-control" value="{{$organization_details->wallet != null ? $organization_details->wallet : "0"}}" name="wallet_balance" id="wallet_balance">
-                                                <input type="submit" class="btn btn-success btn-sm my-2" value="Update">
-                                            </form>
-                                        </div>
-                                        <div class="col-md-6 form-group row w-75 mx-auto py-2">
-                                            
-                                        </div>
+                                        <table class="table table-border">
+                                            <tr>
+                                                <td>
+                                                    <div class="col-md-6">
+                                                        <p>Organization Status : 
+                                                            <a href="{{route("DeactivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->organization_status == "1" ? "" : "d-none"}}">De-Activate</a>
+                                                            <a href="{{route("ActivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->organization_status == "1" ? "d-none" : ""}}">Activate</a>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="col-md-6">
+                                                        <p>Payment Status : 
+                                                            <a href="{{route("Deactivate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->payment_status == "1" ? "" : "d-none"}}">De-Activate</a>
+                                                            <a href="{{route("Activate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->payment_status == "1" ? "d-none" : ""}}">Activate</a>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="col-md-8">
+                                                        <p>Send SMS Status : <br>
+                                                            <a href="{{route("DeactivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->send_sms == "1" ? "" : "d-none"}}">De-Activate</a>
+                                                            <a href="{{route("ActivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->send_sms == "1" ? "d-none" : ""}}">Activate</a>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group w-100" id="discount_viewer">
+                                                        <p for="discount" class="px-1">Discount : {{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? "Kes ".number_format($organization_details->discount_amount) : $organization_details->discount_amount."%") : "Not-Set"}} <br><button class="btn btn-sm btn-primary" id="discount_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group w-100" id="wallet_balance_viewer">
+                                                        <p for="wallet_balance" class="px-1">Wallet : Kes {{$organization_details->wallet != null ? number_format($organization_details->wallet) : "0"}}<br> <button class="btn btn-sm btn-primary" id="wallet_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                     <hr>
                                     <p class="text-primary text-center"><u>Organization Details</u></p>
@@ -244,41 +249,61 @@
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_name" class="form-control-label"><b>Organization Name</b></label>
+                                                <label for="organization_name" class="form-control-label">Organization Name </label>
                                                 <input required type="text" name="organization_name" id="organization_name"
                                                     class="form-control rounded-lg p-1" placeholder="Organization name"
                                                     required value="{{$organization_details->organization_name}}">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_account" class="form-control-label"><b>Organization Account</b></label>
+                                                <label for="organization_account" class="form-control-label">Organization Account</label>
                                                 <input required type="text" readonly min="0" name="organization_account" id="organization_account"
                                                     class="form-control rounded-lg p-1" placeholder="HBS101" value="{{$organization_details->account_no}}">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_location" class="form-control-label"><b>Organization Location</b></label>
+                                                <label for="organization_location" class="form-control-label">Organization Location</label>
                                                 <input required type="text" name="organization_location" id="organization_location"
                                                     class="form-control rounded-lg p-1" placeholder="Organization Location e.x Mombasa"
                                                     required value="{{$organization_details->organization_address}}"
                                                     >
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_contacts" class="form-control-label"><b>Organization Contacts </b></label>
+                                                <label for="organization_contacts" class="form-control-label">Organization Contacts </label>
                                                 <input required type="text" min="0" name="organization_contacts" id="organization_contacts"
                                                     class="form-control rounded-lg p-1" placeholder="Organization Contacts. e.x : 0720000000" value="{{$organization_details->organization_main_contact}}">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="organization_email" class="form-control-label"><b>Organization Email </b></label>
+                                                <label for="organization_email" class="form-control-label">Organization Email</label>
                                                 <input required type="text" min="0" name="organization_email" id="organization_email"
                                                     class="form-control rounded-lg p-1" placeholder="Organization E-Mails. e.x : hilaryme45@gmail.com" value="{{$organization_details->organization_email}}">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="client_package" class="form-control-label"><b>Package </b></label>
-                                                <select required name="client_package" id="client_package" class="form-control">
-                                                    <option value="" hidden>Select Package</option>
-                                                    @foreach ($packages as $package)
-                                                        <option {{$organization_details->package_name == $package->package_id ? "selected" : ""}} value="{{$package->package_id}}" >{{$package->package_name." - Kes (".number_format($package->amount_paid).")"}}</option>
-                                                    @endforeach
+                                                <label for="free_trial_period" class="form-control-label">Free Trial Period </label>
+                                                <select required name="free_trial_period" id="free_trial_period" class="form-control">
+                                                    <option value="" hidden>Select Period</option>
+                                                    <option {{$organization_details->free_trial_period == "1 Month" ? "selected" : ""}} value="1 Month">1 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "2 Month" ? "selected" : ""}} value="2 Month">2 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "3 Month" ? "selected" : ""}} value="3 Month">3 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "4 Month" ? "selected" : ""}} value="4 Month">4 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "5 Month" ? "selected" : ""}} value="5 Month">5 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "6 Month" ? "selected" : ""}} value="6 Month">6 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "7 Month" ? "selected" : ""}} value="7 Month">7 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "8 Month" ? "selected" : ""}} value="8 Month">8 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "9 Month" ? "selected" : ""}} value="9 Month">9 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "10 Month" ? "selected" : ""}} value="10 Month">10 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "11 Month" ? "selected" : ""}} value="11 Month">11 Month</option>
+                                                    <option {{$organization_details->free_trial_period == "12 Month" ? "selected" : ""}} value="12 Month">12 Month</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="monthly_payment" class="form-control-label">Monthly Payment <i>(per 50 clients)</i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text">Kes </span></div>
+                                                    <input type="number" class="form-control" id="monthly_payment" name="monthly_payment" placeholder="E.g, 1000" value="{{$organization_details->monthly_payment}}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="registration_date" class="form-control-label">Registration Date</label>
+                                                <input type="date" class="form-control" id="registration_date" name="registration_date" value="<?=date("Y-m-d", strtotime($organization_details->date_joined))?>">
                                             </div>
                                             <div class="col-md-4 form-group">
                                                 <label for="sms_sender" class="form-control-label"><b>SMS SENDER</b></label>
@@ -374,29 +399,46 @@
     <script src="/theme-assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
     <!-- END CHAMELEON  JS-->
     <script>
-        var lenience_days_btn = document.getElementById("lenience_days_btn");
-        var wallet_change_btn = document.getElementById("wallet_change_btn");
-        var discount_change_btn = document.getElementById("discount_change_btn");
-
-        wallet_change_btn.onclick = function () {
-            var wallet_balance_window = document.getElementById("wallet_balance_window");
-            wallet_balance_window.classList.toggle("d-none");
-        }
-        lenience_days_btn.onclick = function () {
-            var lenience_days_window = document.getElementById("lenience_days_window");
-            lenience_days_window.classList.toggle("d-none");
-        }
-        discount_change_btn.onclick = function () {
-            var discount_window = document.getElementById("discount_window");
-            discount_window.classList.toggle("d-none");
-        }
-    </script>
-
-    <script>
         document.getElementById("DeleteTable").onclick = function () {
             document.getElementById("delete_column_details").classList.remove("hide");
             document.getElementById("delete_column_details").classList.add("show");
             document.getElementById("delete_column_details").classList.add("showBlock");
+        }
+
+        document.getElementById("close_change_wallet").onclick = function () {
+            document.getElementById("change_wallet_window").classList.add("hide");
+            document.getElementById("change_wallet_window").classList.remove("show");
+            document.getElementById("change_wallet_window").classList.remove("showBlock");
+        }
+
+        document.getElementById("hide_change_wallet").onclick = function () {
+            document.getElementById("change_wallet_window").classList.add("hide");
+            document.getElementById("change_wallet_window").classList.remove("show");
+            document.getElementById("change_wallet_window").classList.remove("showBlock");
+        }
+
+        document.getElementById("wallet_change_btn").onclick = function () {
+            document.getElementById("change_wallet_window").classList.remove("hide");
+            document.getElementById("change_wallet_window").classList.add("show");
+            document.getElementById("change_wallet_window").classList.add("showBlock");
+        }
+
+        document.getElementById("close_change_discounts").onclick = function () {
+            document.getElementById("change_discounts").classList.add("hide");
+            document.getElementById("change_discounts").classList.remove("show");
+            document.getElementById("change_discounts").classList.remove("showBlock");
+        }
+
+        document.getElementById("hide_change_discounts").onclick = function () {
+            document.getElementById("change_discounts").classList.add("hide");
+            document.getElementById("change_discounts").classList.remove("show");
+            document.getElementById("change_discounts").classList.remove("showBlock");
+        }
+
+        document.getElementById("discount_change_btn").onclick = function () {
+            document.getElementById("change_discounts").classList.remove("hide");
+            document.getElementById("change_discounts").classList.add("show");
+            document.getElementById("change_discounts").classList.add("showBlock");
         }
 
         document.getElementById("close_this_window_delete").onclick = function () {
