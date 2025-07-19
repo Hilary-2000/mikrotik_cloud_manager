@@ -210,19 +210,25 @@
                                                     <p><code>[reg_date]</code></p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
-                                                    <p>6. Package Fees</p>
+                                                    <p>6. Monthly Payment / <i>(per 50 clients)</i></p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
-                                                    <p><code>[package_fees]</code></p>
+                                                    <p><code>[monthly_fees]</code></p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
-                                                    <p>7. Contact</p>
+                                                    <p>7. This Month Payment / <i>(for all clients)</i></p>
+                                                </div>
+                                                <div class="col-md-6  border border-light">
+                                                    <p><code>[this_month_payment]</code></p>
+                                                </div>
+                                                <div class="col-md-6  border border-light">
+                                                    <p>8. Contact</p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
                                                     <p><code>[org_contact]</code></p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
-                                                    <p>8. Account No.</p>
+                                                    <p>9. Account No.</p>
                                                 </div>
                                                 <div class="col-md-6  border border-light">
                                                     <p><code>[acc_no]</code></p>

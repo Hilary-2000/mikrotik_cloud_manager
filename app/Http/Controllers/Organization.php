@@ -171,8 +171,11 @@ class Organization extends Controller
         $free_trial_period = $request->input("free_trial_period");
         $monthly_payment = $request->input("monthly_payment");
         $registration_date = date("Ymd", strtotime($request->input("registration_date"))).date("His");
-        $insert_org = DB::insert("INSERT INTO `organizations` (`organization_name`,`organization_address`,`organization_main_contact`,`organization_email`,`organization_database`,`account_no`,`free_trial_period`, `monthly_payment`, `date_joined`, `organization_status`)
-                                VALUES (?,?,?,?,?,?,?,?,?,?)",[$organization_name, $organization_location, $organization_contacts, $organization_email, $organization_account, $organization_account, $free_trial_period, $monthly_payment, $registration_date, $status]);
+
+        // add free trial period.
+        $expiry_date = $this->addMonths($registration_date, explode(" ",$free_trial_period)[0]);
+        $insert_org = DB::insert("INSERT INTO `organizations` (`organization_name`,`organization_address`,`organization_main_contact`,`organization_email`,`organization_database`,`account_no`,`free_trial_period`, `monthly_payment`, `date_joined`, `organization_status`, `expiry_date`)
+                                VALUES (?,?,?,?,?,?,?,?,?,?,?)",[$organization_name, $organization_location, $organization_contacts, $organization_email, $organization_account, $organization_account, $free_trial_period, $monthly_payment, $registration_date, $status, $expiry_date]);
                                 
 
         if ($register_main_user == "on") {
@@ -1382,6 +1385,25 @@ class Organization extends Controller
         $update = DB::update("UPDATE `organizations` SET `wallet` = ? WHERE `organization_id` = ?",[$wallet_balance,$organization_id]);
 
         // return organization details
+        session()->flash("success","Wallet has been updated successfully!");
+        return redirect(route("ViewOrganization",[$organization_id]));
+    }
+
+    // update wallet
+    function update_expiry(Request $request,$organization_id){
+        // get if the organization is valid
+        $select = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($select) == 0) {
+            session()->flash("error","Organization is invalid!");
+            return redirect(route("Organizations"));
+        }
+
+        // update the wallet balance
+        $expiration_date = date("YmdHis", strtotime($request->input("expiration_date")));
+        $update = DB::update("UPDATE `organizations` SET `expiry_date` = ? WHERE `organization_id` = ?",[$expiration_date,$organization_id]);
+
+        // return organization details
+        session()->flash("success","Expiry date has been updated successfully!");
         return redirect(route("ViewOrganization",[$organization_id]));
     }
 

@@ -155,7 +155,7 @@
                                                   </div>
                                                   <div class="modal-footer">
                                                       <button type="button" id="close_change_discounts" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <button class="btn btn-success" id="update_discounts" onclick="document.getElementById('update_discount_window').click();"> Update Discounts</button>
+                                                      <button class="btn btn-success" id="update_discounts" onclick="document.getElementById('update_discount_window').click();"> Update</button>
                                                   </div>
                                               </div>
                                           </div>
@@ -183,7 +183,35 @@
                                                   </div>
                                                   <div class="modal-footer">
                                                       <button type="button" id="close_change_wallet" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <button class="btn btn-success" onclick="document.getElementById('update_Wallet_amount').click();"> Update Wallet</button>
+                                                      <button class="btn btn-success" onclick="document.getElementById('update_Wallet_amount').click();"> Update</button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      {{-- CHANGE EXPIRATION DATE --}}
+                                      <div class="modal fade text-left hide" id="change_expiration_date" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="padding-right: 17px;" aria-modal="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                              <div class="modal-content">
+                                                  <div class="modal-header bg-primary white">
+                                                    <h4 class="text-white">Change Expiration Date</h4>
+                                                    <button id="hide_change_expiration_date" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="{{route("UpdateExpiration",$organization_details->organization_id)}}" method="POST" class="form-group w-100">
+                                                        <hr>
+                                                        <h6 class="text-center">Set Expiration Date</h6>
+                                                        @csrf
+                                                        <label for="wallet_balance" class="form-control-label">Expiration Date</label>
+                                                        <input type="date" placeholder="Expiration Date" class="form-control" value="{{date("Y-m-d", strtotime($organization_details->expiry_date))}}" name="expiration_date">
+                                                        <input type="submit" class="btn btn-success btn-sm my-2 d-none" id="update_expiration_date_btn" value="Update">
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="button" id="close_change_expiration_date" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button class="btn btn-success" onclick="document.getElementById('update_expiration_date_btn').click();"> Update</button>
                                                   </div>
                                               </div>
                                           </div>
@@ -229,8 +257,13 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <div class="form-group w-100" id="wallet_balance_viewer">
+                                                    <div class="form-group w-100">
                                                         <p for="wallet_balance" class="px-1">Wallet : Kes {{$organization_details->wallet != null ? number_format($organization_details->wallet) : "0"}}<br> <button class="btn btn-sm btn-primary" id="wallet_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group w-100">
+                                                        <p for="expiration_date" class="px-1">Expiry Date : {{date("D dS M Y", strtotime($organization_details->expiry_date))}}<br> <button class="btn btn-sm btn-primary" id="expiration_date"><i class="ft-refresh-cw"></i> Change</button></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -421,6 +454,24 @@
             document.getElementById("change_wallet_window").classList.remove("hide");
             document.getElementById("change_wallet_window").classList.add("show");
             document.getElementById("change_wallet_window").classList.add("showBlock");
+        }
+
+        document.getElementById("expiration_date").onclick = function () {
+            document.getElementById("change_expiration_date").classList.remove("hide");
+            document.getElementById("change_expiration_date").classList.add("show");
+            document.getElementById("change_expiration_date").classList.add("showBlock");
+        }
+
+        document.getElementById("close_change_expiration_date").onclick = function () {
+            document.getElementById("change_expiration_date").classList.add("hide");
+            document.getElementById("change_expiration_date").classList.remove("show");
+            document.getElementById("change_expiration_date").classList.remove("showBlock");
+        }
+
+        document.getElementById("hide_change_expiration_date").onclick = function () {
+            document.getElementById("change_expiration_date").classList.add("hide");
+            document.getElementById("change_expiration_date").classList.remove("show");
+            document.getElementById("change_expiration_date").classList.remove("showBlock");
         }
 
         document.getElementById("close_change_discounts").onclick = function () {

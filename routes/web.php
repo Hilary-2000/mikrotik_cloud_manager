@@ -70,6 +70,7 @@ Route::get("/Organization/Activate/{organization_id}", [Organization::class,"act
 Route::get("/Organization/Deactivate_Payment_Status/{organization_id}", [Organization::class,"deactivate_payment_status"])->name("Deactivate_Payment_Status");
 Route::get("/Organization/Activate_Payment_Status/{organization_id}", [Organization::class,"activate_payment_status"])->name("Activate_Payment_Status");
 Route::post("/Organization/UpdateWallet/{organization_id}",[Organization::class,"update_wallet"])->name("UpdateWallet");
+Route::post("/Organization/UpdateExpiration/{organization_id}",[Organization::class,"update_expiry"])->name("UpdateExpiration");
 Route::post("/Organization/UpdateLenience/{organization_id}",[Organization::class,"update_lenience"])->name("UpdateLenience");
 Route::post("/Organization/UpdateDiscount/{organization_id}",[Organization::class,"update_discount"])->name("UpdateDiscount");
 Route::post("/Organization/Update/{organization_id}",[Organization::class,"update_organization"])->name("UpdateOrganization");
