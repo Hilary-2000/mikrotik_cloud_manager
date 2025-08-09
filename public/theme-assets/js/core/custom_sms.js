@@ -304,7 +304,8 @@ function replace_text(data) {
     data = data.replace(/\[org_contact\]/g, "0743551250");
     data = data.replace(/\[acc_no\]/g, "HBS001");
     data = data.replace(/\[org_wallet\]/g, "Ksh 1000");
-    // data = data.replace(/\[username\]/g, "juma");
+    data = data.replace(/\[monthly_fees\]/g, "Ksh 1000");
+    data = data.replace(/\[this_month_payment\]/g, "Ksh 1000");
     // data = data.replace(/\[password\]/g, "Kiganjo16");
     data = data.replace(/\[trans_amnt\]/,"Ksh 1000");
     // data = data.replace(/\[min_amnt\]/,"Ksh 300");

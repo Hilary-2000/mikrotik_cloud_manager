@@ -344,10 +344,11 @@
                                                     <option value="" hidden>Select Sender</option>
                                                     <option {{$organization_details->sms_sender == "celcom" ? "selected" : ""}} value="celcom">Celcom Kenya</option>
                                                     <option {{$organization_details->sms_sender == "afrokatt" ? "selected" : ""}} value="afrokatt">Afrokatt Kenya</option>
+                                                    <option {{$organization_details->sms_sender == "hostpinnacle" ? "selected" : ""}} value="hostpinnacle">Hostpinnacle Kenya</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="sms_api_key" class="form-control-label"><b>Organization API KEY</b></label>
+                                                <label for="sms_api_key" class="form-control-label"><b>Organization API KEY / API USERNAME</b></label>
                                                 <input type="text" min="0" name="sms_api_key" id="sms_api_key"
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_api_key}}">
                                             </div>
@@ -357,7 +358,7 @@
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_shortcode}}">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label for="sms_partner_id" class="form-control-label"><b>Organization PATNER ID</b></label>
+                                                <label for="sms_partner_id" class="form-control-label"><b>Organization PATNER ID/ API PASSWORD</b></label>
                                                 <input type="text" min="0" name="sms_partner_id" id="sms_partner_id"
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->sms_partner_id}}">
                                             </div>
