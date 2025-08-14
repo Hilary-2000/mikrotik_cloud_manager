@@ -98,7 +98,7 @@ class login extends Controller
                 }
                 
                 $sender_name = "HypBits";
-                $email_username = "hypbits@gmail.com";
+                $email_username = env("EMAIL_USERNAME");
                 $sender_address = $result[0]->email;
                 $mobile = $sender_address;
 
@@ -110,8 +110,8 @@ class login extends Controller
                 $mail->Host = 'smtp.gmail.com';
                 // $mail->Host = $email_host_addr;
                 $mail->SMTPAuth = true;
-                $mail->Username = "hypbits@gmail.com";
-                $mail->Password = "kqlhimlxwekyzags";
+                $mail->Username = env("EMAIL_USERNAME");
+                $mail->Password = env("EMAIL_PASSWORD");
                 // $mail->Username = $email_username;
                 // $mail->Password = $email_password;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
