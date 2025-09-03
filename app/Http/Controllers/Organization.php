@@ -262,6 +262,21 @@ class Organization extends Controller
         $select = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'sms_shortcode'");
         $sms_shortcode = count($select) > 0 ? $select[0]->value : "";
         $organization_details[0]->sms_shortcode = $sms_shortcode;
+
+        // GET THE SMS API LINK
+        $select = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'consumer_key'");
+        $consumer_key = count($select) > 0 ? $select[0]->value : "";
+        $organization_details[0]->consumer_key = $consumer_key;
+
+        // GET THE SMS API LINK
+        $select = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'consumer_secret'");
+        $consumer_secret = count($select) > 0 ? $select[0]->value : "";
+        $organization_details[0]->consumer_secret = $consumer_secret;
+
+        // GET THE SMS API LINK
+        $select = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'passkey'");
+        $passkey = count($select) > 0 ? $select[0]->value : "";
+        $organization_details[0]->passkey = $passkey;
         // return $organization_details[0];
 
         // get the rest of the account details
@@ -1243,6 +1258,33 @@ class Organization extends Controller
             DB::connection("mysql2")->update("UPDATE `settings` SET `value` = '".$request->input("sms_api_key")."' WHERE `id` = '".$api_link_id."'");
         }else{
             $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('sms_api_key','".$request->input("sms_api_key")."','1')");
+        }
+
+        // insert or update the pass key
+        $api_link = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'passkey'");
+        if (count($api_link) > 0) {
+            $api_link_id = $api_link[0]->id;
+            DB::connection("mysql2")->update("UPDATE `settings` SET `value` = '".$request->input("mpesa_pass_key")."' WHERE `id` = '".$api_link_id."'");
+        }else{
+            $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('passkey','".$request->input("mpesa_pass_key")."','1')");
+        }
+
+        // insert or update the CONSUMER KEY
+        $api_link = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'consumer_key'");
+        if (count($api_link) > 0) {
+            $api_link_id = $api_link[0]->id;
+            DB::connection("mysql2")->update("UPDATE `settings` SET `value` = '".$request->input("mpesa_consumer_key")."' WHERE `id` = '".$api_link_id."'");
+        }else{
+            $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('consumer_key','".$request->input("mpesa_consumer_key")."','1')");
+        }
+
+        // insert or update the API KEY
+        $api_link = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'consumer_secret'");
+        if (count($api_link) > 0) {
+            $api_link_id = $api_link[0]->id;
+            DB::connection("mysql2")->update("UPDATE `settings` SET `value` = '".$request->input("mpesa_consumer_secret")."' WHERE `id` = '".$api_link_id."'");
+        }else{
+            $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('consumer_secret','".$request->input("mpesa_consumer_secret")."','1')");
         }
 
         // organization 

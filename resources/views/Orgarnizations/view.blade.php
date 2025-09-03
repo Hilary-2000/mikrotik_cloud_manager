@@ -367,6 +367,21 @@
                                                 <input type="text" min="0" name="business_short_code" id="business_short_code"
                                                     class="form-control rounded-lg p-1" placeholder="Ex : 112233" value="{{$organization_details->BusinessShortCode}}">
                                             </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="mpesa_pass_key" class="form-control-label"><b>M-Pesa Passkey</b></label>
+                                                <input type="text" min="0" name="mpesa_pass_key" id="mpesa_pass_key"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : XXXXXXX" value="{{$organization_details->passkey}}">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="mpesa_consumer_key" class="form-control-label"><b>M-Pesa Consumer Key</b></label>
+                                                <input type="text" min="0" name="mpesa_consumer_key" id="mpesa_consumer_key"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : YYYYYY" value="{{$organization_details->consumer_key}}">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label for="mpesa_consumer_secret" class="form-control-label"><b>M-Pesa Consumer Secret</b></label>
+                                                <input type="text" min="0" name="mpesa_consumer_secret" id="mpesa_consumer_secret"
+                                                    class="form-control rounded-lg p-1" placeholder="Ex : ZZZZZZZZ" value="{{$organization_details->consumer_secret}}">
+                                            </div>
                                         </div>
                                         <hr>
                                         <div class="row">
