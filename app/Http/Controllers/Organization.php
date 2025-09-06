@@ -1287,6 +1287,15 @@ class Organization extends Controller
             $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('consumer_secret','".$request->input("mpesa_consumer_secret")."','1')");
         }
 
+        // insert or update the API KEY
+        $api_link = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'paybill'");
+        if (count($api_link) > 0) {
+            $api_link_id = $api_link[0]->id;
+            DB::connection("mysql2")->update("UPDATE `settings` SET `value` = '".$request->input("business_short_code")."' WHERE `id` = '".$api_link_id."'");
+        }else{
+            $insert = DB::connection("mysql2")->insert("INSERT INTO `settings` (`keyword`, `value`,`status`) VALUES ('paybill','".$request->input("business_short_code")."','1')");
+        }
+
         // organization 
         $organization_name = $request->input("organization_name");
         $organization_location = $request->input("organization_location");
