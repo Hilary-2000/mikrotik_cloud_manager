@@ -13,7 +13,14 @@ CREATE TABLE `Expenses` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+CREATE TABLE `five_minute_stats` (
+  `stat_id` int(11) NOT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `admin_tables` (
   `admin_id` int NOT NULL AUTO_INCREMENT,
@@ -34,8 +41,6 @@ CREATE TABLE `admin_tables` (
   `deleted` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 
 CREATE TABLE `client_tables` (
   `client_id` int NOT NULL AUTO_INCREMENT,
@@ -68,13 +73,54 @@ CREATE TABLE `client_tables` (
   `client_secret_password` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `client_profile` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `last_changed` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '20220801185959',
+  `last_seen` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `date_changed` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '20230320161856',
   `deleted` int DEFAULT '0',
-  `authenticated` INT(1) NULL DEFAULT '1',
+  `validated` int(11) DEFAULT 1,
   PRIMARY KEY (`client_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `one_day_stats` (
+  `stat_id` int(11) NOT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `one_minute_stats` (
+  `stat_id` int(11) NOT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `invoices` (
+  `invoice_id` int(11) NOT NULL,
+  `date_generated` varchar(200) DEFAULT NULL,
+  `client_id` varchar(200) DEFAULT NULL,
+  `invoice_for` varchar(500) DEFAULT NULL,
+  `VAT_type` varchar(200) DEFAULT NULL,
+  `invoice_number` varchar(200) DEFAULT NULL,
+  `amount_to_pay` int(11) DEFAULT NULL,
+  `invoice_deadline` varchar(255) NOT NULL DEFAULT '0',
+  `generated_by` varchar(200) NOT NULL DEFAULT 'System',
+  PRIMARY KEY (`invoice_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `client_usage_stats` (
+  `usage_id` int(11) NOT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `previous_download` bigint(20) DEFAULT NULL,
+  `previous_upload` bigint(20) DEFAULT NULL,
+  `date` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`usage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `remote_routers` (
   `router_id` int NOT NULL AUTO_INCREMENT,
@@ -86,12 +132,11 @@ CREATE TABLE `remote_routers` (
   `winbox_port` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `api_port` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `date_changed` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `last_seen` varchar(200) DEFAULT NULL,
   `activated` int NOT NULL DEFAULT '0',
   `deleted` int DEFAULT '0',
   PRIMARY KEY (`router_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 
 CREATE TABLE `router_tables` (
   `router_id` int NOT NULL AUTO_INCREMENT,
@@ -105,8 +150,6 @@ CREATE TABLE `router_tables` (
   `deleted` int DEFAULT '0',
   PRIMARY KEY (`router_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 
 CREATE TABLE `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -132,7 +175,6 @@ INSERT INTO settings VALUES ('14', 'repeat_value', '{\"date\":\"20230414\",\"rep
 INSERT INTO settings VALUES ('15', 'sstp_server', '{\"username\":\"SJpdcxixj\",\"password\":\"ncUTdImrLQHQAErjxp\",\"ip_address\":\"3.14.249.167\",\"port\" : \"1982\"}', '1', '20230320161856', '0');
 INSERT INTO settings VALUES ('16', 'sms_sender', 'celcom', '1', '20230320161856', '0');
 
-
 CREATE TABLE `sms_tables` (
   `sms_id` int NOT NULL AUTO_INCREMENT,
   `sms_content` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -145,8 +187,6 @@ CREATE TABLE `sms_tables` (
   `deleted` int DEFAULT '0',
   PRIMARY KEY (`sms_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 
 CREATE TABLE `transaction_sms_tables` (
   `transaction_id` int NOT NULL,
@@ -164,8 +204,6 @@ CREATE TABLE `transaction_sms_tables` (
   PRIMARY KEY (`transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
 CREATE TABLE `transaction_tables` (
   `transaction_id` int NOT NULL AUTO_INCREMENT,
   `transaction_mpesa_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -181,8 +219,6 @@ CREATE TABLE `transaction_tables` (
   `deleted` int DEFAULT '0',
   PRIMARY KEY (`transaction_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 
 CREATE TABLE `verification_codes` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -211,4 +247,22 @@ CREATE TABLE `client_reports` (
   `resolve_time` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`report_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `thirty_minute_stats` (
+  `stat_id` int(11) NOT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `two_hour_stats` (
+  `stat_id` int(11) NOT NULL,
+  `upload` bigint(20) DEFAULT NULL,
+  `download` bigint(20) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
