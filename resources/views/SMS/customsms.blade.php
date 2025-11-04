@@ -314,16 +314,46 @@
                                                             <textarea name="message_contents" id="message_contents" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[0]->messages[0]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_daybefore" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_daybefore";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_daybefore" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="daybefore_win_sample">
                                                             <p id="daybefore_contents"></p>
-                                                            <button id="backto_daybefore" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_daybefore";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_daybefore" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -347,16 +377,46 @@
                                                             <textarea name="message_contents" id="message_contents_2" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[0]->messages[1]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_deday" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_deday";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_deday" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="deday_win_sample">
                                                             <p id="deday_contents"></p>
-                                                            <button id="backto_deday" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_deday";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_deday" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -380,16 +440,46 @@
                                                             <textarea name="message_contents" id="message_contents_3" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[0]->messages[2]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_after_due_date" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_after_due_date";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_after_due_date" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="after_due_date_win_sample">
                                                             <p id="after_due_date_contents"></p>
-                                                            <button id="backto_after_due_date" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_after_due_date";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_after_due_date" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -442,16 +532,46 @@
                                                             <textarea name="message_contents" id="message_contents_4" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[1]->messages[0]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_correct_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_correct_acc_no";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_correct_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="correct_acc_no_win_sample">
                                                             <p id="correct_acc_no_contents"></p>
-                                                            <button id="backto_correct_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_correct_acc_no";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_correct_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -475,16 +595,46 @@
                                                             <textarea name="message_contents" id="message_contents_5" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[1]->messages[1]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_incorrect_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_incorrect_acc_no";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_incorrect_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="incorrect_acc_no_win_sample">
                                                             <p id="incorrect_acc_no_contents"></p>
-                                                            <button id="backto_incorrect_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_incorrect_acc_no";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_incorrect_acc_no" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -508,16 +658,46 @@
                                                             <textarea name="message_contents" id="message_contents_10" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[1]->messages[2]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_refferer_msg" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_refferer_msg";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_refferer_msg" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="refferer_msg_win_sample">
                                                             <p id="refferer_msg_contents"></p>
-                                                            <button id="backto_refferer_msg" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_refferer_msg";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_refferer_msg" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -541,16 +721,46 @@
                                                             <textarea name="message_contents" id="message_contents_11" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[1]->messages[3]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_below_min_amnt" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_below_min_amnt";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_below_min_amnt" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="below_min_amnt_win_sample">
                                                             <p id="below_min_amnt_contents"></p>
-                                                            <button id="backto_below_min_amnt" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_below_min_amnt";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_below_min_amnt" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -603,16 +813,46 @@
                                                             <textarea name="message_contents" id="message_contents_6" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[2]->messages[0]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_account_renewed" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_account_renewed";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_account_renewed" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="account_renewed_win_sample">
                                                             <p id="account_renewed_contents"></p>
-                                                            <button id="backto_account_renewed" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_account_renewed";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_account_renewed" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -636,16 +876,46 @@
                                                             <textarea name="message_contents" id="message_contents_7" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[2]->messages[1]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_account_extended" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_account_extended";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_account_extended" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="account_extended_win_sample">
                                                             <p id="account_extended_contents"></p>
-                                                            <button id="backto_account_extended" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_account_extended";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_account_extended" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -669,16 +939,46 @@
                                                             <textarea name="message_contents" id="message_contents_9" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[2]->messages[2]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_account_deactivated" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_account_deactivated";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_account_deactivated" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="account_deactivated_win_sample">
                                                             <p id="account_deactivated_contents"></p>
-                                                            <button id="backto_account_deactivated" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_account_deactivated";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_account_deactivated" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -772,16 +1072,46 @@
                                                             <textarea name="message_contents" id="message_contents_17" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[5]->messages[0]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_account_frozen" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_account_frozen";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_account_frozen" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="account_frozen_win_sample">
                                                             <p id="account_frozen_contents"></p>
-                                                            <button id="backto_account_frozen" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_account_frozen";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_account_frozen" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -805,16 +1135,46 @@
                                                             <textarea name="message_contents" id="message_contents_18" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[5]->messages[1]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_account_unfrozen" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_account_unfrozen";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_account_unfrozen" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="account_unfrozen_win_sample">
                                                             <p id="account_unfrozen_contents"></p>
-                                                            <button id="backto_account_unfrozen" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_account_unfrozen";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_account_unfrozen" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -838,16 +1198,46 @@
                                                             <textarea name="message_contents" id="message_contents_19" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[5]->messages[2]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_future_account_freeze" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_future_account_freeze";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_future_account_freeze" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="future_account_freeze_win_sample">
                                                             <p id="future_account_freeze_contents"></p>
-                                                            <button id="backto_future_account_freeze" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_future_account_freeze";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_future_account_freeze" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -900,16 +1290,46 @@
                                                             <textarea name="message_contents" id="message_contents_8" cols="30" rows="5" class="form-control p-2" placeholder="Write your message here ...">{{$sms_data[3]->messages[0]->message ?? 'No message set for this section at the moment'}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_welcome_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_welcome_sms";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_welcome_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="welcome_sms_win_sample">
                                                             <p id="welcome_sms_contents"></p>
-                                                            <button id="backto_welcome_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_welcome_sms";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_welcome_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1017,16 +1437,46 @@
                                                                 $message_data}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_welcome_client_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_welcome_client_sms";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_welcome_client_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="welcome_client_sms_win_sample">
                                                             <p id="welcome_client_sms_contents"></p>
-                                                            <button id="backto_welcome_client_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_welcome_client_sms";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_welcome_client_sms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1062,16 +1512,46 @@
                                                                 $message_data}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_rcv_coracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_rcv_coracc_billsms";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_rcv_coracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="rcv_coracc_billsms_win_sample">
                                                             <p id="rcv_coracc_billsms_contents"></p>
-                                                            <button id="backto_rcv_coracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_rcv_coracc_billsms";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_rcv_coracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1107,16 +1587,46 @@
                                                                 $message_data}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_rcv_incoracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_rcv_incoracc_billsms";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_rcv_incoracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="rcv_incoracc_billsms_win_sample">
                                                             <p id="rcv_incoracc_billsms_contents"></p>
-                                                            <button id="backto_rcv_incoracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_rcv_incoracc_billsms";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_rcv_incoracc_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1152,16 +1662,46 @@
                                                                 $message_data}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_rcv_belowmin_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_rcv_belowmin_billsms";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_rcv_belowmin_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="rcv_belowmin_billsms_win_sample">
                                                             <p id="rcv_belowmin_billsms_contents"></p>
-                                                            <button id="backto_rcv_belowmin_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_rcv_belowmin_billsms";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_rcv_belowmin_billsms" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1197,16 +1737,46 @@
                                                                 $message_data}}</textarea>
                                                             <div class="row my-1">
                                                                 <div class="col-md-6">
-                                                                    <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-save\"></i> Save";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "";
+                                                                        $btnSize="sm";
+                                                                        $type = "submit";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button type="submit" {{$readonly}} class="btn btn-primary my-1"><i class="fas fa-save"></i> Save</button> --}}
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <button id="view_sample_msg_reminder_bal" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button>
+                                                                    @php
+                                                                        $btnText = "<i class=\"fas fa-eye\"></i> View Sample";
+                                                                        $otherClasses = "";
+                                                                        $btn_id = "view_sample_msg_reminder_bal";
+                                                                        $btnSize="sm";
+                                                                        $type = "button";
+                                                                        $readonly = "";
+                                                                        $otherAttributes = "";
+                                                                    @endphp
+                                                                    <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                                    {{-- <button id="view_sample_msg_reminder_bal" type="button" class="btn btn-primary my-1"><i class="fas fa-eye"></i> View Sample</button> --}}
                                                                 </div>
                                                             </div>
                                                         </form>
                                                         <div class="container" id="msg_reminder_bal_win_sample">
                                                             <p id="msg_reminder_bal_contents"></p>
-                                                            <button id="backto_msg_reminder_bal" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button>
+                                                            @php
+                                                                $btnText = "<i class=\"fas fa-pen\"></i> Edit";
+                                                                $otherClasses = "";
+                                                                $btn_id = "backto_msg_reminder_bal";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                            {{-- <button id="backto_msg_reminder_bal" type="button" class="btn btn-primary my-1"><i class="fas fa-pen"></i> Edit</button> --}}
                                                         </div>
                                                     </div>
                                                 </div>

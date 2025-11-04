@@ -292,12 +292,29 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button class="btn btn-success" type="submit"><i
-                                                        class="ft-plus"></i> Register Organization</button>
+                                                {{-- <button class="btn btn-success" type="submit"><i class="ft-plus"></i> Register Organization</button> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-plus\"></i> Register Organization";
+                                                    $otherClasses = "";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="success" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                             </div>
                                             <div class="col-md-6">
-                                                <a class="btn btn-secondary btn-outline" href="{{route("Packages")}}"
-                                                    type="button"><i class="ft-x"></i> Cancel</a>
+                                                @php
+                                                    $btnText = "<i class=\"ft-x\"></i> Cancel";
+                                                    $otherClasses = "my-1 ";
+                                                    $btnLink = route("Packages");
+                                                    $otherAttributes = "";
+                                                    $readonly = "";
+                                                @endphp
+                                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                {{-- <a class="btn btn-secondary btn-outline" href="{{route("Packages")}}"
+                                                    type="button"><i class="ft-x"></i> Cancel</a> --}}
                                             </div>
                                         </div>
                                     </form>

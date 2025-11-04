@@ -182,12 +182,13 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 50 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][9] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
-                }
-            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][9] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var actions = "<a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View that transaction!' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -199,7 +200,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+            var actions = "<a href='/Organization/ViewTransactionDetail/"+organization_details.organization_id+"/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View that transaction!' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr data-toggle='tooltip' title='Paid Ksh "+arrays[index][2]+" to "+arrays[index][4]+" {"+arrays[index][10]+"} using "+arrays[index][11]+" {"+arrays[index][0]+"} on "+arrays[index][12]+".'><th scope='row'>"+counter+"</th><td>" + arrays[index][7] +" "+status+"<small>{"+arrays[index][12]+"}</small></td><td>" + arrays[index][4] + " <small><a href='/Organization/ViewClient/"+organization_details.organization_id+"/"+arrays[index][3]+"' class='text-secondary'>{"+arrays[index][10]+"}</a></small></td><td>Kes " + arrays[index][2] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

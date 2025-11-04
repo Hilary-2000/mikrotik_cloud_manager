@@ -71,11 +71,12 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 10 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][3] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
-                }
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][3] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var actions = "<a href='/BillingSms/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"'' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='Assign transaction' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-edit'></i> Assign</span></a>";
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/BillingSms/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder "+readonly_flags+"' data-toggle='tooltip' title='Assign transaction'><i class='ft-edit'></i> Assign</a></td></tr>";
             counter++;
         }
@@ -88,6 +89,7 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
+            var actions = "<a href='/BillingSms/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"'' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='Assign transaction' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-edit'></i> Assign</span></a>";
             tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/BillingSms/Assign/Transaction/"+transaction_id+"/Client/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder "+readonly_flags+"' data-toggle='tooltip' title='Assign transaction'><i class='ft-edit'></i> Assign</a></td></tr>";
             counter++;
         }

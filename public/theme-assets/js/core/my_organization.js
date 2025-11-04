@@ -114,6 +114,7 @@ function displayRecord(start, finish, arrays) {
                 status = "<span class='badge badge-danger'> </span>";
                 account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this Organization'><i class='ft-check'></i></a>";
             }
+            account_status="";
             if (arrays[index][12] != null && arrays[index][12] != "") {
                 var mainData = arrays[index][12];
                 if (arrays[index][12].substr(0, 1) == "\"") {
@@ -134,7 +135,8 @@ function displayRecord(start, finish, arrays) {
                     }
                 }
             }
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
+            var actions = "<a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Organization' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td> "+actions+"</td></tr>";
             counter++;
         }
     } else {
@@ -148,6 +150,7 @@ function displayRecord(start, finish, arrays) {
                 status = "<span class='badge badge-danger'> </span>";
                 account_status = "<a href='/Organization/Activate/" + arrays[index][0] + "' class='btn btn-sm btn-success text-dark text-bolder'  data-toggle='tooltip' title='Activate this Organization'><i class='ft-check'></i></a>";
             }
+            account_status="";
             var discount = "";
             if (arrays[index][12] != null && arrays[index][12] != "") {
                 var mainData = arrays[index][12];
@@ -162,7 +165,8 @@ function displayRecord(start, finish, arrays) {
                     discount = arrays[index][13]+"%";
                 }
             }
-            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td><a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> "+account_status+"</td></tr>";
+            var actions = "<a href='/Organization/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Organization' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'><input type='checkbox' class='actions_id' id='actions_id_"+arrays[index][11]+"'><input type='hidden' id='actions_value_"+arrays[index][11]+"' value='"+arrays[index][11]+"'> " + counter + "</th><td><a href='/Organization/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a><br><small class='text-gray d-none d-xl-block'>" + (discount) + "</small></td><td>" + arrays[index][10].toUpperCase() + " </td><td>" + ucwords(arrays[index][2]) + "<br></td><td>" + arrays[index][14] + "</td><td> "+actions+"</td></tr>";
             counter++;
         }
         fins = total;

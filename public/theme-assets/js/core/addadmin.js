@@ -100,7 +100,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Admins/deactivate_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+            var actions = "<a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";            
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -112,8 +113,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            console.log(arrays[index][7]);
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td><a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='/Organization/Admins/deactivate_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-warning text-bolder "+readonly_flag+"'  data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+            var actions = "<a href='/Organization/Admins/view_administrator/"+organization_details.organization_id+"/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";            
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][2] + "</td><td>" + arrays[index][8] + "</td><td>" + arrays[index][6] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

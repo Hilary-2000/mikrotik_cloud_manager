@@ -69,28 +69,26 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 10 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][7] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
-                }
-                tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td><a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this Router'><i class='ft-eye'></i> View</a></td></tr>";
-                // tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td><a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this Router'><i class='ft-eye'></i> View</a><a href='Router/Logs/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder mx-1 ' data-toggle='tooltip' title='View this routers logs'><i class='ft-activity'></i></a></td></tr>";
-                // tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][5] + "</td><td><a href='#' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='#' class='btn btn-sm btn-secondary text-bolder' data-toggle='tooltip' title='Edit this User'><i class='ft-edit'></i></a>  <a href='#' class='btn btn-sm btn-warning text-bolder'   data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][7] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var actions = "<a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Router' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
         //create a table of the 10 records
         var counter = start+1;
         for (let index = start; index < total; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][7] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
-                }
-                // tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td><a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this Router'><i class='ft-eye'></i> View</a><a href='Router/Logs/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder mx-1 ' data-toggle='tooltip' title='View this routers logs'><i class='ft-activity'></i></a></td></tr>";
-                tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td><a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this Router'><i class='ft-eye'></i> View</a></td></tr>";
-                // tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][5] + "</td><td><a href='#' class='btn btn-sm btn-primary text-bolder ' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> <a href='#' class='btn btn-sm btn-secondary text-bolder' data-toggle='tooltip' title='Edit this User'><i class='ft-edit'></i></a>  <a href='#' class='btn btn-sm btn-warning text-bolder'   data-toggle='tooltip' title='Disable this User'><i class='ft-alert-octagon'></i></a></td></tr>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][7] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var actions = "<a href='/Organization/Router/" + organization_details.organization_id + "/" + arrays[index][3] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Router' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData+="<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][5] +" "+status+"</td><td>" + arrays[index][4] +" "+ (arrays[index][9] != null ? " <a class='text-danger' href = 'https://www.google.com/maps/place/"+arrays[index][9]+"' target = '_blank'><u>Locate</u> </a>": "")+"</td><td>" + arrays[index][8]+" Client(s)" + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

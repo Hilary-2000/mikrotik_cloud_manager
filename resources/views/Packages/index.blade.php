@@ -108,7 +108,15 @@
                                             <input type="text" name="searchkey" id="searchkey" class="form-control rounded-lg p-1" placeholder="Search here ..">
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="{{route("NewPackages")}}" class="btn btn-info text-bolder float-right"><i class="ft-plus"> Packages</i></a>
+                                            {{-- <a href="{{route("NewPackages")}}" class="btn btn-info text-bolder float-right"><i class="ft-plus"> Packages</i></a> --}}
+                                            @php
+                                                $btnText = "<i class=\"ft-plus\"></i> New Packages";
+                                                $otherClasses = "float-right my-1 ";
+                                                $btnLink = route("NewPackages");
+                                                $otherAttributes = "";
+                                                $readonly = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="info" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                         </div>
                                     </div>
                                     <div class="table-responsive" id="transDataReciever">

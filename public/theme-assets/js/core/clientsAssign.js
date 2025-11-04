@@ -71,12 +71,13 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 10 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
+            var status = "<span class='badge badge-success'> </span>";
                 if (arrays[index][3] == 0) {
                     // if the user is active
                     status = "<span class='badge badge-danger'> </span>";
-                }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
+            }
+            var actions = "<a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='Assign Client' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-edit'></i> Assign</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -88,7 +89,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td><a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder "+transaction_assign_flag+"' data-toggle='tooltip' title='View this User'><i class='ft-edit'></i> Assign</a></td></tr>";
+            var actions = "<a href='/Transactions/Assign/"+arrays[index][0]+"/"+transaction_id+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='Assign Client' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-edit'></i> Assign</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][1] +" "+status+"</td><td>" + arrays[index][4] + "</td><td>" + arrays[index][11] + "</td><td>" + arrays[index][5] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

@@ -169,8 +169,26 @@
                             <div class="card-header">
                                 <p>- Stats & Reports!</p>
                                 {{-- <a href="/TransactionSync" class="btn btn-primary {{$readonly}}"><i class="ft-refresh-ccw"></i> Sync Transaction</a> --}}
-                                <a href="/Transactions/Statistics" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a>
-                                <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span>
+                                @php
+                                    $btnText = "<i class=\"ft-bar-chart-2\"></i>";
+                                    $otherClasses = "my-1 ";
+                                    $btnLink = "/Transactions/Statistics";
+                                    $otherAttributes = 'data-toggle="tooltip" title="Transaction`s Statistics"';
+                                    $readonly = "";
+                                @endphp
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                {{-- <a href="/Transactions/Statistics" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a> --}}
+                                {{-- <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span> --}}
+                                @php
+                                    $btnText = "<i class=\"ft-file-text\"></i>";
+                                    $otherClasses = "";
+                                    $btn_id = "transaction_reports_btn";
+                                    $btnSize="sm";
+                                    $type = "submit";
+                                    $readonly = "";
+                                    $otherAttributes = "";
+                                @endphp
+                                <x-button toolTip="Transaction Reports" btnType="success" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
@@ -217,7 +235,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button>
+                                                        @php
+                                                            $btnText = "<i class=\"ft-settings\"></i> Generate Reports";
+                                                            $otherClasses = "mt-2";
+                                                            $btn_id = "";
+                                                            $btnSize="sm";
+                                                            $type = "submit";
+                                                            $readonly = "";
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                        {{-- <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button> --}}
                                                     </div>
                                                 </div>
                                             </form>

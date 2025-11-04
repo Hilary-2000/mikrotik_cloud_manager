@@ -374,12 +374,13 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 20 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][9] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
-                }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder disabled' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][9] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var actions = "<a href='/Transactions/View/"+arrays[index][6]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View that transaction!' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -391,7 +392,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td><a href='/Transactions/View/" + arrays[index][6] + "' class='btn btn-sm btn-primary text-bolder disabled' data-toggle='tooltip' title='View this transaction'><i class='ft-eye'></i> View</a></td></tr>";
+            var actions = "<a href='/Transactions/View/"+arrays[index][6]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View that transaction!' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>" + arrays[index][14] +" "+status+"<small></small></td><td>" + arrays[index][4] + " <small></small></td><td>Kes " + arrays[index][2] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

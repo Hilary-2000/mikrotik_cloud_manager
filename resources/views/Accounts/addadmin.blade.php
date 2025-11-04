@@ -119,7 +119,17 @@
                                 <div class="heading-elements">
                                     {{-- <button data-action="collapse" class="btn btn-primary"><i class="ft-plus"></i> Add Administrator</button> --}}
                                     <ul class="list-inline mb-0">
-                                        <li><a class="btn btn-primary text-white" data-action="collapse"><i class="ft-plus"></i> Add Admin</a></li>
+                                        <li>
+                                            {{-- <a class="btn btn-primary text-white" data-action="collapse"><i class="ft-plus"></i> Add Admin</a> --}}
+                                            @php
+                                                $btnText = "<i class=\"ft-plus\"></i> Add Admin";
+                                                $otherClasses = "";
+                                                $btnLink = "";
+                                                $otherAttributes = 'data-action="collapse"';
+                                                $readonly = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="primary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -166,7 +176,17 @@
                                         <input type="hidden" name="privileges" id="privileged" value="[{&quot;option&quot;:&quot;My Clients&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Transactions&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Expenses&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;My Routers&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;SMS&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false},{&quot;option&quot;:&quot;Account and Profile&quot;,&quot;view&quot;:true,&quot;readonly&quot;:false}]">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button class="btn btn-primary" {{$readonly}} type="submit"><i class="ft-plus"></i> Add Administrator</button>
+                                                @php
+                                                    $btnText = "<i class=\"ft-plus\"></i> Add Administrator";
+                                                    $otherClasses = "";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                {{-- <button class="btn btn-primary" {{$readonly}} type="submit"><i class="ft-plus"></i> Add Administrator</button> --}}
                                             </div>
                                         </div>
                                         <hr>

@@ -130,16 +130,24 @@
                                 </div>
                             </div>
                             <div class="card-content collapse show">
-                                <div class="card-body">
+                                <div class="card-body p-1">
                                     @if (session('success'))
                                         <p class="text-success">{{ session('success') }}</p>
                                     @endif
                                     <a href="{{route("SMS")}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i>
                                         Back to list</a>
                                 </div>
-                                <div class="container">
-                                    <a href="{{ route("resend_sms", [$sms_data[0]->sms_id]) }}"
-                                        class="btn btn-primary btn-sm {{$readonly}}">Resend Sms</a>
+                                <div class="p-1 mb-2">
+                                    {{-- <a href="{{ route("resend_sms", [$sms_data[0]->sms_id]) }}"
+                                        class="btn btn-primary btn-sm {{$readonly}}">Resend Sms</a> --}}
+                                    @php
+                                        $btnText = "Resend Sms";
+                                        $otherClasses = "".$readonly;
+                                        $btnLink = route("resend_sms", [$sms_data[0]->sms_id]);
+                                        $otherAttributes = "";
+                                        $readonly = "";
+                                    @endphp
+                                    <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="primary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                 </div>
                                 <div class="row card-body">
                                     <div class="col-md-7">
@@ -188,12 +196,27 @@
                                 </div>
                                 <div class="card-body row">
                                     <div class="col-md-6">
-                                        <a href="/sms" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back
-                                            to list</a>
+                                        {{-- <a href="/sms" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to list</a> --}}
+                                        @php
+                                            $btnText = "<i class=\"fas fa-arrow-left\"></i> Back to list";
+                                            $otherClasses = "".$readonly;
+                                            $btnLink = "/sms";
+                                            $otherAttributes = "";
+                                            $readonly = "";
+                                        @endphp
+                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="primary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="{{ route("delete_sms",[$sms_data[0]->sms_id]) }}" class="btn btn-danger {{$readonly}}"><i
-                                                class="fas fa-trash"></i> Delete</a>
+                                        @php
+                                            $btnText = "<i class=\"fas fa-trash\"></i> Delete";
+                                            $otherClasses = "".$readonly;
+                                            $btnLink = route("delete_sms",[$sms_data[0]->sms_id]);
+                                            $otherAttributes = "";
+                                            $readonly = "";
+                                        @endphp
+                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                        {{-- <a href="{{ route("delete_sms",[$sms_data[0]->sms_id]) }}" class="btn btn-danger {{$readonly}}"><i
+                                                class="fas fa-trash"></i> Delete</a> --}}
                                     </div>
                                 </div>
                             </div>

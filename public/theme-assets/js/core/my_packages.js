@@ -101,7 +101,8 @@ function displayRecord(start, finish, arrays) {
         var counter = start + 1;
         for (let index = start; index < finish; index++) {
             var status = arrays[index][7] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>";
-            tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td><a href='/Packages/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Package'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/Packages/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this expense' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     } else {
@@ -109,7 +110,8 @@ function displayRecord(start, finish, arrays) {
         var counter = start + 1;
         for (let index = start; index < total; index++) {
             var status = arrays[index][7] == 1 ? "<span class='badge badge-success'> </span>" : "<span class='badge badge-danger'> </span>";
-            tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td><a href='/Packages/View/" + arrays[index][0] + "' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this Package'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/Packages/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this expense' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>" + counter + "</th><td> <a href='/Packages/View/" + arrays[index][0] + "' class='text-secondary'>" + ucwords(arrays[index][1]) + " " + status + "</a></td><td>" + arrays[index][2] + " " + "</td><td>" + ucwords(arrays[index][3]) + "</td><td>" + arrays[index][4] + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

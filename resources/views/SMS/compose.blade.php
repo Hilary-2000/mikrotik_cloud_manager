@@ -238,12 +238,29 @@
                                                 required>{{ isset($messages) ? $messages : '' }}</textarea>
                                         </div>
                                         <div class="col-md-6 my-1">
-                                            <button type="submit" {{$readonly}} class="btn btn-primary"><i
-                                                    class="fa-solid fa-paper-plane"></i> Send Message</button>
+                                            {{-- <button type="submit" {{$readonly}} class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button> --}}
+                                            @php
+                                                $btnText = "<i class=\"fa-solid fa-paper-plane\"></i> Send Message";
+                                                $otherClasses = "";
+                                                $btn_id = "";
+                                                $btnSize="sm";
+                                                $type = "submit";
+                                                $readonly = "";
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                         </div>
                                         <div class="col-md-6 my-1">
-                                            <a href="/sms" class="btn btn-danger"><i class="fa-solid fa-xmark"></i>
-                                                Cancel</a>
+                                            {{-- <a href="/sms" class="btn btn-danger"><i class="fa-solid fa-xmark"></i>
+                                                Cancel</a> --}}
+                                            @php
+                                                $btnText = "<i class=\"ft-x\"></i> Cancel";
+                                                $otherClasses = "my-1 ";
+                                                $btnLink = "/sms";
+                                                $otherAttributes = "";
+                                                $readonly = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                         </div>
                                     </form>
                                 </div>

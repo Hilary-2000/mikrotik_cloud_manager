@@ -149,16 +149,32 @@
                                                 <div class="row my-1">
                                                     <div class="col-sm-6"><strong>Transaction status:</strong></div>
                                                     <div class="col-sm-6">
-                                                        <a href="#" {{$readonly}} class="btn btn-sm btn-success">Assigned</a>
+                                                        {{-- <a href="#" {{$readonly}} class="btn btn-sm btn-success">Assigned</a> --}}
+                                                        @php
+                                                            $btnText = "Assigned";
+                                                            $otherClasses = "my-1 ";
+                                                            $btnLink = "#";
+                                                            $otherAttributes = "";
+                                                            // $readonly = "";
+                                                        @endphp
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                                         {{-- <p class="text-success"><b>Assigned!</b></p> --}}
                                                     </div>
                                                 </div>
                                             @else
                                                 <div class="row my-1">
                                                     <div class="col-sm-6"><strong>Transaction status:</strong></div>
-                                                    <div class="col-sm-6"><a href="#assign_transaction"
-                                                            class="btn btn-sm btn-danger {{$readonly}}">Assign?</a>
-                                                            {{-- <p class="text-danger"><b>Not-Assigned!</b></p> --}}
+                                                    <div class="col-sm-6">
+                                                        {{-- <a href="#assign_transaction" class="btn btn-sm btn-danger {{$readonly}}">Assign?</a> --}}
+                                                        @php
+                                                            $btnText = "Assign?";
+                                                            $otherClasses = "my-1 ".$readonly;
+                                                            $btnLink = "#assign_transaction";
+                                                            $otherAttributes = "";
+                                                            // $readonly = "";
+                                                        @endphp
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                        {{-- <p class="text-danger"><b>Not-Assigned!</b></p> --}}
                                                     </div>
                                                 </div>
                                             @endif

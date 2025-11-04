@@ -121,8 +121,26 @@
                                                       </div>
                                                   </div>
                                                   <div class="modal-footer">
-                                                      <button type="button" id="close_this_window_delete" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <a href="{{route("DeleteOrganization",[$organization_details->organization_id])}}" class="btn btn-primary my-1 "><i class="ft-trash"></i> Delete</a>
+                                                    @php
+                                                        $btnText = "<i class=\"ft-x\"></i> Close";
+                                                        $otherClasses = "";
+                                                        $btn_id = "close_this_window_delete";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="secondary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                      {{-- <button type="button" id="close_this_window_delete" class="btn grey btn-secondary" data-dismiss="modal">Close</button> --}}
+                                                        @php
+                                                            $readonly="";
+                                                            $btnText = "<i class=\"ft-trash\"></i> Delete";
+                                                            $otherClasses = "my-1 ".$readonly;
+                                                            $btnLink = route("DeleteOrganization",[$organization_details->organization_id]);
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                      {{-- <a href="{{route("DeleteOrganization",[$organization_details->organization_id])}}" class="btn btn-primary my-1 "><i class="ft-trash"></i> Delete</a> --}}
                                                   </div>
                                               </div>
                                           </div>
@@ -154,8 +172,28 @@
                                                     </form>
                                                   </div>
                                                   <div class="modal-footer">
-                                                      <button type="button" id="close_change_discounts" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <button class="btn btn-success" id="update_discounts" onclick="document.getElementById('update_discount_window').click();"> Update</button>
+                                                        @php
+                                                            $btnText = "<i class=\"ft-x\"></i> Close";
+                                                            $otherClasses = "";
+                                                            $btn_id = "close_change_discounts";
+                                                            $btnSize="sm";
+                                                            $type = "button";
+                                                            $readonly = "";
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button toolTip="" btnType="secondary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                      {{-- <button type="button" id="close_change_discounts" class="btn grey btn-secondary" data-dismiss="modal">Close</button> --}}
+                                                        @php
+                                                            $btnText = "<i class=\"ft-save\"></i> Update";
+                                                            $otherClasses = "";
+                                                            $btn_id = "update_discounts";
+                                                            $btnSize="sm";
+                                                            $type = "button";
+                                                            $readonly = "";
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button toolTip="" btnType="success" onclick="document.getElementById('update_discount_window').click();" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                      {{-- <button class="btn btn-success" id="update_discounts" onclick="document.getElementById('update_discount_window').click();"> Update</button> --}}
                                                   </div>
                                               </div>
                                           </div>
@@ -182,8 +220,28 @@
                                                     </form>
                                                   </div>
                                                   <div class="modal-footer">
-                                                      <button type="button" id="close_change_wallet" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <button class="btn btn-success" onclick="document.getElementById('update_Wallet_amount').click();"> Update</button>
+                                                    @php
+                                                        $btnText = "<i class=\"ft-x\"></i> Close";
+                                                        $otherClasses = "";
+                                                        $btn_id = "close_change_wallet";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="secondary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                    {{-- <button type="button" id="close_change_wallet" class="btn grey btn-secondary" data-dismiss="modal">Close</button> --}}
+                                                    @php
+                                                        $btnText = "<i class=\"ft-save\"></i> Update";
+                                                        $otherClasses = "";
+                                                        $btn_id = "close_change_wallet";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="success" onclick="document.getElementById('update_Wallet_amount').click();" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                    {{-- <button class="btn btn-success" onclick="document.getElementById('update_Wallet_amount').click();"> Update</button> --}}
                                                   </div>
                                               </div>
                                           </div>
@@ -210,8 +268,28 @@
                                                     </form>
                                                   </div>
                                                   <div class="modal-footer">
-                                                      <button type="button" id="close_change_expiration_date" class="btn grey btn-secondary" data-dismiss="modal">Close</button>
-                                                      <button class="btn btn-success" onclick="document.getElementById('update_expiration_date_btn').click();"> Update</button>
+                                                    @php
+                                                        $btnText = "<i class=\"ft-x\"></i> Close";
+                                                        $otherClasses = "";
+                                                        $btn_id = "close_change_expiration_date";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="secondary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                    {{-- <button type="button" id="close_change_expiration_date" class="btn grey btn-secondary" data-dismiss="modal">Close</button> --}}
+                                                    @php
+                                                        $btnText = "<i class=\"ft-save\"></i> Update";
+                                                        $otherClasses = "";
+                                                        $btn_id = "";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="success" onclick="document.getElementById('update_expiration_date_btn').click();" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                    {{-- <button class="btn btn-success" onclick="document.getElementById('update_expiration_date_btn').click();"> Update</button> --}}
                                                   </div>
                                               </div>
                                           </div>
@@ -219,23 +297,65 @@
                                     </div>
                                     <div class="container row ">
                                         <div class="col-md-12">
-                                            <button type="button" class="btn btn-danger btn-sm my-1" id="DeleteTable"><i class="ft-trash"></i></button>
+                                        {{-- <button type="button" class="btn btn-danger btn-sm my-1" id="DeleteTable"><i class="ft-trash"></i></button> --}}
+                                        @php
+                                            $btnText = "<i class=\"ft-trash\"></i> Delete Organization";
+                                            $otherClasses = "mb-1";
+                                            $btn_id = "DeleteTable";
+                                            $btnSize="sm";
+                                            $type = "button";
+                                            $readonly = "";
+                                            $otherAttributes = "";
+                                        @endphp
+                                        <x-button toolTip="" btnType="danger" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                         </div>
                                         <table class="table table-border">
                                             <tr>
                                                 <td>
                                                     <div class="col-md-6">
                                                         <p>Organization Status : 
-                                                            <a href="{{route("DeactivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->organization_status == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                            <a href="{{route("ActivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->organization_status == "1" ? "d-none" : ""}}">Activate</a>
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "De-Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->organization_status == "1" ? "" : "d-none");
+                                                                $btnLink = route("DeactivateOrganization",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("DeactivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->organization_status == "1" ? "" : "d-none"}}">De-Activate</a> --}}
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->organization_status == "1" ? "d-none" : "");
+                                                                $btnLink = route("ActivateOrganization",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("ActivateOrganization",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->organization_status == "1" ? "d-none" : ""}}">Activate</a> --}}
                                                         </p>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="col-md-6">
-                                                        <p>Payment Status : 
-                                                            <a href="{{route("Deactivate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->payment_status == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                            <a href="{{route("Activate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->payment_status == "1" ? "d-none" : ""}}">Activate</a>
+                                                        <p>Payment Status : <br>
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "De-Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->payment_status == "1" ? "" : "d-none");
+                                                                $btnLink = route("Deactivate_Payment_Status",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("Deactivate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->payment_status == "1" ? "" : "d-none"}}">De-Activate</a> --}}
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->payment_status == "1" ? "d-none" : "");
+                                                                $btnLink = route("Activate_Payment_Status",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("Activate_Payment_Status",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->payment_status == "1" ? "d-none" : ""}}">Activate</a> --}}
                                                         </p>
                                                     </div>
                                                 </td>
@@ -244,26 +364,78 @@
                                                 <td>
                                                     <div class="col-md-8">
                                                         <p>Send SMS Status : <br>
-                                                            <a href="{{route("DeactivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->send_sms == "1" ? "" : "d-none"}}">De-Activate</a>
-                                                            <a href="{{route("ActivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->send_sms == "1" ? "d-none" : ""}}">Activate</a>
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "De-Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->send_sms == "1" ? "" : "d-none");
+                                                                $btnLink = route("DeactivateSMS",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("DeactivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-danger {{$organization_details->send_sms == "1" ? "" : "d-none"}}">De-Activate</a> --}}
+                                                            @php
+                                                                $readonly="";
+                                                                $btnText = "Activate";
+                                                                $otherClasses = "".$readonly." ".($organization_details->send_sms == "1" ? "d-none" : "");
+                                                                $btnLink = route("ActivateSMS",$organization_details->organization_id);
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                            {{-- <a href="{{route("ActivateSMS",$organization_details->organization_id)}}" class="btn btn-sm btn-success {{$organization_details->send_sms == "1" ? "d-none" : ""}}">Activate</a> --}}
                                                         </p>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="form-group w-100" id="discount_viewer">
-                                                        <p for="discount" class="px-1">Discount : {{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? "Kes ".number_format($organization_details->discount_amount) : $organization_details->discount_amount."%") : "Not-Set"}} <br><button class="btn btn-sm btn-primary" id="discount_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                        <p for="discount" class="px-1">Discount : {{$organization_details->discount_type != null ? ($organization_details->discount_type == "number" ? "Kes ".number_format($organization_details->discount_amount) : $organization_details->discount_amount."%") : "Not-Set"}} <br>
+                                                            {{-- <button class="btn btn-sm btn-primary" id="discount_change_btn"><i class="ft-refresh-cw"></i> Change</button> --}}
+                                                            @php
+                                                                $btnText = "<i class=\"ft-refresh-cw\"></i> Change";
+                                                                $otherClasses = "mb-1";
+                                                                $btn_id = "discount_change_btn";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                        </p>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <div class="form-group w-100">
-                                                        <p for="wallet_balance" class="px-1">Wallet : Kes {{$organization_details->wallet != null ? number_format($organization_details->wallet) : "0"}}<br> <button class="btn btn-sm btn-primary" id="wallet_change_btn"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                        <p for="wallet_balance" class="px-1">Wallet : Kes {{$organization_details->wallet != null ? number_format($organization_details->wallet) : "0"}}<br> 
+                                                            {{-- <button class="btn btn-sm btn-primary" id="wallet_change_btn"><i class="ft-refresh-cw"></i> Change</button> --}}
+                                                            @php
+                                                                $btnText = "<i class=\"ft-refresh-cw\"></i> Change";
+                                                                $otherClasses = "mb-1";
+                                                                $btn_id = "wallet_change_btn";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                        </p>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="form-group w-100">
-                                                        <p for="expiration_date" class="px-1">Expiry Date : {{date("D dS M Y", strtotime($organization_details->expiry_date))}}<br> <button class="btn btn-sm btn-primary" id="expiration_date"><i class="ft-refresh-cw"></i> Change</button></p>
+                                                        <p for="expiration_date" class="px-1">Expiry Date : {{date("D dS M Y", strtotime($organization_details->expiry_date))}}<br> 
+                                                            {{-- <button class="btn btn-sm btn-primary" id="expiration_date"><i class="ft-refresh-cw"></i> Change</button> --}}
+                                                            @php
+                                                                $btnText = "<i class=\"ft-refresh-cw\"></i> Change";
+                                                                $otherClasses = "mb-1";
+                                                                $btn_id = "expiration_date";
+                                                                $btnSize="sm";
+                                                                $type = "button";
+                                                                $readonly = "";
+                                                                $otherAttributes = "";
+                                                            @endphp
+                                                            <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                        </p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -387,12 +559,30 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button class="btn btn-success" type="submit"><i
-                                                        class="ft-save"></i> Update</button>
+                                                @php
+                                                    $btnText = "<i class=\"ft-save\"></i> Update";
+                                                    $otherClasses = "";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="success" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                {{-- <button class="btn btn-success" type="submit"><i
+                                                        class="ft-save"></i> Update</button> --}}
                                             </div>
                                             <div class="col-md-6">
-                                                <a class="btn btn-secondary btn-outline" href="{{url()->route("Organizations")}}"
-                                                    type="button"><i class="ft-x"></i> Cancel</a>
+                                                @php
+                                                    $readonly="";
+                                                    $btnText = "<i class=\"ft-x\"></i> Cancel";
+                                                    $otherClasses = "".$readonly;
+                                                    $btnLink = url()->route("Organizations");
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                {{-- <a class="btn btn-secondary btn-outline" href="{{url()->route("Organizations")}}"
+                                                    type="button"><i class="ft-x"></i> Cancel</a> --}}
                                             </div>
                                         </div>
                                     </form>
@@ -402,27 +592,67 @@
                                         <div class="col-md-2 text-center">
                                             <p class="text-center"><b>Client : {{$client_count}} Client(s)</b></p>
                                             <hr>
-                                            <a href="{{route("viewOrganizationClients",$organization_details->organization_id)}}" class="btn btn-sm btn-secondary">View Client(s)</a>
+                                            @php
+                                                $readonly="";
+                                                $btnText = "View Client(s)";
+                                                $otherClasses = "".$readonly;
+                                                $btnLink = route("viewOrganizationClients",$organization_details->organization_id);
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("viewOrganizationClients",$organization_details->organization_id)}}" class="btn btn-sm btn-secondary">View Client(s)</a> --}}
                                         </div>
                                         <div class="col-md-3 text-center">
                                             <p class="text-center"><b>Transactions : {{$transaction_count}} Transaction(s)</b></p>
                                             <hr>
-                                            <a href="{{route("get_transactions",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Transaction(s)</a>
+                                            @php
+                                                $readonly="";
+                                                $btnText = "View Transaction(s)";
+                                                $otherClasses = "".$readonly;
+                                                $btnLink = route("get_transactions",[$organization_details->organization_id]);
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("get_transactions",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Transaction(s)</a> --}}
                                         </div>
                                         <div class="col-md-2 text-center">
                                             <p class="text-center"><b>Routers : {{$routers_count}} Router(s)</b></p>
                                             <hr>
-                                            <a href="{{route("view_routers",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Router(s)</a>
+                                            @php
+                                                $readonly="";
+                                                $btnText = "View Router(s)";
+                                                $otherClasses = "".$readonly;
+                                                $btnLink = route("view_routers",[$organization_details->organization_id]);
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("view_routers",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Router(s)</a> --}}
                                         </div>
                                         <div class="col-md-2 text-center">
                                             <p class="text-center"><b>SMS : {{$sms_count}} SMS(es)</b></p>
                                             <hr>
-                                            <a href="{{route("view_organization_sms",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View SMS(es)</a>
+                                            @php
+                                                $readonly="";
+                                                $btnText = "View SMS(es)";
+                                                $otherClasses = "".$readonly;
+                                                $btnLink = route("view_organization_sms",[$organization_details->organization_id]);
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("view_organization_sms",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View SMS(es)</a> --}}
                                         </div>
                                         <div class="col-md-3 text-center">
                                             <p class="text-center"><b>Admin : {{$administrator_count}} Administrators</b></p>
                                             <hr>
-                                            <a href="{{route("view_organization_admin",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Admins</a>
+                                            @php
+                                                $readonly="";
+                                                $btnText = "View Admins";
+                                                $otherClasses = "".$readonly;
+                                                $btnLink = route("view_organization_admin",[$organization_details->organization_id]);
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("view_organization_admin",[$organization_details->organization_id])}}" class="btn btn-sm btn-secondary">View Admins</a> --}}
                                         </div>
                                     </div>
                                 </div>

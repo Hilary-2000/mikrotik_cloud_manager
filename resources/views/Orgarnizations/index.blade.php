@@ -149,7 +149,14 @@
                                             <input type="text" name="search" id="searchkey" class="form-control rounded-lg " placeholder="Your keyword ..">
                                         </div>
                                         <div class="col-md-8">
-                                            <a href="{{route("NewOrganizations")}}" class="btn btn-info text-bolder float-right"><i class="ft-plus"> </i> New Organization</a>
+                                            @php
+                                                $btnText = "<i class=\"ft-plus\"></i> New Organization";
+                                                $otherClasses = "my-1 float-right ".$readonly;
+                                                $btnLink = route("NewOrganizations");
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="info" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                            {{-- <a href="{{route("NewOrganizations")}}" class="btn btn-info text-bolder float-right"><i class="ft-plus"> </i> New Organization</a> --}}
                                         </div>
                                     </div>
                                     <div class="table-responsive" id="transDataReciever">

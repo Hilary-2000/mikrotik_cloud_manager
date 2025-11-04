@@ -78,7 +78,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td><a class='text-dark' href='/BillingSms/ViewClient/"+arrays[index][0] +"'>"+ucwords(arrays[index][1]) +"</a> "+status+"</td><td>"+arrays[index][6] +" sms</td><td>"+arrays[index][5] +" <small>per</small> SMS</td><td>"+arrays[index][12] +"</td><td>"+arrays[index][7] +"</td><td><a href='/BillingSms/ViewClient/"+arrays[index][0] +"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/BillingSms/ViewClient/"+arrays[index][0] +"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td><a class='text-dark' href='/BillingSms/ViewClient/"+arrays[index][0] +"'>"+ucwords(arrays[index][1]) +"</a> "+status+"</td><td>"+arrays[index][6] +" sms</td><td>"+arrays[index][5] +" <small>per</small> SMS</td><td>"+arrays[index][12] +"</td><td>"+arrays[index][7] +"</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -90,7 +91,8 @@ function displayRecord(start, finish, arrays) {
                 // if the user is active
                 status = "<span class='badge badge-danger'> </span>";
             }
-            tableData += "<tr><th scope='row'>"+counter+"</th><td><a class='text-dark' href='/BillingSms/ViewClient/"+arrays[index][0] +"'>"+ucwords(arrays[index][1]) +"</a> "+status+"</td><td>"+arrays[index][6] +" sms</td><td>"+arrays[index][5] +" <small>per</small> SMS</td><td>"+arrays[index][12] +"</td><td>"+arrays[index][7] +"</td><td><a href='/BillingSms/ViewClient/"+arrays[index][0] +"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/BillingSms/ViewClient/"+arrays[index][0] +"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td><a class='text-dark' href='/BillingSms/ViewClient/"+arrays[index][0] +"'>"+ucwords(arrays[index][1]) +"</a> "+status+"</td><td>"+arrays[index][6] +" sms</td><td>"+arrays[index][5] +" <small>per</small> SMS</td><td>"+arrays[index][12] +"</td><td>"+arrays[index][7] +"</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;

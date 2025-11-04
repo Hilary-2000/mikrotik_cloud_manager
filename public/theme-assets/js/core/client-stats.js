@@ -530,40 +530,40 @@ function displayRecord(start, finish, arrays) {
         //create a table of the 20 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][3] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][3] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var reffered = "";
+            if (arrays[index][12] != null && arrays[index][12] != "") {
+                var mainData = arrays[index][12];
+                if(arrays[index][12].substr(0,1) == "\""){
+                    mainData = mainData.substr(1,mainData.length-2);
+                    mainData = mainData.replace(/\\/g, "");
                 }
-                var reffered = "";
-                if (arrays[index][12] != null && arrays[index][12] != "") {
-                    var mainData = arrays[index][12];
-                    if(arrays[index][12].substr(0,1) == "\""){
-                        mainData = mainData.substr(1,mainData.length-2);
-                        mainData = mainData.replace(/\\/g, "");
+                // console.log(mainData);
+                var data = JSON.parse(mainData);
+                // get the client name
+                var fullname = "Null";
+                var id = 0;
+                for (let ind = 0; ind < rowsNCols_original.length; ind++) {
+                    const element = rowsNCols_original[ind];
+                    if (element[11] == data.client_acc) {
+                        fullname = element[1];
+                        id = element[0];
                     }
-                    // console.log(mainData);
-                    var data = JSON.parse(mainData);
-                    // get the client name
-                    var fullname = "Null";
-                    var id = 0;
-                    for (let ind = 0; ind < rowsNCols_original.length; ind++) {
-                        const element = rowsNCols_original[ind];
-                        if (element[11] == data.client_acc) {
-                            fullname = element[1];
-                            id = element[0];
-                        }
-                    }
-                    reffered = "<a href='/Clients/View/"+id+"' class='text-secondary'><span data-toggle='tooltip' title='Reffered by "+fullname+" {"+data.client_acc+"} @ Kes "+data.monthly_payment+"' class='badge badge-warning text-dark'>Reffered</span></a>";
                 }
-                var assignment = "";
-                if (arrays[index][15] == "static") {
-                    assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
-                }else if (arrays[index][15] == "pppoe"){
-                    assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
-                }
-            
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
+                reffered = "<a href='/Clients/View/"+id+"' class='text-secondary'><span data-toggle='tooltip' title='Reffered by "+fullname+" {"+data.client_acc+"} @ Kes "+data.monthly_payment+"' class='badge badge-warning text-dark'>Reffered</span></a>";
+            }
+            var assignment = "";
+            if (arrays[index][15] == "static") {
+                assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
+            }else if (arrays[index][15] == "pppoe"){
+                assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
+            }
+            var actions = "<a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -581,9 +581,8 @@ function displayRecord(start, finish, arrays) {
             }else if (arrays[index][15] == "pppoe"){
                 assignment = "<span class='badge text-light' style = 'background: rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
             }
-            
-            // console.log(location);
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span class=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;
@@ -1157,40 +1156,40 @@ function displayRecord_2(start, finish, arrays) {
         //create a table of the 20 records
         var counter = start+1;
         for (let index = start; index < finish; index++) {
-                var status = "<span class='badge badge-success'> </span>";
-                if (arrays[index][3] == 0) {
-                    // if the user is active
-                    status = "<span class='badge badge-danger'> </span>";
+            var status = "<span class='badge badge-success'> </span>";
+            if (arrays[index][3] == 0) {
+                // if the user is active
+                status = "<span class='badge badge-danger'> </span>";
+            }
+            var reffered = "";
+            if (arrays[index][12] != null && arrays[index][12] != "") {
+                var mainData = arrays[index][12];
+                if(arrays[index][12].substr(0,1) == "\""){
+                    mainData = mainData.substr(1,mainData.length-2);
+                    mainData = mainData.replace(/\\/g, "");
                 }
-                var reffered = "";
-                if (arrays[index][12] != null && arrays[index][12] != "") {
-                    var mainData = arrays[index][12];
-                    if(arrays[index][12].substr(0,1) == "\""){
-                        mainData = mainData.substr(1,mainData.length-2);
-                        mainData = mainData.replace(/\\/g, "");
+                // console.log(mainData);
+                var data = JSON.parse(mainData);
+                // get the client name
+                var fullname = "Null";
+                var id = 0;
+                for (let ind = 0; ind < rowsNCols_original_2.length; ind++) {
+                    const element = rowsNCols_original_2[ind];
+                    if (element[11] == data.client_acc) {
+                        fullname = element[1];
+                        id = element[0];
                     }
-                    // console.log(mainData);
-                    var data = JSON.parse(mainData);
-                    // get the client name
-                    var fullname = "Null";
-                    var id = 0;
-                    for (let ind = 0; ind < rowsNCols_original_2.length; ind++) {
-                        const element = rowsNCols_original_2[ind];
-                        if (element[11] == data.client_acc) {
-                            fullname = element[1];
-                            id = element[0];
-                        }
-                    }
-                    reffered = "<a href='/Clients/View/"+id+"' class='text-secondary'><span data-toggle='tooltip' title='Reffered by "+fullname+" {"+data.client_acc+"} @ Kes "+data.monthly_payment+"' class='badge badge-warning text-dark'>Reffered</span></a>";
                 }
-                var assignment = "";
-                if (arrays[index][15] == "static") {
-                    assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
-                }else if (arrays[index][15] == "pppoe"){
-                    assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
-                }
-            
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a> </td></tr>";
+                reffered = "<a href='/Clients/View/"+id+"' class='text-secondary'><span data-toggle='tooltip' title='Reffered by "+fullname+" {"+data.client_acc+"} @ Kes "+data.monthly_payment+"' class='badge badge-warning text-dark'>Reffered</span></a>";
+            }
+            var assignment = "";
+            if (arrays[index][15] == "static") {
+                assignment = "<span class='badge text-light' style='background: rgb(141, 110, 99);' data-toggle='tooltip' title='Static Assigned'>S</span>";
+            }else if (arrays[index][15] == "pppoe"){
+                assignment = "<span class='badge text-light' style = 'background:rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
+            }
+            var actions = "<a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span lass=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
     }else{
@@ -1209,8 +1208,8 @@ function displayRecord_2(start, finish, arrays) {
                 assignment = "<span class='badge text-light' style = 'background: rgb(119, 105, 183);' data-toggle='tooltip' title='PPPoE Assigned'>P</span>";
             }
             
-            // console.log(location);
-            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td><a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary disabled text-bolder' data-toggle='tooltip' title='View this User'><i class='ft-eye'></i></a></td></tr>";
+            var actions = "<a href='/Clients/View/"+arrays[index][0]+"' class='btn btn-sm btn-primary text-bolder' data-toggle='tooltip' title='View this User' style=\"padding: 3px;\"><span lass=\"d-inline-block border border-white w-100 text-center\" style=\"border-radius: 2px; padding: 5px;\"><i class='ft-eye'></i> View</span></a>";
+            tableData += "<tr><th scope='row'>"+counter+"</th><td>"+assignment+" <a href='/Clients/View/"+arrays[index][0]+"' class='text-secondary'>" + ucwords(arrays[index][1]) +" "+status+"</a><br><small class='text-gray d-none d-xl-block'>" + ucword(arrays[index][13]) +"</small></td><td>" + arrays[index][11].toUpperCase() + "</td><td>" + setDate(arrays[index][16]) + "</td><td>" + setDate(arrays[index][7]) + "</td><td>"+actions+"</td></tr>";
             counter++;
         }
         fins = total;
