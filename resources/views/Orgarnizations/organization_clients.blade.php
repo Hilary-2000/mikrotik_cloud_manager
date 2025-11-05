@@ -121,7 +121,17 @@
                                 <div class="heading-elements">
                                     {{-- <button data-action="collapse" class="btn btn-primary"><i class="ft-plus"></i> Add Administrator</button> --}}
                                     <ul class="list-inline mb-0">
-                                        <li><a class="btn btn-primary text-white" data-action="collapse"><i class="ft-plus"></i> Check Frozen Clients</a></li>
+                                        <li>
+                                            {{-- <a class="btn btn-primary text-white" data-action="collapse"><i class="ft-plus"></i> Check Frozen Clients</a> --}}
+                                            @php
+                                                $btnText = "<i class=\"ft-plus\"></i> Check Frozen Clients";
+                                                $otherClasses = "text-white";
+                                                $btnLink = route("Packages");
+                                                $otherAttributes = ' data-action="collapse"';
+                                                $readonly = "";
+                                            @endphp
+                                            <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="primary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -174,12 +184,37 @@
                                 </div>
                             </div>
                             <div class="card-header">
-                                <a href="{{route("ViewOrganization", $organization_details->organization_id)}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back
-                                    to Organization List</a>
+                                <a href="{{route("ViewOrganization", $organization_details->organization_id)}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back to Organization List</a>
+                                {{-- @php
+                                    $btnText = "<i class=\"fas fa-arrow-left\"></i> Back to Organization List";
+                                    $otherClasses = "text-white";
+                                    $btnLink = route("ViewOrganization", $organization_details->organization_id);
+                                    $otherAttributes = ' data-action="collapse"';
+                                    $readonly = "";
+                                @endphp
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="primary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" /> --}}
                                 <p>- Syncs Clients only!</p>
                                 {{-- <span class='badge badge-warning text-dark'>Reffered</span> --}}
-                                <a href="{{route("get_clients_statistics", [$organization_details->organization_id])}}" data-toggle="tooltip" title="Client`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a>
-                                <span data-toggle="tooltip" title="Client`s Reports" class="btn btn-info" id="client_reports_btn"><i class="ft-file-text"></i></span>
+                                {{-- <a href="{{route("get_clients_statistics", [$organization_details->organization_id])}}" data-toggle="tooltip" title="Client`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a> --}}
+                                @php
+                                    $btnText = "<i class=\"ft-bar-chart-2\"></i>";
+                                    $otherClasses = "";
+                                    $btnLink = route("get_clients_statistics", [$organization_details->organization_id]);
+                                    $otherAttributes = ' title="Client`s Statistics"';
+                                    $readonly = "";
+                                @endphp
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                {{-- <span data-toggle="tooltip" title="Client`s Reports" class="btn btn-info" id="client_reports_btn"><i class="ft-file-text"></i></span> --}}
+                                @php
+                                    $btnText = "<i class=\"ft-file-text\"></i>";
+                                    $otherClasses = "";
+                                    $btn_id = "client_reports_btn";
+                                    $btnSize="sm";
+                                    $type = "submit";
+                                    $readonly = "";
+                                    $otherAttributes = "";
+                                @endphp
+                                <x-button toolTip="Client`s Reports" btnType="info" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
@@ -244,7 +279,17 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button>
+                                                        @php
+                                                            $btnText = "<i class=\"ft-settings\"></i> Generate Reports";
+                                                            $otherClasses = "mt-2";
+                                                            $btn_id = "client_reports_btn";
+                                                            $btnSize="sm";
+                                                            $type = "submit";
+                                                            $readonly = "";
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                        {{-- <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button> --}}
                                                     </div>
                                                 </div>
                                             </form>
@@ -318,19 +363,59 @@
                                             <form action="/delete_clients" method="POST" class="col-md-3 border-right border-secondary my-1">
                                                 @csrf
                                                 <input type="hidden" name="hold_user_id_data" id="hold_user_id_data">
-                                                <button class="btn btn-sm btn-danger" {{$readonly}} id="delete_clients_id" type="button"><i class="ft-trash"></i> Delete</button>
+                                                @php
+                                                    $btnText = "<i class=\"ft-trash\"></i> Delete";
+                                                    $otherClasses = "mt-2";
+                                                    $btn_id = "delete_clients_id";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="danger" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                {{-- <button class="btn btn-sm btn-danger" {{$readonly}} id="delete_clients_id" type="button"><i class="ft-trash"></i> Delete</button> --}}
                                                 <div class="container hide" id="delete_clients_window">
                                                     <p><b>Are you sure you want to delete <span id="delete_number_clients"></span> Client(s)</b>?</p>
                                                     <label for="delete_from_router" class="form-label">Delete Client Data on Router</label>
                                                     <input type="checkbox" checked name="delete_from_router" id="delete_from_router">
-                                                    <button class="btn btn-danger" {{$readonly}} type="submit">Yes</button>
-                                                    <button class="btn btn-secondary" id="no_dont_delete_selected" type="button">No</button>
+                                                    {{-- <button class="btn btn-danger" {{$readonly}} type="submit">Yes</button> --}}
+                                                    @php
+                                                        $btnText = "Yes";
+                                                        $otherClasses = "";
+                                                        $btn_id = "";
+                                                        $btnSize="sm";
+                                                        $type = "submit";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="danger" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                    {{-- <button class="btn btn-secondary" id="no_dont_delete_selected" type="button">No</button> --}}
+                                                    @php
+                                                        $btnText = "No";
+                                                        $otherClasses = "";
+                                                        $btn_id = "no_dont_delete_selected";
+                                                        $btnSize="sm";
+                                                        $type = "button";
+                                                        $readonly = "";
+                                                        $otherAttributes = "";
+                                                    @endphp
+                                                    <x-button toolTip="" btnType="secondary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                                 </div>
                                             </form>
                                             <form class="col-md-3" action="/send_sms_clients" method="POST" class="col-md-3 my-1">
                                                 @csrf
                                                 <input type="hidden" name="hold_user_id_data" id="hold_user_id_data_2">
-                                                <button class="btn btn-sm btn-info" {{$readonly}} type="submit"><i class="fa-solid fa-paper-plane"></i> Send SMS</button>
+                                                {{-- <button class="btn btn-sm btn-info" {{$readonly}} type="submit"><i class="fa-solid fa-paper-plane"></i> Send SMS</button> --}}
+                                                @php
+                                                    $btnText = "<i class=\"fa-solid fa-paper-plane\"></i> Send SMS";
+                                                    $otherClasses = "";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    // $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="info" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                             </form>
                                             <div class="col-md-12 card-content">
                                                 <h6 class="text-center"><u>Clients Selected</u></h6>

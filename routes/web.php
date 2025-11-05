@@ -92,6 +92,21 @@ Route::get("/Organization/ActivateSMS/{organization_id}",[Organization::class,"A
 Route::get("/Organization/DeactivateSMS/{organization_id}",[Organization::class,"DeactivateSMS"])->name("DeactivateSMS");
 Route::get("/Organization/Delete/{delete_id}",[Organization::class,"DeleteOrganization"])->name("DeleteOrganization");
 
+// save minimum payment
+Route::post("/Organization/Client/Update/MinimumPay/{organization_id}", [Organization::class, "updateMinPay"])->name("client.update.minimum_payment.static");
+Route::post("/Organization/Client/Update/Phone/{organization_id}", [Organization::class, "change_phone_number"])->name("change_client_phone");
+Route::post("/Organization/Client/Update/MonthlyPayment/{organization_id}", [Organization::class, "change_client_monthly_payment"])->name("change_client_monthly_payment");
+Route::post("/Organization/Client/Update/Wallet/{organization_id}", [Organization::class, "changeWalletBal"])->name("changeWallet");
+Route::post("/Organization/Client/Update/ExpiryDate/{organization_id}", [Organization::class, "updateExpDate"])->name("updateExpDate");
+Route::post("/Organization/Client/Update/Comment/{organization_id}", [Organization::class, "update_client_comment"])->name("update_client_comment");
+Route::post("/Organization/Client/InitiateSTK/{organization_id}", [Organization::class, "initiate_stk"])->name("initiate_stk");
+Route::post("/Organization/Client/UpdateRefferer/{organization_id}", [Organization::class, "setRefferal"])->name("setRefferal");
+Route::post("/Organization/Client/ConvertClient/{organization_id}", [Organization::class, "convertClient"])->name("convertClient");
+Route::get("/Organization/Client/reffererInfor/{organization_id}/{client_account}", [Organization::class, "getRefferal"])->name("getRefferal");
+Route::get("/Organization/Client/getRouterProfiles/{organization_id}/{routerid}", [Organization::class, "getRouterProfile"])->name("getRouterProfile");
+Route::get("/Organization/Client/getRouterInterfaces/{organization_id}/{routerid}", [Organization::class, "getRouterInterfaces"])->name("getRouterInterfaces");
+Route::get("/Organization/Client/DeactivateFreeze/{organization_id}/{client_id}", [Organization::class, "deactivatefreeze"])->name("deactivatefreeze");
+
 // statistics
 Route::get("/Organization/Client-Statistics/{organization_id}",[Organization::class,'get_clients_statistics'])->name("get_clients_statistics");
 Route::post("/Organization/Client-due-demographics/{organization_id}",[Organization::class,'clients_demographics'])->name("clients_demographics");

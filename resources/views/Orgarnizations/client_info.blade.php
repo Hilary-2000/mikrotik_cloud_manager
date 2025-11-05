@@ -33,6 +33,66 @@
     <!-- END Custom CSS-->
 
     <style>
+        .hide{
+            display: none;
+        }
+        .showBlock{
+            display: block;
+        }
+        .dt-search {
+            display: none;
+        }
+        .ct-chart {
+            display: flex; /* chart + legend side by side */
+        }
+        .ct-legend {
+            position: relative;
+            margin-right: 15px;
+            width: 100px;   /* adjust as needed */
+        }
+
+        .ct-legend li {
+            display: block; /* stack items vertically */
+            margin-bottom: 8px;
+        }
+        /*the container must be positioned relative:*/
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+            width: 100%
+        }
+        
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 250; /* Set the maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
         .hide:{
             display: none;
         }
@@ -183,7 +243,7 @@
                                     @endif
 
                                     {{-- client statuses --}}
-                                        <x-clientinforstatus :organizationdetails="$organization_details" :registrationdate="$registration_date" :expiredate="$expire_date " :clientsdata="$clients_data" :readonly="$readonly"/>
+                                    <x-clientinforstatus :routerdata="$router_data" :organizationdetails="$organization_details" :clientrefferal="$client_refferal" :registrationdate="$registration_date" :expiredate="$expire_date " :clientsdata="$clients_data" :readonly="$readonly"/>
                                     {{-- end --}}
                                     <hr>
                                     <p><strong>Note: </strong><br> - Some fields can`t be left blank the default
@@ -370,12 +430,28 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button {{$readonly}} class="btn btn-success text-dark" disabled type="submit"><i
-                                                        class="ft-upload"></i> Update User</button>
+                                                {{-- <button {{$readonly}} class="btn btn-success text-dark" disabled type="submit"><i class="ft-upload"></i> Update User</button> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-upload\"></i> Update User";
+                                                    $otherClasses = "text-dark";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="success" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                             </div>
                                             <div class="col-md-6">
-                                                <a class="btn btn-secondary btn-outline" href="{{url()->previous()}}"><i
-                                                        class="ft-x"></i> Cancel</a>
+                                                {{-- <a class="btn btn-secondary btn-outline" href="{{url()->previous()}}"><i class="ft-x"></i> Cancel</a> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-x\"></i> Cancel";
+                                                    $otherClasses = "";
+                                                    $btnLink = route("viewOrganizationClients", $organization_details->organization_id);
+                                                    $otherAttributes = "";
+                                                    $readonly = "";
+                                                @endphp
+                                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                             </div>
                                         </div>
                                     </form>

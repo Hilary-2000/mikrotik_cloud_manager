@@ -24,7 +24,7 @@ function getUser() {
     var acc_no = cObj("search_refferer_keyword").value;
     var err = checkBlank("search_refferer_keyword");
     if (err == 0) {
-        var datapass = "/get_refferal/"+acc_no;
+        var datapass = "/Organization/Client/reffererInfor/"+cObj("organization_id_stkpush").value+"/"+acc_no;
         sendDataGet("GET", datapass, cObj("refferer_data"), cObj("search_referer_loader"));
         setTimeout(() => {
             var timeout = 0;
@@ -64,9 +64,9 @@ function getUser() {
 }
 
 cObj("find_user_refferal").addEventListener("click",getUser);
-cObj("edit_refferal").onclick = function () {
-    cObj("set_refferal_window").classList.remove("d-none");
-}
-cObj("cancel_refferer_updates").onclick = function () {
-    cObj("set_refferal_window").classList.add("d-none");
-}
+// cObj("edit_refferal").onclick = function () {
+//     cObj("set_refferal_window").classList.remove("d-none");
+// }
+// cObj("cancel_refferer_updates").onclick = function () {
+//     cObj("set_refferal_window").classList.add("d-none");
+// }

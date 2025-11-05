@@ -100,6 +100,15 @@ window.onload = function () {
     }else{
         // console.log("Is null");
     }
+
+    // add an event listener to the router name list to change
+    var router_list = document.getElementById("router_list");
+    if (router_list != null) {
+        // set the event listener
+        router_list.addEventListener("change", getRouterProfiles);
+    }else{
+        // console.log("Is null");
+    }
     // populate the table below
     // var payment_infor = [];
     // var payinfor = refferal_payment.payment_history;
@@ -188,36 +197,13 @@ cObj("tolastNav").onclick = function() {
         cObj("transDataReciever").innerHTML = displayRecord(startpage, endpage, rowsColStudents);
     }
 }
-
+function getRouterProfiles() {
+    sendDataGet("GET","/Organization/Client/getRouterProfiles/"+cObj("organization_id_stkpush").value+"/"+this.value+"",cObj("router_profile_holder"),cObj("interface_load_main"));
+}
 function getRouterInterfaces() {
-    sendDataGet("GET","/Organization/get_interfaces/"+organization_details.organization_id+"/"+this.value+"",cObj("interface_holder"),cObj("interface_load"));
-}
-cObj("edit_epiration").onclick = function () {
-    cObj("change_exp_date_windoe").classList.toggle("d-none");
-}
-cObj("cancel_exp_update").onclick = function () {
-    cObj("change_exp_date_windoe").classList.add("d-none");
+    sendDataGet("GET","/Organization/Client/getRouterInterfaces/"+cObj("organization_id_stkpush").value+"/"+this.value+"",cObj("interface_holder"),cObj("interface_load"));
 }
 
-cObj("prompt_delete").onclick = function () {
-    cObj("prompt_del_window").classList.remove("d-none");
-}
-cObj("delet_user_no").onclick = function () {
-    cObj("prompt_del_window").classList.add("d-none");
-}
-
-cObj("edit_freeze_client").onclick = function () {
-    cObj("change_freeze_date_window").classList.toggle("d-none");
-}
-cObj("cancel_freeze_dates").onclick = function () {
-    cObj("change_freeze_date_window").classList.add("d-none");
-}
-cObj("edit_wallet").onclick = function () {
-    cObj("change_wallet_window").classList.toggle("d-none");
-}
-cObj("cancel_wallet_updates").onclick = function () {
-    cObj("change_wallet_window").classList.add("d-none");
-}
 
 cObj("client_network").onkeyup = function (event) {
     var network = this.value;
@@ -305,4 +291,215 @@ cObj("freeze_date").onchange = function () {
 
 cObj("edit_minimum_amount").onclick = function () {
     cObj("hide_min_pay_window").classList.toggle("d-none");
+}
+/**
+ * ----------------------------------------------------------------------------------------------
+ */
+
+function showModal(modal_id) {
+    cObj(modal_id).classList.remove("hide");
+    cObj(modal_id).classList.add("show");
+    cObj(modal_id).classList.add("showBlock");
+}
+
+function hideModal(modal_id) {
+    cObj(modal_id).classList.add("hide");
+    cObj(modal_id).classList.remove("show");
+    cObj(modal_id).classList.remove("showBlock");
+}
+
+/** UPDATE USER PHONENUMBER */
+cObj("edit_phone_number").onclick = function () {
+    showModal("update_phone_modal");
+}
+
+cObj("close_update_phone_2").onclick = function () {
+    hideModal("update_phone_modal");
+}
+
+cObj("close_update_phone_1").onclick = function () {
+    hideModal("update_phone_modal");
+}
+
+/** UPDATE MONTHLY PAYMENT  */
+cObj("edit_monthly_payments").onclick = function () {
+    showModal("update_monthly_payment");
+}
+
+cObj("close_update_monthly_payment_1").onclick = function () {
+    hideModal("update_monthly_payment");
+}
+
+cObj("close_update_monthly_payment_2").onclick = function () {
+    hideModal("update_monthly_payment");
+}
+
+/** UPDATE MONTHLY MINIMUM PAYMENT  */ 
+cObj("edit_minimum_amount").onclick = function () {
+    showModal("update_monthly_min_pay_modal");
+}
+
+cObj("close_update_monthly_min_pay_modal_2").onclick = function () {
+    hideModal("update_monthly_min_pay_modal");
+}
+
+cObj("close_update_monthly_min_pay_modal_1").onclick = function () {
+    hideModal("update_monthly_min_pay_modal");
+}
+
+/** UPDATE WALLET AMOUNT  */ 
+cObj("edit_wallet").onclick = function () {
+    showModal("update_wallet_amount_modal");
+}
+
+cObj("close_update_wallet_amount_modal_2").onclick = function () {
+    hideModal("update_wallet_amount_modal");
+}
+
+cObj("close_update_wallet_amount_modal_1").onclick = function () {
+    hideModal("update_wallet_amount_modal");
+}
+
+/** UPDATE USER EXPIRATION DATE  */
+cObj("edit_expiration_date").onclick = function () {
+    showModal("update_expiration_date_modal");
+}
+
+cObj("close_update_expiration_date_modal_2").onclick = function () {
+    hideModal("update_expiration_date_modal");
+}
+
+cObj("close_update_expiration_date_modal_1").onclick = function () {
+    hideModal("update_expiration_date_modal");
+}
+
+/** UPDATE FREEZE STATUS  */ 
+cObj("edit_freeze_client").onclick = function () {
+    showModal("update_freeze_status_modal");
+}
+
+cObj("close_update_freeze_status_modal_1").onclick = function () {
+    hideModal("update_freeze_status_modal");
+}
+
+cObj("close_update_freeze_status_modal_2").onclick = function () {
+    hideModal("update_freeze_status_modal");
+}
+
+/** UPDATE REFEEREE  */ 
+cObj("edit_refferal_menu").onclick = function () {
+    showModal("update_refferee_by_modal");
+}
+
+cObj("close_update_refferee_by_modal_1").onclick = function () {
+    hideModal("update_refferee_by_modal");
+}
+
+cObj("close_update_refferee_by_modal_2").onclick = function () {
+    hideModal("update_refferee_by_modal");
+}
+
+// MODAL FOR STK PUSH
+cObj("initiate_payment").onclick = function() {
+    showModal("initiate_payment_modal");
+}
+cObj("close_initiate_payment_modal_1").onclick = function() {
+    hideModal("initiate_payment_modal");
+}
+cObj("close_initiate_payment_modal_2").onclick = function() {
+    hideModal("initiate_payment_modal");
+}
+
+/** UPDATE CLIENT COMMENT */
+cObj("edit_comments").onclick = function () {
+    showModal("update_comments_modal");
+}
+
+cObj("close_update_comments_modal_1").onclick = function () {
+    hideModal("update_comments_modal");
+}
+
+cObj("close_update_comments_modal_2").onclick = function () {
+    hideModal("update_comments_modal");
+}
+cObj("initiate_client_payment_mpesa").onclick = function () {
+    var err = checkBlank("client_amount");
+    err += checkBlank("client_phone_number");
+    err += checkBlank("clients_account_number");
+    if (err == 0) {
+        this.disabled = true;
+        this.classList.add("disabled");
+        cObj("error_mpesa_holder").innerHTML = "";
+        cObj("initiate_process_holder").innerHTML = "<span id='initiate_loader' class='invisible'></span> <i class='fas fa-refresh fa-spin'></i> Please wait...";
+        sendDataPost1("POST", "/Organization/Client/InitiateSTK/"+cObj("organization_id_stkpush").value, "amount="+cObj("client_amount").value+"&phone_number="+cObj("client_phone_number").value+"&account_number="+cObj("clients_account_number").value, cObj("error_mpesa_holder"), cObj("initiate_loader"));
+        setTimeout(() => {
+            var timeout = 0;
+            var ids = setInterval(() => {
+                timeout++;
+                //after two minutes of slow connection the next process wont be executed
+                if (timeout==1200) {
+                    stopInterval(ids);                        
+                }
+                if (cObj("initiate_loader").classList.contains("invisible")) {
+                    this.disabled = false;
+                    this.classList.remove("disabled");
+                    cObj("initiate_process_holder").innerHTML = "<i class=\"fas fa-money-bill\"></i> Initiate";
+                    // cObj("error_mpesa_holder").innerHTML = "";
+                    stopInterval(ids);
+                
+                }
+            }, 100);
+        }, 200);
+    }else{
+        cObj("error_mpesa_holder").innerHTML = "<p class='text-danger'>Please fill all fields covered with a red border!</p>";
+    }
+}
+
+// Send date with post request
+function sendDataPost1(method, file, datapassing, object1, object2) {
+    //make the loading window show
+    object2.classList.remove("invisible");
+    let xml = new XMLHttpRequest();
+    xml.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            object1.innerHTML = this.responseText;
+            object2.classList.add("invisible");
+        } else if (this.status == 500) {
+            object2.classList.add("invisible");
+            object1.innerHTML = "<p class='red_notice'>Cannot establish connection to server.<br>Try reloading your page</p>";
+        } else if (this.status == 204) {
+            object2.classList.add("invisible");
+            object1.innerHTML = "<p class='red_notice'>Password updated successfully!</p>";
+        }
+        // console.log(this.status);
+    };
+    xml.open(method, "" + file, true);
+    xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xml.send(datapassing);
+}
+
+/**DELETE USER MODAL */
+cObj("convert_client").onclick = function () {
+    showModal("convert_client_modal");
+}
+
+cObj("close_convert_client").onclick = function () {
+    hideModal("convert_client_modal");
+}
+
+cObj("hide_convert_client").onclick = function () {
+    hideModal("convert_client_modal");
+}
+
+/**DELETE USER MODAL */
+cObj("prompt_delete").onclick = function () {
+    showModal("delete_client_modal");
+}
+
+cObj("close_this_window_delete").onclick = function () {
+    hideModal("delete_client_modal");
+}
+
+cObj("hide_delete_column").onclick = function () {
+    hideModal("delete_client_modal");
 }

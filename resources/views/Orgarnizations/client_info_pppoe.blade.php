@@ -76,14 +76,37 @@
                 is_array(json_decode($string))))) ? true : false;
     }
 @endphp
+
 <style>
+    .hide{
+        display: none;
+    }
+    .showBlock{
+        display: block;
+    }
+    .dt-search {
+        display: none;
+    }
+    .ct-chart {
+        display: flex; /* chart + legend side by side */
+    }
+    .ct-legend {
+        position: relative;
+        margin-right: 15px;
+        width: 100px;   /* adjust as needed */
+    }
+
+    .ct-legend li {
+        display: block; /* stack items vertically */
+        margin-bottom: 8px;
+    }
     /*the container must be positioned relative:*/
     .autocomplete {
         position: relative;
         display: inline-block;
         width: 100%
     }
-
+    
     .autocomplete-items {
         position: absolute;
         border: 1px solid #d4d4d4;
@@ -94,6 +117,8 @@
         top: 100%;
         left: 0;
         right: 0;
+        max-height: 250; /* Set the maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
     }
 
     .autocomplete-items div {
@@ -113,8 +138,11 @@
         background-color: DodgerBlue !important;
         color: #ffffff;
     }
-
+    .hide:{
+        display: none;
+    }
 </style>
+
 <body class="vertical-layout vertical-menu 2-columns  menu-expanded fixed-navbar" data-open="click"
     data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
 
@@ -182,7 +210,7 @@
                                     </ul>
                                     
                                     {{-- client statuses --}}
-                                        <x-clientinforstatus :organizationdetails="$organization_details" :registrationdate="$registration_date" :expiredate="$expire_date " :clientsdata="$clients_data" :readonly="$readonly"/>
+                                    <x-clientinforstatus :routerdata="$router_data" :organizationdetails="$organization_details" :clientrefferal="$client_refferal" :registrationdate="$registration_date" :expiredate="$expire_date " :clientsdata="$clients_data" :readonly="$readonly"/>
                                     {{-- end --}}
                                     <hr>
                                     <p><strong>Note: </strong><br> - Some fields can`t be left blank the default
@@ -298,7 +326,7 @@
                                             <div class="col-md-6 form-group">
                                                 <label for="router_name" class="form-control-label">Router Name: {
                                                     <span class="primary bolder" id="router_named">Hilary Dev</span> }
-                                                    <span class="invisible" id="interface_load"><i
+                                                    <span class="invisible" id="interface_load_main"><i
                                                             class="fas ft-rotate-cw fa-spin"></i></span></label>
                                                 <p id="router_data"><span class="secondary">The router list will
                                                         appear here.. If this message is still present you have no
@@ -308,7 +336,7 @@
                                                 <label for="client_address" class="form-control-label">Router
                                                     Profile: { <span class="primary bolder"
                                                         id="router_profiles"></span> } </label>
-                                                <p class="text-secondary" id="interface_holder">The router secret profiles
+                                                <p class="text-secondary" id="interface_holder_main">The router secret profiles
                                                     will appear here If the router is selected.If this message is still
                                                     present a router is not selected.</p>
                                             </div>
@@ -339,12 +367,28 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button {{$readonly}} class="btn btn-success text-dark " disabled type="submit"><i
-                                                        class="ft-upload"></i> Update User</button>
+                                                {{-- <button {{$readonly}} class="btn btn-success text-dark" disabled type="submit"><i class="ft-upload"></i> Update User</button> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-upload\"></i> Update User";
+                                                    $otherClasses = "text-dark";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="success" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                             </div>
                                             <div class="col-md-6">
-                                                <a class="btn btn-secondary btn-outline" href="{{url()->previous()}}"><i
-                                                        class="ft-x"></i> Cancel</a>
+                                                {{-- <a class="btn btn-secondary btn-outline" href="{{url()->previous()}}"><i class="ft-x"></i> Cancel</a> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-x\"></i> Cancel";
+                                                    $otherClasses = "";
+                                                    $btnLink = route("viewOrganizationClients", $organization_details->organization_id);
+                                                    $otherAttributes = "";
+                                                    $readonly = "";
+                                                @endphp
+                                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                             </div>
                                         </div>
                                     </form>
@@ -700,9 +744,9 @@
                         break;
                     }
                     /*check if the item starts with the same letters as the text field value:*/
-                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase() ||
-                        arr2[i].substr(0, val.length).toUpperCase() == val.toUpperCase() ||
-                        arr3[i].substr(0, val.length).toUpperCase() == val.toUpperCase()
+                    if (arr[i].toUpperCase().includes(val.toUpperCase()) ||
+                        arr2[i].toUpperCase().includes(val.toUpperCase()) ||
+                        arr3[i].toUpperCase().includes(val.toUpperCase())
                     ) {
                         /*create a DIV element for each matching element:*/
                         b = document.createElement("DIV");
@@ -724,7 +768,6 @@
                         a.appendChild(b);
                         counter++;
                     }
-                    console.log(counter);
                 }
             });
             /*execute a function presses a key on the keyboard:*/

@@ -37,6 +37,7 @@ class VerifyCsrfToken extends Middleware
         'wireless_settings',
         '/Client-due-demographics',
         '/Organization/Client-due-demographics/*',
-        '/HBS/Transact'
+        '/HBS/Transact',
+        '/Organization/Client/InitiateSTK/*'
     ];
 }

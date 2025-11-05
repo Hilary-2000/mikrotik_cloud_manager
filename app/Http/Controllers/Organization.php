@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\MpesaService;
 use App\Classes\reports\PDF;
 use App\Classes\routeros_api;
 use App\Models\admin_table;
 use App\Models\admin_table_mikrotik_cloud;
+use App\Models\sms_table;
+use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +23,259 @@ class Organization extends Controller
         // select from organization.
         $organizations = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
         return view("Orgarnizations.index",["organizations" => $organizations]);
+    }
+
+    // update expiration date
+    function updateExpDate($organization_id, Request $req)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+
+        $affect_wallet_balance = $req->input("affect_wallet_balance") ?? "off";
+        $client_id = $req->input('clients_id');
+
+        $client_tables = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+        $previous_expiry = $client_tables[0]->next_expiration_date*1 > date("YmdHis")*1 ? $client_tables[0]->next_expiration_date : date("YmdHis");
+        $wallet_amount = $client_tables[0]->wallet_amount;
+        $new_expiration = date("Ymd", strtotime($req->input('expiration_date_edits'))) . str_replace(":", "", $req->input("expiration_time_edits")) . date("s", strtotime($previous_expiry));
+
+        if ($new_expiration*1 > date("YmdHis")) {
+            // valid
+            if($affect_wallet_balance == "on"){
+                // difference ine days
+                $per_day_cost = round($client_tables[0]->monthly_payment / 30);
+                if ($new_expiration > $previous_expiry) {
+                    $date1 = date_create($previous_expiry);
+                    $date2 = date_create($new_expiration);
+                    $diff = date_diff($date1,$date2);
+                    $days =  $diff->format("%a");
+                    $wallet_amount -= ($days*$per_day_cost);
+                }else{
+                    $date1 = date_create($new_expiration);
+                    $date2 = date_create($previous_expiry);
+                    $diff = date_diff($date1,$date2);
+                    $days =  $diff->format("%a");
+                    $wallet_amount += ($days*$per_day_cost);
+                }
+            }
+        } else {
+            session()->flash("error", "The new expiration date must be greater than today!");
+        }
+
+        DB::connection("mysql2")->table('client_tables')
+        ->where('client_id', $client_id)
+        ->update([
+            'next_expiration_date' => $new_expiration,
+            'date_changed' => date("YmdHis"),
+            'wallet_amount' => $wallet_amount
+        ]);
+
+        $client = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+        $client_name = $client[0]->client_name;
+
+        $txt = ":Client ( " . $client_name . " - " . $client[0]->client_account . " ) expiration date changed to " . date("D dS M Y", strtotime($new_expiration)) . "" . "! by " . session('Usernames');
+        $this->log($txt);
+        // redirect to the client table
+        session()->flash("success", "Updates have been done successfully!");
+        return redirect(url()->previous());
+    }
+
+    // change wallet
+    function changeWalletBal($organization_id, Request $req)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // return $req;
+        $client_id = $req->input('clients_id');
+        $wallet_amount = $req->input('wallet_amounts');
+        DB::connection("mysql2")->table('client_tables')
+            ->where('client_id', $client_id)
+            ->update([
+                'wallet_amount' => $wallet_amount,
+                'last_changed' => date("YmdHis"),
+                'date_changed' => date("YmdHis")
+            ]);
+
+        $client = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+        $client_name = $client[0]->client_name;
+
+        $txt = ":Client ( $client_name ) wallet balance has been changed to Kes $wallet_amount by " . session('Usernames') . "" . "!";
+        $this->log($txt);
+        // end of log file
+        session()->flash("success", "Wallet balance has been successfully changed!");
+        return redirect(url()->previous());
+    }
+
+    // change_client_monthly_payment
+    function change_client_monthly_payment($organization_id, Request $req)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+
+        // GET THE DATA
+        $client_id = $req->input('clients_id');
+        $client_monthly_payment = $req->input('client_monthly_payment');
+
+
+        // check if its a valid phone number
+        if ($client_monthly_payment <= 0) {
+            session()->flash("error", "Monthly Payments cant be less or equals to zero");
+            return redirect(url()->previous());
+        }
+
+        $client = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+
+        DB::connection("mysql2")->table('client_tables')
+            ->where('client_id', $client_id)
+            ->update([
+                'monthly_payment' => $client_monthly_payment,
+                'last_changed' => date("YmdHis"),
+                'date_changed' => date("YmdHis")
+            ]);
+
+        $client_name = $client[0]->client_name;
+        $monthly_payment = $client[0]->monthly_payment;
+
+        $txt = ":Client ( $client_name ) monthly payment has been changed from (Kes " . number_format($monthly_payment) . ") to (Kes " . number_format($client_monthly_payment) . ") by " . session('Usernames') . "" . "!";
+        // $this->log($txt);
+        // end of log file
+        session()->flash("success", "Client monthly payment has been successfully changed!");
+        return redirect(url()->previous());
+    }
+
+    function change_phone_number($organization_id, Request $req)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+
+        // GET THE DATA
+        $client_id = $req->input('clients_id');
+        $client_new_phone = $req->input('client_new_phone');
+
+
+        // check if its a valid phone number
+        if (!ctype_digit($client_new_phone) || (strlen(trim($client_new_phone)) != 10 && strlen(trim($client_new_phone)) != 12)) {
+            session()->flash("error", "The phone number given is invalid : Format 0712345678 or 254712345678");
+            return redirect(url()->previous());
+        }
+
+        $client = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+
+        DB::connection("mysql2")->table('client_tables')
+            ->where('client_id', $client_id)
+            ->update([
+                'clients_contacts' => $client_new_phone,
+                'last_changed' => date("YmdHis"),
+                'date_changed' => date("YmdHis")
+            ]);
+
+        $client_name = $client[0]->client_name;
+        $old_phone = $client[0]->clients_contacts;
+
+        $txt = ":Client ( $client_name ) contact has been changed from (" . $old_phone . ") to (" . $client_new_phone . ") by " . session('Usernames') . "" . "!";
+        $this->log($txt);
+        // end of log file
+        session()->flash("success", "Client contact has been successfully changed!");
+        return redirect(url()->previous());
+    }
+
+    function log($log_message, $log_subdirectory = null)
+    {
+
+        // Log subdirectory
+        $log_subdirectory = $log_subdirectory != null ? $log_subdirectory : "";
+        $log_subdirectory = strlen($log_subdirectory) > 0 ? (substr($log_subdirectory, -1) == "/" ? $log_subdirectory : $log_subdirectory . "/") : "";
+
+        // Log directory path
+        $log_directory = public_path("/logs/" . $log_subdirectory);
+
+        // Create directory if it doesn't exist
+        if (!is_dir($log_directory)) {
+            mkdir($log_directory, 0755, true); // 0755 is the default permission
+        }
+
+        // Log file path
+        $log_file_path = $log_directory . session("database_name") . ".txt";
+
+        // Open or create the log file
+        $myfile = fopen($log_file_path, "a+") or die("Unable to open file!");
+
+        // Get existing content
+        $file_sizes = filesize($log_file_path) > 0 ? filesize($log_file_path) : 8190;
+        $existing_txt = fread($myfile, $file_sizes);
+
+        // Write to the log file
+        $myfile = fopen($log_file_path, "w") or die("Unable to open file!");
+        $date = date("dS M Y (H:i:sa)");
+
+        // this is an extension message to make the investigator know which system was perfoming this action
+        $extension_message = $log_subdirectory != null ? " {regular checks}" : "";
+
+        $txt = $date . $log_message . $extension_message . "\n" . $existing_txt;
+        fwrite($myfile, $txt);
+        fclose($myfile);
+    }
+
+    // update minimum payment
+    function updateMinPay($organization_id, Request $request)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // return $request;
+        $client_id = $request->input("client_id");
+        $change_minimum_payment = $request->input("change_minimum_payment");
+
+        // update the clients minimum pay
+        $update = DB::connection("mysql2")->update("UPDATE `client_tables` SET `min_amount` = ? WHERE `client_id` = ?", [$change_minimum_payment, $client_id]);
+
+        // set a success
+        session()->flash("success", "Update has been done successfully!");
+        return redirect(url()->previous());
     }
 
     function new_organizations(){
@@ -1213,6 +1469,489 @@ class Organization extends Controller
     
     }
 
+    // convert client
+    function convertClient($organization_id, Request $request){
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // client id
+        $client_id = $request->input("client_id");
+        // select the client details
+        $client_data = DB::connection("mysql2")->select("SELECT * FROM client_tables WHERE client_id = ?",[$client_id]);
+        if (count($client_data) > 0) {
+            if ($client_data[0]->assignment == "static"){
+                $client_secret_username = $request->input("client_secret_username");
+                $client_secret_password = $request->input("client_secret_password");
+                $router_list = $request->input("router_list");
+                $pppoe_profile = $request->input("pppoe_profile");
+                // delete the user ip address
+
+                // check if the routers are the same
+                $router_id =  $router_list;
+                $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ? AND `deleted` = '0'", [$router_id]);
+                if (count($router_data) > 0) {
+                    // disable the interface in that router
+
+                    // get the sstp credentails they are also the api usernames
+                    $sstp_username = $router_data[0]->sstp_username;
+                    $sstp_password = $router_data[0]->sstp_password;
+                    $api_port = $router_data[0]->api_port;
+
+
+                    // connect to the router and set the sstp client
+                    $sstp_value = $this->getSSTPAddress($organization_details[0]->organization_database);
+                    if ($sstp_value == null) {
+                        $error = "The SSTP server is not set, Contact your administrator!";
+                        session()->flash("error", $error);
+                        return redirect(url()->previous());
+                    }
+
+                    // connect to the router and set the sstp client
+                    $server_ip_address = $sstp_value->ip_address;
+                    $user = $sstp_value->username;
+                    $pass = $sstp_value->password;
+                    $port = $sstp_value->port;
+
+                    // check if the router is actively connected
+                    $client_router_ip = $this->checkActive($server_ip_address, $user, $pass, $port, $sstp_username);
+                    if($client_router_ip != null){
+                        $API = new routeros_api();
+                        $API->debug = false;
+                        if ($API->connect($client_router_ip, $sstp_username, $sstp_password, $api_port)) {
+                            // GET IP ADDRESS
+                            $ip_addresses = $this->getRouterIPAddress($router_id);
+                            // GET QUEUES
+                            $simple_queues = $this->getRouterQueues($router_id);
+                            $subnet = explode("/", $client_data[0]->client_default_gw);
+
+                            // DELETE IP ADDRESS
+                            $client_network = $client_data[0]->client_network;
+                            foreach ($ip_addresses as $key => $ip_address) {
+                                if ($client_network == $ip_address['network']) {
+                                    $API->comm("/ip/address/remove", array(
+                                        ".id" => $ip_address['.id']
+                                    ));
+                                    break;
+                                }
+                            }
+
+                            // DELETE THE QUEUES
+                            $target_key = array_key_exists('address', $simple_queues[0]) ? 'address' : 'target';
+                            $queue_ip = $client_network . "/" . $subnet[1];
+                            foreach ($simple_queues as $key => $queue) {
+                                if ($queue[$target_key] == $queue_ip) {
+                                    $API->comm("/queue/simple/remove", array(
+                                        ".id" => $queue['.id']
+                                    ));
+                                    break;
+                                }
+                            }
+
+                            // ADD THE SECRET TO THE ROUTER
+                            $ppp_secrets = $this->getPPPSecrets($router_id);
+
+                            // FIND THE SECRET
+                            $present_ppp_profile = 0;
+                            $secret_id = 0;
+                            for ($index = 0; $index < count($ppp_secrets); $index++) {
+                                if ($ppp_secrets[$index]['name'] == $client_secret_username) {
+                                    $present_ppp_profile = 1;
+                                    $secret_id = $ppp_secrets[$index]['.id'];
+                                    break;
+                                }
+                            }
+                            
+                            if ($present_ppp_profile == 1) {
+                                // update the password and the service
+                                $API->comm(
+                                    "/ppp/secret/set",
+                                    array(
+                                        "name"     => $client_secret_username,
+                                        "service" => "pppoe",
+                                        "password" => $client_secret_password,
+                                        "profile"  => $pppoe_profile,
+                                        "comment"  => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                        "disabled" => $client_data[0]->client_status == "1" ? "false" : "true",
+                                        ".id" => $secret_id
+                                    )
+                                );
+                                // log message
+                                $txt = ":Client (" . $client_data[0]->client_name . ") converted from static assignment to pppoe by  " . session('Usernames') . "!";
+                                $this->log($txt);
+                            } else {
+                                $API->comm(
+                                    "/ppp/secret/add",
+                                    array(
+                                        "name"     => $client_secret_username,
+                                        "service" => "pppoe",
+                                        "password" => $client_secret_password,
+                                        "profile"  => $pppoe_profile,
+                                        "comment"  => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                        "disabled" => $client_data[0]->client_status == "1" ? "false" : "true"
+                                    )
+                                );
+
+                                // log message
+                                $txt = ":New Client (" . $client_data[0]->client_name . ") successfully converted from static assignment to pppoe by  " . session('Usernames') . "!";
+                                $this->log($txt);
+                            }
+
+                            // update the client details
+                            DB::connection("mysql2")->table('client_tables')
+                            ->where('client_id', $client_data[0]->client_id)
+                            ->update([
+                                // 'client_network' => "",
+                                // 'client_default_gw' => "",
+                                // 'max_upload_download' => "",
+                                'router_name' => $router_list,
+                                'assignment' => "pppoe",
+                                'client_secret' => $client_secret_username,
+                                'client_secret_password' => $client_secret_password,
+                                'client_profile' => $pppoe_profile,
+                                'date_changed' => date("YmdHis")
+                            ]);
+
+                            session()->flash("success", $client_data[0]->client_name." assignment to PPPoE has been successfully done!");
+                            return redirect(url()->previous());
+                        }else {
+                            session()->flash("error", "Can`t connect to router please try again later!");
+                            return redirect(url()->previous());
+                        }
+                    }else {
+                        session()->flash("error", "Can`t connect to router please try again later!");
+                        return redirect(url()->previous());
+                    }
+                }else {
+                    session()->flash("error", "Can`t connect to router please try again later!");
+                    return redirect(url()->previous());
+                }
+            }elseif ($client_data[0]->assignment == "pppoe") {
+                // CONVERT FROM PPPOE TO STATIC
+                
+                // DELETE SECRET AND ACTIVE CONNECTION
+                // get the router data
+                $router_id = $client_data[0]->router_name;
+                $client_name = $client_data[0]->client_name;
+                $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ? AND `deleted` = '0'", [$client_data[0]->router_name]);
+                if (count($router_data) > 0) {
+                    // get the sstp credentails they are also the api usernames
+                    $sstp_username = $router_data[0]->sstp_username;
+                    $sstp_password = $router_data[0]->sstp_password;
+                    $api_port = $router_data[0]->api_port;
+
+                    // connect to the router and set the sstp client
+                    $sstp_value = $this->getSSTPAddress($organization_details[0]->organization_database);
+                    if ($sstp_value == null) {
+                        $error = "The SSTP server is not set, Contact your administrator!";
+                        session()->flash("error", $error);
+                        return redirect(url()->previous());
+                    }
+
+                    // connect to the router and set the sstp client
+                    $server_ip_address = $sstp_value->ip_address;
+                    $user = $sstp_value->username;
+                    $pass = $sstp_value->password;
+                    $port = $sstp_value->port;
+
+                    // check if the router is actively connected
+                    $client_router_ip = $this->checkActive($server_ip_address, $user, $pass, $port, $sstp_username);
+                    if($client_router_ip !=null){
+                        $API = new routeros_api();
+                        $API->debug = false;
+
+                        $router_secrets = [];
+                        $active_connections = [];
+                        if ($API->connect($client_router_ip, $sstp_username, $sstp_password, $api_port)) {
+                            // get the secret details
+                            $secret_name = $client_data[0]->client_secret;
+                            // ACTIVE SECRET CONNECTIONS
+                            $active_connections = $this->getRouterActiveSecrets($client_data[0]->router_name);
+                            // ROUTER SECRETS
+                            $router_secrets = $this->getRouterSecrets($client_data[0]->router_name);
+
+                            // router secrets
+                            foreach ($router_secrets as $key => $router_secret) {
+                                if ($router_secret['name'] == $secret_name) {
+                                    $API->comm("/ppp/secret/remove", array(
+                                        ".id" => $router_secret['.id']
+                                    ));
+                                    break;
+                                }
+                            }
+                            foreach ($active_connections as $key => $connection) {
+                                if ($connection['name'] == $secret_name) {
+                                    // remove the active connection if there is, it will do nothing if the id is not present
+                                    $API->comm("/ppp/active/remove", array(
+                                        ".id" => $connection['.id']
+                                    ));
+                                }
+                            }
+
+                        }
+                    }
+                }else{
+                    session()->flash("error","An error has occured!");
+                    return redirect(url()->previous());
+                }
+
+                // ROUTER LIST
+                $router_name = $request->input("router_list");
+
+                // check if the selected router is connected
+                // get the router data
+                $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ? AND `deleted` = '0'", [$router_name]);
+                if (count($router_data) == 0) {
+                    $error = "Router selected does not exist!";
+                    session()->flash("error", $error);
+                    return redirect(url()->previous());
+                }
+
+                // get the sstp credentails they are also the api usernames
+                $sstp_username = $router_data[0]->sstp_username;
+                $sstp_password = $router_data[0]->sstp_password;
+                $api_port = $router_data[0]->api_port;
+
+                // connect to the router and set the sstp client
+                $sstp_value = $this->getSSTPAddress($organization_details[0]->organization_database);
+                if ($sstp_value == null) {
+                    $error = "The SSTP server is not set, Contact your administrator!";
+                    session()->flash("error", $error);
+                    return redirect(url()->previous());
+                }
+
+                // connect to the router and set the sstp client
+                $server_ip_address = $sstp_value->ip_address;
+                $user = $sstp_value->username;
+                $pass = $sstp_value->password;
+                $port = $sstp_value->port;
+
+                // check if the router is actively connected
+                $client_router_ip = $this->checkActive($server_ip_address, $user, $pass, $port, $sstp_username);
+
+                if($client_router_ip != null){
+                    // get ip address and queues
+                    // start with IP address
+                    // connect to the router and add the ip address and queues to the interface
+                    $API = new routeros_api();
+                    $API->debug = false;
+
+                    $router_ip_addresses = [];
+                    $router_simple_queues = [];
+                    if ($API->connect($client_router_ip, $sstp_username, $sstp_password, $api_port)) {
+                        $router_ip_addresses = $this->getRouterIPAddress($router_name);
+                        $simple_queues = $this->getRouterQueues($router_name);
+
+                        // proceed and add the client to the router
+                        // check if the ip address is present
+                        $present = false;
+                        foreach ($router_ip_addresses as $key => $value_address) {
+                            if ($value_address['network'] == $request->input('client_network')) {
+                                $present = true;
+                                // update the ip address
+                                $result = $API->comm(
+                                    "/ip/address/set",
+                                    array(
+                                        "address"     => $request->input('client_gw'),
+                                        "interface" => $request->input('interface_name'),
+                                        "comment"  => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                        "disabled" => $client_data[0]->client_status == "1" ? "false" : "true",
+                                        ".id" => $value_address['.id']
+                                    )
+                                );
+                                if (count($result) > 0) {
+                                    // this means there is an error
+                                    $API->comm(
+                                        "/ip/address/set",
+                                        array(
+                                            "interface" => $request->input('interface_name'),
+                                            "comment"  => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                            "disabled" => $client_data[0]->client_status == "1" ? "false" : "true",
+                                            ".id" => $value_address['.id']
+                                        )
+                                    );
+                                }
+                                break;
+                            }
+                        }
+
+                        // return $present_ip;
+                        if (!$present) {
+                            // add the ip address
+                            $result = $API->comm(
+                                "/ip/address/add",
+                                array(
+                                    "address"     => $request->input('client_gw'),
+                                    "interface" => $request->input('interface_name'),
+                                    "network" => $request->input('client_network'),
+                                    "disabled" => $client_data[0]->client_status == "1" ? "false" : "true",
+                                    "comment"  => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account
+                                )
+                            );
+                        }
+
+                        // proceed and add the queues 
+                        // first check the queues
+                        $upload = $request->input("upload_speed") . $request->input("unit1");
+                        $download = $request->input("download_speed") . $request->input("unit2");
+                        $target_key = array_key_exists('address', $simple_queues) ? 'address' : 'target';
+                        $queue_present = false;
+                        foreach ($router_simple_queues as $key => $value_simple_queues) {
+                            if ($value_simple_queues[$target_key] == $request->input("client_network") . "/" . explode("/", $request->input("client_gw"))[1]) {
+                                $queue_present = true;
+                                $API->comm(
+                                    "/queue/simple/set",
+                                    array(
+                                        "name" => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                        "$target_key" => $request->input("client_network") . "/" . explode("/", $request->input("client_gw"))[1],
+                                        "max-limit" => $upload . "/" . $download,
+                                        ".id" => $value_simple_queues['.id']
+                                    )
+                                );
+                                break;
+                            }
+                        }
+
+                        // queue not present
+                        if (!$queue_present) {
+                            // add the queue to the list
+                            $API->comm(
+                                "/queue/simple/add",
+                                array(
+                                    "name" => $client_data[0]->client_name . " (" . $client_data[0]->client_address . " - " . $client_data[0]->location_coordinates . ") - " . $client_data[0]->client_account,
+                                    "$target_key" => $request->input("client_network") . "/" . explode("/", $request->input("client_gw"))[1],
+                                    "max-limit" => $upload . "/" . $download
+                                )
+                            );
+                        }
+                        // disconnect the api
+                        $API->disconnect();
+                        
+                        // update the client information
+                        // log message
+                        $txt = ":Client (" . $client_name . ") has been successfully converted to Static Assignment by  " . session('Usernames');
+                        $this->log($txt);
+                        // end of log file
+
+                        // update the client details
+                        DB::connection("mysql2")->table('client_tables')
+                        ->where('client_id', $client_data[0]->client_id)
+                        ->update([
+                            'client_network' => $request->input("client_network"),
+                            'client_default_gw' => $request->input('client_gw'),
+                            'max_upload_download' => $upload . "/" . $download,
+                            'router_name' => $router_name,
+                            'assignment' => "static",
+                            // 'client_secret' => "",
+                            // 'client_secret_password' => "",
+                            // 'client_profile' => "",
+                            'date_changed' => date("YmdHis")
+                        ]);
+
+                        // return to the main page
+                        session()->flash("success", $client_data[0]->client_name." assignment to static has been successfully done!");
+                        return redirect(url()->previous());
+                    }
+                }
+            }
+            session()->flash("error", "Invalid Conversion try again!");
+            return redirect(url()->previous());
+        }else{
+            session()->flash("error", "Invalid user!");
+            return redirect(url()->previous());
+        }
+    }
+    function getRouterProfile($organization_id,$routerid)
+    {
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // get the router data
+        $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ? AND `deleted` = '0'", [$routerid]);
+        if (count($router_data) == 0) {
+            echo "Router does not exist!";
+            return "";
+        }
+
+        // get the IP ADDRES
+        $curl_handle = curl_init();
+        $url = env('CRONJOB_URL', 'https://crontab.hypbits.com')."/getIpaddress.php?db_name=" . session("database_name") . "&r_id=" . $routerid . "&r_ppoe_profiles=true";
+        curl_setopt($curl_handle, CURLOPT_URL, $url);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        $curl_data = curl_exec($curl_handle);
+        curl_close($curl_handle);
+        $pppoe_profiles = strlen($curl_data) > 0 ? json_decode($curl_data, true) : [];
+
+        if (isset($pppoe_profiles) && count($pppoe_profiles) > 0){
+            // create the select selector
+            $data_to_display = "<select name='pppoe_profile' class='form-control' id='pppoe_profile'  ><option value='' hidden>Select a Profile</option>";
+            for ($index = 0; $index < count($pppoe_profiles); $index++) {
+                $data_to_display .= "<option value='" . $pppoe_profiles[$index]['name'] . "'>" . $pppoe_profiles[$index]['name'] . "</option>";
+            }
+            $data_to_display .= "</select>";
+            echo $data_to_display;
+        } else {
+            echo "No data to display : \"Your router might be In-active!\"";
+        }
+        return "";
+    }
+
+    function getRouterInterfaces($organization_id,$routerid)
+    {
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // get the router data
+        $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ? AND `deleted` = '0'", [$routerid]);
+        if (count($router_data) == 0) {
+            echo "Router does not exist!";
+            return "";
+        }
+
+        // get the IP ADDRES
+        $curl_handle = curl_init();
+        $url = env('CRONJOB_URL', 'https://crontab.hypbits.com')."/getIpaddress.php?db_name=" . session("database_name") . "&r_id=" . $routerid . "&r_interfaces=true";
+        curl_setopt($curl_handle, CURLOPT_URL, $url);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        $curl_data = curl_exec($curl_handle);
+        curl_close($curl_handle);
+        $interfaces = strlen($curl_data) > 0 ? json_decode($curl_data, true) : [];
+        
+        if (!empty($interfaces)) {
+            $data_to_display = "<select name='interface_name' class='form-control' id='interface_name' required ><option value='' hidden>Select an Interface</option>";
+            for ($index = 0; $index < count($interfaces); $index++) {
+                if($interfaces[$index]['type'] == "ether" || $interfaces[$index]['type'] == "bridge"){
+                    $data_to_display .= "<option value='" . $interfaces[$index]['name'] . "'>" . $interfaces[$index]['name'] . "</option>";
+                }
+            }
+            $data_to_display .= "</select>";
+            echo $data_to_display;
+        } else {
+            echo "No data to display : \"Your router might be In-active!\"";
+        }
+        return "";
+    }
+
     function update_organization (Request $request,$organization_id){
         // organization id
         $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
@@ -1647,7 +2386,6 @@ class Organization extends Controller
         // change db
         $change_db = new login();
         $change_db->change_db($organization_details[0]->organization_database);
-        $database_name = $organization_details[0]->organization_database;
 
         $new_expiration = date("Ymd",strtotime($req->input('expiration_date_edits')))."235959";
         $client_id = $req->input('clients_id');
@@ -1789,6 +2527,202 @@ class Organization extends Controller
         return redirect(route("viewOrganizationClient",[$organization_id, $client_id]));
     }
 
+    // set refferal information
+    function setRefferal($organization_id, Request $req)
+    {
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // return $req->input();
+        // get the user refferal information if there is any
+        $user_id = $req->input('clients_id');
+        $refferal_account_no = $req->input('refferal_account_no');
+        $refferer_amount = $req->input("refferer_amount");
+        $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '" . $user_id . "' AND `deleted` = '0'");
+        $refferer_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_account` = '" . $refferal_account_no . "' AND `deleted` = '0'");
+        if (count($client_data) > 0 && count($refferer_data) > 0) {
+            $user_refferal = $client_data[0]->reffered_by;
+            // check if there is anyone who reffered them by getting the str len
+            if (strlen(trim($user_refferal)) > 0) {
+                // if there is a refferal set
+                $user_refferal = str_contains($user_refferal, "\\") === true ? trim(str_replace("\\", "", $user_refferal)) : trim($user_refferal);
+                $user_refferal = substr($user_refferal, 0, 1) == "\"" ? substr($user_refferal, 1, (strlen($user_refferal) - 2)) : $user_refferal;
+                $user_refferal = str_replace("'", "\"", $user_refferal);
+                $reffered_by = json_decode($user_refferal);
+                $reffered_by->client_acc = $refferal_account_no;
+                $reffered_by->monthly_payment = $refferer_amount;
+                // update the table and set the refferer information
+                DB::connection("mysql2")->table('client_tables')
+                    ->where('client_id', $user_id)
+                    ->update([
+                        'reffered_by' => json_encode($reffered_by),
+                        "date_changed" => date("YmdHis")
+                    ]);
+                // return $json_data;
+                session()->flash("success", "" . $client_data[0]->client_name . " refferer is set to " . $refferer_data[0]->client_name . " and will recieve Kes " . number_format($refferer_amount) . "!");
+
+                // log message
+                $txt = $client_data[0]->client_name . " - " . $client_data[0]->client_account . " refferer is updated to " . $refferer_data[0]->client_name . " and will recieve Kes " . number_format($refferer_amount) . " by " . session('Usernames') . "!";
+                $this->log($txt);
+                // end of log file
+                return redirect(url()->previous());
+            } else {
+                // create a new refferal
+                $string = "{\"client_acc\":\"unknown\",\"monthly_payment\":0,\"payment_history\":[]}";
+                $json_data = json_decode($string);
+                $json_data->client_acc = $refferal_account_no;
+                $json_data->monthly_payment = $refferer_amount;
+                // update the table and set the refferer information
+                DB::connection("mysql2")->table('client_tables')
+                    ->where('client_id', $user_id)
+                    ->update([
+                        'reffered_by' => json_encode($json_data),
+                        'date_changed' => date("YmdHis")
+                    ]);
+                // return $json_data;
+                session()->flash("success", "" . $client_data[0]->client_name . " refferer is set  to " . $refferer_data[0]->client_name . " and will recieve Kes " . number_format($refferer_amount) . "!");
+
+                // log message
+                $txt = $client_data[0]->client_name . " - " . $client_data[0]->client_account . " refferer is set to " . $refferer_data[0]->client_name . " and will recieve Kes " . number_format($refferer_amount) . " by " . session('Usernames') . "!";
+                $this->log($txt);
+
+                // end of log file
+                return redirect(url()->previous());
+            }
+        }
+    }
+
+    // get refferal
+    function getRefferal($organization_id, $client_account)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_account` = '$client_account' AND `deleted` = '0'");
+        if (count($client_data) > 0) {
+            return $client_data[0]->client_name . ":" . $client_data[0]->client_account . ":" . $client_data[0]->wallet_amount . ":" . $client_data[0]->client_address;
+        } else {
+            return "Invalid User!";
+        }
+    }
+
+    function initiate_stk($organization_id, Request $request){
+        $phone = $request->input("phone_number");
+        $amount = $request->input("amount");
+        $acc_no = $request->input("account_number");
+
+        
+        $phone = $this->formatKenyanPhone($phone);
+
+        if($phone == null){
+            return "<p class='text-danger'>Please enter a valid phone number</p>";
+        }
+
+        if ($amount < 1) {
+            return "<p class='text-danger'>Please enter a valid amount</p>";
+        }
+
+        // SEND STK PUSH VERSION 1
+        $mpesa = new MpesaService($organization_id);
+        $response = $mpesa->stkPush($phone, $amount, $acc_no, "Payment for $acc_no", "v1");
+        $response = $this->handleStkPushResponse($response);
+        if ($response['status'] == "success") {
+            return "<p class='text-success'>".$response['message']."</p>";
+        }
+        if ($response['status'] == "error" || $response['status'] == "unknown") {
+            // SEND WITH VERSION 2
+            $response = $mpesa->stkPush($phone, $amount, $acc_no, "Payment for $acc_no", "v2");
+            $response = $this->handleStkPushResponse($response);
+            if ($response['status'] == "success") {
+                return "<p class='text-success'>".$response['message']."</p>";
+            }
+            return "<p class='text-danger'>".$response['message']."</p>";
+        }
+        
+        return $response;
+    }
+    function handleStkPushResponse($response)
+    {
+        // Convert JSON string to array if needed
+        if (is_string($response)) {
+            $response = json_decode($response, true);
+        }
+
+        // Handle invalid JSON
+        if ($response === null) {
+            return [
+                'status'  => 'error',
+                'message' => 'Invalid JSON response',
+                'data'    => null,
+            ];
+        }
+
+        // Check for error response
+        if (isset($response['errorCode'])) {
+            return [
+                'status'  => 'error',
+                'code'    => $response['errorCode'],
+                'message' => $response['errorMessage'] ?? 'Unknown error occurred',
+                'data'    => $response,
+            ];
+        }
+
+        // Check for success response
+        if (isset($response['ResponseCode']) && $response['ResponseCode'] == "0") {
+            return [
+                'status'   => 'success',
+                'code'     => $response['ResponseCode'],
+                'message'  => $response['CustomerMessage'] ?? 'Request accepted',
+                'requestId'=> $response['MerchantRequestID'] ?? null,
+                'checkoutId'=> $response['CheckoutRequestID'] ?? null,
+                'data'     => $response,
+            ];
+        }
+
+        // If neither errorCode nor success is present, return unknown
+        return [
+            'status'  => 'unknown',
+            'message' => 'Unexpected response format',
+            'data'    => $response,
+        ];
+    }
+    
+    function update_client_comment($organization_id, Request $request){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        $clients_id = $request->input("clients_id");
+        $comments = $request->input("comments");
+
+        // update the comment
+        $update = DB::connection("mysql2")->update("UPDATE client_tables SET comment = ? WHERE client_id = ?", [$comments, $clients_id]);
+        session()->flash("success", "Comment has been updated successfully!");
+        return redirect(url()->previous());
+    }
+
     // update freeze date
     function set_freeze_date(Request $req, $organization_id){
         // organization id
@@ -1897,20 +2831,20 @@ class Organization extends Controller
                     $res = json_decode($response,true);
 
                     // return $res;
-                    $message_status = 0;
-                    $values = !isset($res['responses']) ? $res['response-code'] : $res['response'][0];
+                    $message_status = 1;
+                    $values = !isset($res['responses']) ? $res['response-code'] : null;
                     // return $values;
-                    if (is_array($values)) {
-                        foreach ($values as  $key => $value) {
-                            // echo $key;
-                            if ($key == "response-code") {
-                                if ($value == "200") {
-                                    // if its 200 the message is sent delete the
-                                    $message_status = 1;
-                                }
-                            }
-                        }
-                    }
+                    // if (is_array($values)) {
+                    //     foreach ($values as  $key => $value) {
+                    //         // echo $key;
+                    //         if ($key == "response-code") {
+                    //             if ($value == "200") {
+                    //                 // if its 200 the message is sent delete the
+                    //                 $message_status = 1;
+                    //             }
+                    //         }
+                    //     }
+                    // }
     
                     // if the message status is one the message is already sent to the user
                     $now = date("YmdHis");
@@ -1927,7 +2861,7 @@ class Organization extends Controller
             // log txt
             // $this->log($txt);
             // end of log file
-            return redirect(route("viewOrganizationClient",[$organization_id, $client_id]));
+            return redirect(url()->previous());
         }else{
             // return $req;
             $freeze_type = $req->input("freeze_type");
@@ -1939,7 +2873,7 @@ class Organization extends Controller
             // check if its definate and has the unfreeze date more than the start date
             if ($freeze_type == "definate" && $freezing_date > $freez_dates_edit) {
                 session()->flash("error","The date the client should be frozen should not be greater than the day the freezing ends!");
-                return redirect("Clients/View/".$client_id);
+                return redirect(url()->previous());
             }
 
             // get difference in todays date and the day selected
@@ -2029,20 +2963,20 @@ class Organization extends Controller
                     $res = json_decode($response,true);
 
                     // return $res;
-                    $message_status = 0;
-                    $values = !isset($res['responses']) ? $res['response-code'] : $res['response'][0];
+                    $message_status = 1;
+                    $values = !isset($res['responses']) ? $res['response-code'] : null;
                     // return $values;
-                    if (is_array($values)) {
-                        foreach ($values as  $key => $value) {
-                            // echo $key;
-                            if ($key == "response-code") {
-                                if ($value == "200") {
-                                    // if its 200 the message is sent delete the
-                                    $message_status = 1;
-                                }
-                            }
-                        }
-                    }
+                    // if (is_array($values)) {
+                    //     foreach ($values as  $key => $value) {
+                    //         // echo $key;
+                    //         if ($key == "response-code") {
+                    //             if ($value == "200") {
+                    //                 // if its 200 the message is sent delete the
+                    //                 $message_status = 1;
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     
                     // if the message status is one the message is already sent to the user
                     $now = date("YmdHis");
@@ -2056,7 +2990,7 @@ class Organization extends Controller
             }else{
                 $txt = $client_data[0]->client_name." will be frozen on ".date("D dS M Y",strtotime($freezing_date))." Indefinately. Action done by ".session('Usernames')."!";
             }
-            return redirect(route("viewOrganizationClient",[$organization_id, $client_id]));
+            return redirect(url()->previous());
         }
     }
 	function get_sms(){
@@ -2110,6 +3044,137 @@ class Organization extends Controller
 		$data = str_replace("[unfreeze_date]", ($freeze_date == "Indefinite" ? "Indefinite Date" : date("dS M Y \a\\t h:iA",strtotime($freeze_date))),$data);
 		return $data;
 	}
+
+    // deactivate user from freeze
+    function deactivatefreeze($organization_id, $client_id)
+    {
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        $client = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `client_id` = '$client_id' AND `deleted` = '0'");
+        $client_name = $client[0]->client_name;
+        $next_expiration_date = $client[0]->next_expiration_date;
+        $freeze_date = $client[0]->freeze_date != null ? date("YmdHis", strtotime($client[0]->freeze_date)) : date("YmdHis");
+        $client_freeze_untill = $client[0]->client_freeze_untill;
+
+        $full_days = "";
+        if ($freeze_date < $client_freeze_untill) {
+            $date1 = date_create($freeze_date);
+            $date2 = date_create($client_freeze_untill);
+            $diff = date_diff($date1, $date2);
+            $days =  $diff->format("-%a days");
+            $full_days = $days;
+            $date = date_create($next_expiration_date);
+            date_add($date, date_interval_create_from_date_string($days));
+            $next_expiration_date = date_format($date, "YmdHis");
+        } else {
+            // take the freeze date and the date today 
+            // and get the difference and 
+            // the number of days got should be added to the expiry date
+            $today = date("YmdHis");
+            $date1 = date_create($freeze_date);
+            $date2 = date_create($today);
+            $diff = date_diff($date1, $date2);
+            $days =  $diff->format("%a");
+
+            // add the date
+            if ($days > 0) {
+                // add the days to the expiry date
+                $next_expiration_date = $this->addDaysToDate($next_expiration_date, $days);
+            }
+        }
+
+        // update the client freeze status deactivated status to 
+        DB::connection("mysql2")->table('client_tables')
+            ->where('client_id', $client_id)
+            ->update([
+                'client_freeze_status' => "0",
+                'next_expiration_date' => $next_expiration_date,
+                'client_freeze_untill' => "",
+                'date_changed' => date("YmdHis"),
+                'payments_status' => '1',
+                'freeze_date' => date("YmdHis", strtotime("-1 day"))
+            ]);
+
+        // send the client message on unfreeze
+        $message_contents = $this->get_sms();
+        if (count($message_contents) > 4) {
+            $messages = $message_contents[5]->messages;
+
+            // get the messages for freezing clients
+            $message = "";
+            for ($index = 0; $index < count($messages); $index++) {
+                if ($messages[$index]->Name == "account_unfrozen") {
+                    $message = $messages[$index]->message;
+                }
+            }
+
+            if (strlen($message) > 0 && $message != null) {
+                // send the message
+                // change the tags first
+                $new_message = $this->message_content($message, $client_id, null);
+
+                // get the sms keys
+                $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'sms_api_key'");
+                $sms_api_key = $sms_keys[0]->value;
+                $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'sms_partner_id'");
+                $sms_partner_id = $sms_keys[0]->value;
+                $sms_keys = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted` = '0' AND `keyword` = 'sms_shortcode'");
+                $sms_shortcode = $sms_keys[0]->value;
+                $select = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `keyword` = 'sms_sender'");
+                $sms_sender = count($select) > 0 ? $select[0]->value : "";
+                $partnerID = $sms_partner_id;
+                $apikey = $sms_api_key;
+                $shortcode = $sms_shortcode;
+
+
+                // $client_id = $client_id;
+                $mobile = $client[0]->clients_contacts;
+                $sms_type = 2;
+                $message = $new_message;
+                $message_status = 1;
+
+                // if the message status is one the message is already sent to the user
+                $sms_table = new sms_table();
+                $sms_table->sms_content = $message;
+                $sms_table->date_sent = date("YmdHis");
+                $sms_table->recipient_phone = $mobile;
+                $sms_table->sms_status = $message_status;
+                $sms_table->account_id = $client_id;
+                $sms_table->sms_type = $sms_type;
+                $sms_table->save();
+            }
+        }
+
+        $txt = ":Client ( " . $client_name . " - " . $client[0]->client_account . " ) freeze status changed to in-active by " . session('Usernames') . "" . "!";
+        $this->log($txt);
+        // end of log file
+        session()->flash("success", "Client Unfrozen successfully" . ($full_days != "" ? " and " . $full_days . " has been deducted to the expiration date" : "") . "!");
+        return redirect(url()->previous());
+    }
+    
+    function addDaysToDate($date, $days)
+    {
+        // Create a DateTime object from the given date
+        $dateTime = new DateTime($date);
+
+        // Create a DateInterval object for the specified number of days
+        $interval = new DateInterval('P' . $days . 'D');
+
+        // Add the interval to the date
+        $dateTime->add($interval);
+
+        // Return the modified date as a string
+        return $dateTime->format('YmdHis');
+    }
 
     function delete_user($organization_id, $user_id){
         // return $clientid;
