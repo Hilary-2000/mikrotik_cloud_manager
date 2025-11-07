@@ -116,7 +116,9 @@ Route::get("/Organization/Clients/generate_reports/{organization_id}",[Organizat
 Route::get("/Organization/ViewTransaction/{organization_id}",[organization_client_transaction::class,"get_transactions"])->name("get_transactions");
 Route::get("/Organization/ViewTransactionDetail/{organization_id}/{transaction_id}",[organization_client_transaction::class,"transaction_details"])->name("transaction_details");
 Route::get("/Organization/TransactionStats/{organization_id}",[organization_client_transaction::class,"transaction_statistics"])->name("transaction_statistics");
-Route::get("/Organization/TransactionStats/Reports/{organization_id}",[organization_client_transaction::class,"generate_reports"])->name("generate_reports");
+Route::get("/Organization/Admins/deactivate_administrator/{organization_id}/{administrator_id}",[Organization_Admin::class,"deactivate_admin"])->name("deactivate_admin");
+Route::get("/Organization/TransactionStats/Assign/{organization_id}/{transaction_id}/{client_id}",[organization_client_transaction::class,"assign_transaction"])->name("assign_transaction");
+Route::get("/Organization/TransactionStats/confirmTransfer/{organization_id}/{transaction_id}/{client_id}",[organization_client_transaction::class,"confirmTransfer"])->name("confirmTransfer");
 
 
 // organization routers
@@ -125,13 +127,15 @@ Route::get("/Organization/Router/{organization_id}/{router_id}",[Organization_ro
 Route::post("/Organization/Router/Update/{organization_id}",[Organization_router::class,"updateRouter"])->name("update_organization_router");
 Route::get("/Organization/Router/Connect/{organization_id}/{router_id}",[Organization_router::class,"connect_organization_router"])->name("connect_organization_router");
 Route::get("/Organization/Routers/Delete/{organization_id}/{routerid}",[Organization_router::class,"delete_router"])->name("delete_router");
+Route::get("/Organization/Routers/Connect/{organization_id}/{routerid}",[Organization_router::class,"connect_router"])->name("connect_router");
 
 // Organization SMS
 Route::get("/Organizations/SMS/{organization_id}",[Organization_sms::class,"view_organization_sms"])->name("view_organization_sms");
 Route::get("/Organizations/SMS/View/{organization_id}/{sms_id}",[Organization_sms::class,"view_sms"])->name("view_sms");
-Route::get("/Organizations/SMS/Deleted/{organization_id}/{sms_id}",[Organization_sms::class,"delete_sms"])->name("delete_sms");
+Route::get("/Organizations/SMS/Deleted/{organization_id}/{sms_id}",[Organization_sms::class,"delete_sms"])->name("delete_sms_organization");
 Route::get("/Organizations/SMS/CustomSMS/{organization_id}",[Organization_sms::class,"customize_sms"])->name("customize_sms");
 Route::post("/Organizations/SMS/save_custom/{organization_id}",[Organization_sms::class,"save_sms_content"])->name("save_sms_content");
+Route::post("/Organizations/SMS/save_custom/{organization_id}",[Organization_sms::class,"save_sms_customize"])->name("save_sms_customize");
 Route::get("/Organizations/SMS/generate_reports_sms/{organization_id}",[Organization_sms::class,"generate_reports_sms"])->name("generate_reports_sms");
 
 // organization administrators

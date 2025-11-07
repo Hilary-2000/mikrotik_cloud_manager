@@ -187,12 +187,26 @@
                                 </div>
                                 <div class="card-body row">
                                     <div class="col-md-6">
-                                        <a href="/sms" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back
-                                            to list</a>
+                                        {{-- <a href="{{route("view_organization_sms", [$organization_details->organization_id])}}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to list</a> --}}
+                                        @php
+                                            $btnText = '<i class="fas fa-arrow-left"></i> Back to list';
+                                            $otherClasses = "my-1 ";
+                                            $btnLink = route("view_organization_sms", [$organization_details->organization_id]);
+                                            $otherAttributes = "";
+                                            $readonly = "";
+                                        @endphp
+                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="{{route("delete_sms", [$organization_details->organization_id, $sms_data[0]->sms_id])}}" class="btn btn-danger {{$readonly}}"><i
-                                                class="fas fa-trash"></i> Delete</a>
+                                        {{-- <a href="{{route("delete_sms", [$organization_details->organization_id, $sms_data[0]->sms_id])}}" class="btn btn-danger {{$readonly}}"><i class="fas fa-trash"></i> Delete</a> --}}
+                                        @php
+                                            $btnText = '<i class="fas fa-trash"></i> Delete';
+                                            $otherClasses = "my-1 ";
+                                            $btnLink = route("delete_sms_organization", [$organization_details->organization_id, $sms_data[0]->sms_id]);
+                                            $otherAttributes = "";
+                                            $readonly = "";
+                                        @endphp
+                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                     </div>
                                 </div>
                             </div>

@@ -148,14 +148,32 @@ date_default_timezone_set('Africa/Nairobi');
                                         @if ($transaction_data[0]->transaction_status == 1)
                                             <div class="row my-1">
                                                 <div class="col-sm-6"><strong>Transaction status:</strong></div>
-                                                <div class="col-sm-6"><a href="#" {{$readonly}}
-                                                        class="btn btn-sm btn-success">Assigned</a></div>
+                                                <div class="col-sm-6">
+                                                    {{-- <a href="#" {{$readonly}} class="btn btn-sm btn-success">Assigned</a> --}}
+                                                    @php
+                                                        $btnText = "Assigned";
+                                                        $otherClasses = "my-1 ";
+                                                        $btnLink = "#";
+                                                        $otherAttributes = "";
+                                                        $readonly = "";
+                                                    @endphp
+                                                    <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                </div>
                                             </div>
                                         @else
                                             <div class="row my-1">
                                                 <div class="col-sm-6"><strong>Transaction status:</strong></div>
-                                                <div class="col-sm-6"><a href="#assign_transaction"
-                                                        class="btn btn-sm btn-danger {{$readonly}}">Assign?</a></div>
+                                                <div class="col-sm-6">
+                                                    {{-- <a href="#assign_transaction" class="btn btn-sm btn-danger {{$readonly}}">Assign?</a> --}}
+                                                    @php
+                                                        $btnText = "Assign?";
+                                                        $otherClasses = "my-1 ";
+                                                        $btnLink = "#assign_transaction";
+                                                        $otherAttributes = "";
+                                                        $readonly = "";
+                                                    @endphp
+                                                    <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
@@ -322,10 +340,11 @@ date_default_timezone_set('Africa/Nairobi');
     {{-- transfer the php value to js --}}
     <script>
         var data = @json($client_data ?? '');
+        var organization_id = @json($organization_details->organization_id ?? '');
         // console.log(data);
     </script>
     @if ($transaction_data[0]->transaction_status == 0)
-        <script src="/theme-assets/js/core/clientsAssign.js" type="text/javascript"></script>
+        <script src="/theme-assets/js/core/clientAssignClients.js" type="text/javascript"></script>
     @endif
     <script src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript"></script>
     <script src="/theme-assets/js/core/app-lite.js" type="text/javascript"></script>

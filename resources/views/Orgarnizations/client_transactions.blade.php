@@ -167,11 +167,28 @@
                                 </div>
                             </div>
                             <div class="card-header">
-                                <a href="{{route("ViewOrganization",[$organization_details->organization_id])}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back
-                                    to Organization List</a>
+                                <a href="{{route("ViewOrganization",[$organization_details->organization_id])}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back to Organization</a>
                                     <br>
-                                <a href="{{route("transaction_statistics", [$organization_details->organization_id])}}" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a>
-                                <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span>
+                                {{-- <a href="{{route("transaction_statistics", [$organization_details->organization_id])}}" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a> --}}
+                                @php
+                                    $btnText = "<i class=\"ft-bar-chart-2\"></i>";
+                                    $otherClasses = "my-1 ";
+                                    $btnLink = route("transaction_statistics", [$organization_details->organization_id]);
+                                    $otherAttributes = 'data-toggle="tooltip" title="Transaction`s Statistics"';
+                                    $readonly = "";
+                                @endphp
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                {{-- <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span> --}}
+                                @php
+                                    $btnText = "<i class=\"ft-file-text\"></i>";
+                                    $otherClasses = "";
+                                    $btn_id = "transaction_reports_btn";
+                                    $btnSize="sm";
+                                    $type = "button";
+                                    $readonly = "";
+                                    $otherAttributes = 'data-toggle="tooltip" title="Transaction Reports"';
+                                @endphp
+                                <x-button toolTip="" btnType="info" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
@@ -218,7 +235,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button>
+                                                        {{-- <button class="btn btn-primary mt-2" type="submit"><i class="ft-settings"></i> Generate Reports</button> --}}
+                                                        @php
+                                                            $btnText = "<i class=\"ft-settings\"></i> Generate Reports";
+                                                            $otherClasses = "";
+                                                            $btn_id = "";
+                                                            $btnSize="sm";
+                                                            $type = "submit";
+                                                            $readonly = "";
+                                                            $otherAttributes = "";
+                                                        @endphp
+                                                        <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                                     </div>
                                                 </div>
                                             </form>
@@ -237,7 +264,17 @@
                                         </div>
                                         <div class="col-md-6 row">
                                             <div class="col-md-2">
-                                                <button class="btn btn-sm btn-primary" id="show_totals"><i class="ft-eye"></i> Show Totals</button>
+                                                {{-- <button class="btn btn-sm btn-primary" id="show_totals"><i class="ft-eye"></i> Show Totals</button> --}}
+                                                @php
+                                                    $btnText = "<i class=\"ft-eye\"></i> Show Totals";
+                                                    $otherClasses = "d-none";
+                                                    $btn_id = "show_totals";
+                                                    $btnSize="sm";
+                                                    $type = "button";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                             </div>
                                             <div class="col-md-10">
                                                 <p class="card-text text-right d-none" id="totals_window">
@@ -254,46 +291,6 @@
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
                                                 src="/theme-assets/images/logo.jpeg"/>
                                         </div>
-                                        {{-- <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Transaction ID</th>
-                                                    <th>Account Number</th>
-                                                    <th>Amount</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>PKLJKJKHUJ <span class="badge badge-success"> </span></td>
-                                                    <td>0743551250</td>
-                                                    <td>Kes 1,000</td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary text-bolder"
-                                                            data-toggle="tooltip" title="View this transaction"><i
-                                                                class="ft-eye"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>OOJKUKJUIJ <span class="badge badge-danger"> </span></td>
-                                                    <td>0743551223</td>
-                                                    <td>Kes 3,000</td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary text-bolder"
-                                                            data-toggle="tooltip" title="View this transaction"><i
-                                                                class="ft-eye"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">3</th>
-                                                    <td>PIKJJHIUHKJ <span class="badge badge-success"> </span></td>
-                                                    <td>0713620727</td>
-                                                    <td>Kes 3,000</td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary text-bolder"
-                                                            data-toggle="tooltip" title="View this transaction"><i
-                                                                class="ft-eye"></i></a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table> --}}
                                     </div>
                                     <nav aria-label="Page navigation example" id="tablefooter">
                                         <ul class="pagination" id="datatable_paginate">

@@ -470,21 +470,21 @@ class Organization extends Controller
         // organization id
         $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
         if (count($organization_details) == 0) {
-            return ["success" => false,"date" => null, "account_renewal_date" => null, "reason" => "Invalid Organization!"];
+            return ["success" => false,"date" => null, "expiry_date" => null, "reason" => "Invalid Organization!"];
         }
 
         // get the organization package
         $package_used = DB::select("SELECT * FROM `packages` WHERE `package_id` = ?",[$organization_details[0]->package_name]);
         if (count($package_used) == 0) {
-            return ["success" => false,"date" => null,"account_renewal_date" => null,"reason" => "Invalid Package!"];
+            return ["success" => false,"date" => null,"expiry_date" => null,"reason" => "Invalid Package!"];
         }
 
         // get the date of expiry
-        $last_renewal_date = $organization_details[0]->account_renewal_date;
+        $last_renewal_date = $organization_details[0]->expiry_date;
         $package_period = $package_used[0]->package_period;
         $add_date = $this->addPeriodToDate($last_renewal_date,$package_period);
         
-        return ["success" => true, "date" => $add_date, "account_renewal_date" => $last_renewal_date, "reason" => ""];
+        return ["success" => true, "date" => $add_date, "expiry_date" => $last_renewal_date, "reason" => ""];
     }
 
     function view_organization($organization_id){
@@ -2237,7 +2237,7 @@ class Organization extends Controller
         }
 
         // update the organization last payment date
-        $last_renewal_date = ($organization[0]->account_renewal_date == null) ? date("YmdHis") : $organization[0]->account_renewal_date;
+        $last_renewal_date = ($organization[0]->expiry_date == null) ? date("YmdHis") : $organization[0]->expiry_date;
         
         // add the number of days
         $today = date("YmdHis")*1;
@@ -2251,7 +2251,7 @@ class Organization extends Controller
         // $last_renewal_date = ($last_renewal_date*1) < $today ? $today : $last_renewal_date;
         
         // update the database
-        $update = DB::update("UPDATE `organizations` SET `account_renewal_date` = ?, `lenience` = ? WHERE `organization_id` = ?",[$last_renewal_date,$request->input("linience_days"),$organization_id]);
+        $update = DB::update("UPDATE `organizations` SET `expiry_date` = ?, `lenience` = ? WHERE `organization_id` = ?",[$last_renewal_date,$request->input("linience_days"),$organization_id]);
         
         // return organization details
         session()->flash("success","Lenience days have been successfully updated!");

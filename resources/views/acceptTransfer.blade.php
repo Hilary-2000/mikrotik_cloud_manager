@@ -80,93 +80,9 @@
 @endphp
 
 <body class="vertical-layout vertical-menu 2-columns  menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
-
-    <!-- fixed-top-->
-    <nav
-    class="header-navbar navbar-expand-md navbar  navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-light">
-    <div class="navbar-wrapper">
-        <div class="navbar-container content ">
-            <div class="collapse navbar-collapse show" id="navbar-mobile">
-                <ul class="nav navbar-nav mr-auto float-left">
-                    <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
-                            href="#"><i class="ft-menu"></i></a></li>
-                    <li class="nav-item dropdown navbar-search">
-                        <span class="text-light">Hello, {{ session('Usernames') }}</span>
-                    </li>
-                </ul>
-                @if (!Session::has('Usernames'))
-                    @php
-                        header('Location: ' . URL::to('/Login'), true, 302);
-                        exit();
-                    @endphp
-                @endif
-                <ul class="nav navbar-nav float-right">
-                    <li>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <div class="arrow_box_right"><a class="dropdown-item" href="#"><i
-                                        class="ft-book"></i> Read Notices</a><a class="dropdown-item"
-                                    href="#"><i class="ft-check-square"></i> Mark all Read </a></div>
-                        </div>
-                    </li>
-                    <li class="dropdown dropdown-user nav-item"><a
-                            class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                            <span class="avatar avatar-online"> <img style="width: 100px; height: 40px;"
-                                    src="{{ session('dp_locale') ? session('dp_locale') : '/theme-assets/images/pngegg.png' }}"
-                                    alt="avatar"><i></i> </span></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <div class="arrow_box_right"><a class="dropdown-item" href="#"><span
-                                        class="avatar avatar-online"><img style="width: 100px; height: 30px;"
-                                            src="{{ session('dp_locale') ? session('dp_locale') : '/theme-assets/images/pngegg.png' }}"
-                                            alt="avatar"><br><br><span
-                                            class="user-name text-bold-700 ml-1">{{ session('Usernames') }}</span></span></a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="/Accounts"><i
-                                        class="ft-user"></i>Account & Settings</a>
-                                {{-- <a class="dropdown-item" href="#"><i class="ft-mail"></i> My Inbox</a><a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a><a class="dropdown-item" href="#"><i class="ft-message-square"></i> Chats</a> --}}
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="/Login"><i
-                                        class="ft-power"></i> Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-
-
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
-        <div class="navbar-header" style="height: 120px">
-            <ul class="nav navbar-nav flex-row p-0 justify-content-center align-item-center">
-                <li class="nav-item mr-auto p-0 w-75 text-center" style="width: fit-content"><a class="navbar-brand "
-                        href="/Dashboard">
-                        <img class="w-100 mx-auto" height="100" alt="Your Logo Appear Here"
-                            src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
-                    </a></li>
-                <li class="nav-item d-md-none"><a class="nav-link close-navbar"><i class="ft-x"></i></a></li>
-            </ul>
-        </div>
-        <div class="main-menu-content">
-            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class="nav-item"><a href="/Dashboard"><i class="ft-home"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
-                </li>
-                <li class="{{showOption($priviledges,"My Clients")}} nav-item"><a href="/Clients"><i class="ft-users"></i><span class="menu-title" data-i18n="">My Clients</span></a>
-                </li>
-                <li class="{{(showOption($priviledges,"Transactions") == "hide" && showOption($priviledges,"Expenses") == "hide") ? "hide" : ""}} active has-sub open"><a href="#"><i class="ft-activity"></i><span class="menu-title" data-i18n="">Accounts</span></a>
-                    <ul class="menu-content" style="">
-                        <li class="{{showOption($priviledges,"Transactions")}} active"><a href="/Transactions"><span><i class="ft-award"></i> Transactions</span></a>
-                        </li>
-                      <li class="{{showOption($priviledges,"Expenses")}} nav-item"><a href="/Expenses"><i class="ft-bar-chart-2"></i> Expenses</a></li>
-                    </ul>
-                </li>
-                <li class="{{showOption($priviledges,"My Routers")}} nav-item"><a href="/Routers"><i class="ft-layers"></i><span class="menu-title" data-i18n="">My Routers</span></a>
-                </li>
-                <li class="{{showOption($priviledges,"SMS")}} nav-item"><a href="/sms"><i class="ft-mail"></i><span class="menu-title" data-i18n="">SMS</span></a>
-                </li>
-                <li class="{{showOption($priviledges,"Account and Profile")}} nav-item"><a href="/Accounts"><i class="ft-lock"></i><span class="menu-title" data-i18n="">Account and Profile</span></a>
-                </li>
-            </ul>
-        </div>
+    <x-navbar/>
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true" data-img="/theme-assets/images/backgrounds/02.jpg">
+        <x-menu/>
         <!-- <a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank">Download PRO!</a> -->
         <div class="navigation-background">
         </div>
@@ -212,7 +128,14 @@
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
-                                    <a href="/Transactions/View/{{$transaction_id}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back</a>
+                                    {{-- @php
+                                        $btnText = "<i class=\"fas fa-arrow-left\"></i> Back";
+                                        $otherClasses = "";
+                                        $btnLink = "/Transactions/View/".$transaction_id;
+                                        $otherAttributes = "";
+                                    @endphp
+                                    <x-button-link btnType="primary" btnSize="sm" :otherAttributes="$otherAttributes" :btnText="$btnText" :btnLink="$btnLink" :otherClasses="$otherClasses" :readOnly="$readonly" /> --}}
+                                    <a href="/Organization/ViewTransactionDetail/{{$organization_details->organization_id}}/{{$transaction_id}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back</a>
                                     <p><strong>Note</strong><br>- Confirm the data below is correct before confirming the transfer!</p>
                                 </div>
                                 <div class="card-body row">
@@ -291,10 +214,24 @@
                                 </div>
                                 <div class="card-body row">
                                     <div class="col-md-6">
-                                        <a href="/confirmTransfer/{{$client_data[0]->client_id}}/{{$transaction_details[0]->transaction_id}}" class="btn btn-primary {{$readonly}}">Confirm Transfer</a>
+                                        @php
+                                            $btnText = "Confirm Transfer";
+                                            $otherClasses = "";
+                                            $btnLink = "/Organization/TransactionStats/confirmTransfer/".$organization_details->organization_id."/".$transaction_details[0]->transaction_id."/".$client_data[0]->client_id;
+                                            $otherAttributes = "";
+                                        @endphp
+                                        <x-button-link btnType="primary" btnSize="sm" :otherAttributes="$otherAttributes" :btnText="$btnText" :btnLink="$btnLink" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                        {{-- <a href="/confirmTransfer/{{$client_data[0]->client_id}}/{{$transaction_details[0]->transaction_id}}" class="btn btn-primary {{$readonly}}">Confirm Transfer</a> --}}
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="/Transactions/View/{{$transaction_id}}" class="btn btn-danger">Cancel</a>
+                                        @php
+                                            $btnText = "Cancel";
+                                            $otherClasses = "";
+                                            $btnLink = "/Organization/ViewTransactionDetail/".$organization_details->organization_id."/".$transaction_id;
+                                            $otherAttributes = "";
+                                        @endphp
+                                        <x-button-link btnType="danger" btnSize="sm" :otherAttributes="$otherAttributes" :btnText="$btnText" :btnLink="$btnLink" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                        {{-- <a href="/Transactions/View/{{$transaction_id}}" class="btn btn-danger">Cancel</a> --}}
                                     </div>
                                 </div>
                             </div>

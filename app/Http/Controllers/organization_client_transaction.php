@@ -76,6 +76,88 @@ class organization_client_transaction extends Controller
         return view("Orgarnizations.client_transactions",["organization_details" => $organization_details[0], "transaction_data" => $transaction_data, "today" => $sums,"week" => $week,"month" => $months,"twoweeks" => $twoWeek ,"account_name" => $account_names,"trans_dates" => $dates_infor,"clients_name" => $clients_name,"clients_acc" => $clients_acc,"clients_phone" => $clients_phone]);
     }
 
+    function confirmTransfer($organization_id, $trans_id, $client_id){
+        // organization_id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = $client_id");
+        $trans_data = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$trans_id'");
+        // update the transaction status to 1 and the transaction account id and account number to 1
+        $amount = ($trans_data[0]->transacion_amount) + ($client_data[0]->wallet_amount);
+
+        // update the users wallet and the transaction account id account number and the transaction status and return the confirmation message
+        DB::connection("mysql2")->table('client_tables')
+        ->where('client_id', $client_id)
+        ->update([
+            'wallet_amount' => $amount,
+            'last_changed' => date("YmdHis"),
+            'date_changed' => date("YmdHis")
+        ]);
+
+        // update the transaction details
+        // transaction status, transaction acc number acc id
+        DB::connection("mysql2")->table('transaction_tables')
+        ->where('transaction_id', $trans_id)
+        ->update([
+            'transaction_acc_id' => $client_id,
+            'transaction_status' => "1",
+            'date_changed' => date("YmdHis")
+        ]);
+        // check if its the user or the admin
+        if (session()->has('client_id')) {
+            session()->flash("success","You have successfully transfered the funds to your account");
+            return redirect("/Payment");
+        }
+        // end of log file
+        session()->flash("success","You have successfully transfered the funds to ".$client_data[0]->client_name."");
+        return redirect("/Organization/ViewTransaction/$organization_id");
+    }
+
+    function assign_transaction($organization_id, $transaction_id, $client_id){
+        // organization_id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        $transaction_detail = DB::connection("mysql2")->select("SELECT * FROM `transaction_tables` WHERE `deleted`= '0' AND `transaction_id` = '$transaction_id'");
+        $client_data = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE `deleted`= '0' AND `client_id` = '$client_id'");
+        $date_data = $client_data[0]->next_expiration_date;
+        $year = substr($date_data,0,4);
+        $month = substr($date_data,4,2);
+        $day = substr($date_data,6,2);
+        $hour = substr($date_data,8,2);
+        $minute = substr($date_data,10,2);
+        $second = substr($date_data,12,2);
+        $d = mktime($hour, $minute, $second, $month, $day, $year);
+        $dates = date("D dS M Y  h:i:sa", $d);
+
+        // Transaction date
+        $date_data = $transaction_detail[0]->transaction_date;
+        $year = substr($date_data,0,4);
+        $month = substr($date_data,4,2);
+        $day = substr($date_data,6,2);
+        $hour = substr($date_data,8,2);
+        $minute = substr($date_data,10,2);
+        $second = substr($date_data,12,2);
+        $d = mktime($hour, $minute, $second, $month, $day, $year);
+        $dates2 = date("D dS M Y  h:i:sa", $d);
+        return view("acceptTransfer",["organization_details" => $organization_details[0] ,"client_data" => $client_data, "transaction_details" => $transaction_detail,"transaction_id" => $transaction_id, "expiration_date" => $dates, "transaction_date" => $dates2]);
+    }
+
     // transaction detail
     function transaction_details($organization_id, $transaction_id){
         // organization id

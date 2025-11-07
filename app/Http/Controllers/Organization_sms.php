@@ -169,6 +169,586 @@ class Organization_sms extends Controller
         return view("Orgarnizations.SMS.custom_sms",["organization_details" => $organization_details[0], "sms_data"=>$message_content]);
     }
 
+
+    function save_sms_customize ($organization_id, Request $req){
+        // organization_id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+        $database_name = $organization_details[0]->organization_database;
+
+        // return $req->input();
+        // save it in settings
+        $sms_content = DB::connection("mysql2")->select("SELECT * FROM `settings` WHERE `deleted`= '0' AND `keyword` = 'Messages'");
+        // if we have some data we update the data
+        if (count($sms_content) > 0) {
+            $message_content =  json_decode($sms_content[0]->value);
+            // return $message_content;
+            if ($req->input('date_before')) {
+                $message_content[0]->messages[0]->message = $req->input("message_contents");
+                // return $message_content;
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif($req->input('deday')){
+                $message_content[0]->messages[1]->message = $req->input("message_contents");
+                // return $message_content;
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('after_due_date')) {
+                $message_content[0]->messages[2]->message = $req->input("message_contents");
+                // return $req->input();
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('correct_acc_no')) {
+                $message_content[1]->messages[0]->message = $req->input("message_contents");// return $req->input();
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input("incorrect_acc_no")) {
+                $message_content[1]->messages[1]->message = $req->input("message_contents");
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('account_renewed')) {
+                $message_content[2]->messages[0]->message = $req->input("message_contents");
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('account_extended')) {
+                // return $message_content[2]->messages[1]->message;
+                $message_content[2]->messages[1]->message = $req->input("message_contents");
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('welcome_sms')) {
+                // return $message_content[3]->messages[0]->message;
+                $message_content[3]->messages[0]->message = $req->input("message_contents");
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('account_deactivated')) {
+                $message_content[2]->messages[2]->message = $req->input("message_contents");
+                DB::connection("mysql2")->table('settings')
+                ->where('keyword', 'Messages')
+                ->update([
+                    'value' => $message_content,
+                    'date_changed' => date("YmdHis")
+                ]);
+                return redirect(route("customize_sms", [$organization_id]));
+            }elseif ($req->input('refferer_msg')) {
+                // return $message_content;
+                if(isset($message_content[1]->messages[2]->message)){
+                    $message_content[1]->messages[2]->message = $req->input('message_contents');
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }else{
+                    $msgs = array("Name" => "refferer_msg","message" => $req->input('message_contents'));
+                    // return $msgs;
+                    array_push($message_content[1]->messages,$msgs);
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('below_min_amnt')) {
+                // return $message_content;
+                if(isset($message_content[1]->messages[3]->message)){
+                    $message_content[1]->messages[3]->message = $req->input('message_contents');
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }else{
+                    $msgs = array("Name" => "refferer_msg","message" => $req->input('message_contents'));
+                    // return $msgs;
+                    array_push($message_content[1]->messages,$msgs);
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('welcome_client_sms')) {
+                // return $message_content[4];
+                if(isset($message_content[4])){
+                    // set the welcome client sms
+                    $messages = $message_content[4]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('welcome_client_sms')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1){
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" =>"welcome_client_sms", "message" => $req->input('message_contents'));
+                        array_push($message_content[4]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the array
+                    $arrayed = ["Name" => "sms_bill_manager","messages" => []];
+                    array_push($message_content,$arrayed);
+                    $message_content = json_decode(json_encode($message_content));
+                    // proceed and add the new message
+                    $message = array("Name" => $req->input('welcome_client_sms'), "message" => $req->input('message_contents'));
+                    array_push($message_content[4]->messages,$message);
+                    // return $message_content;
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('rcv_coracc_billsms')) {
+                if(isset($message_content[4])){
+                    // set the welcome client sms
+                    $messages = $message_content[4]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('rcv_coracc_billsms')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" =>"rcv_coracc_billsms", "message" => $req->input('message_contents'));
+                        array_push($message_content[4]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the array
+                    $arrayed = ["Name" => "sms_bill_manager","messages" => []];
+                    array_push($message_content,$arrayed);
+                    $message_content = json_decode(json_encode($message_content));
+                    // proceed and add the new message
+                    $message = array("Name" => $req->input('rcv_coracc_billsms'), "message" => $req->input('message_contents'));
+                    array_push($message_content[4]->messages,$message);
+                    // return $message_content;
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('rcv_incoracc_billsms')) {
+                // return $req->input();
+                if(isset($message_content[4])){
+                    // set the welcome client sms
+                    $messages = $message_content[4]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('rcv_incoracc_billsms')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" =>"rcv_incoracc_billsms", "message" => $req->input('message_contents'));
+                        array_push($message_content[4]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the array
+                    $arrayed = ["Name" => "sms_bill_manager","messages" => []];
+                    array_push($message_content,$arrayed);
+                    $message_content = json_decode(json_encode($message_content));
+                    // proceed and add the new message
+                    $message = array("Name" => $req->input('rcv_incoracc_billsms'), "message" => $req->input('message_contents'));
+                    array_push($message_content[4]->messages,$message);
+                    // return $message_content;
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('rcv_belowmin_billsms')) {
+                // return $req->input();
+                if(isset($message_content[4])){
+                    // set the welcome client sms
+                    $messages = $message_content[4]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('rcv_belowmin_billsms')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" =>"rcv_belowmin_billsms", "message" => $req->input('message_contents'));
+                        array_push($message_content[4]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the array
+                    $arrayed = ["Name" => "sms_bill_manager","messages" => []];
+                    array_push($message_content,$arrayed);
+                    $message_content = json_decode(json_encode($message_content));
+                    // proceed and add the new message
+                    $message = array("Name" => $req->input('rcv_belowmin_billsms'), "message" => $req->input('message_contents'));
+                    array_push($message_content[4]->messages,$message);
+                    // return $message_content;
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('msg_reminder_bal')) {
+                // return $req->input();
+                if(isset($message_content[4])){
+                    // set the welcome client sms
+                    $messages = $message_content[4]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('msg_reminder_bal')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" =>"msg_reminder_bal", "message" => $req->input('message_contents'));
+                        array_push($message_content[4]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the array
+                    $arrayed = ["Name" => "sms_bill_manager","messages" => []];
+                    array_push($message_content,$arrayed);
+                    $message_content = json_decode(json_encode($message_content));
+                    // proceed and add the new message
+                    $message = array("Name" => $req->input('msg_reminder_bal'), "message" => $req->input('message_contents'));
+                    array_push($message_content[4]->messages,$message);
+                    // return $message_content;
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('account_frozen')) {
+                // return $req->input();
+                if (isset($message_content[5])) {
+                    // set the welcome client sms
+                    $messages = $message_content[5]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('account_frozen')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    // return $message_content;
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" => $req->input('account_frozen'), "message" => $req->input('message_contents'));
+                        array_push($message_content[5]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the std class
+                    $message = new stdClass();
+                    $message->Name = "account_freezing";
+                    $message->messages = [array("Name" => $req->input('account_frozen'), "message" => $req->input('message_contents')),array("Name" => 'account_unfrozen', "message" => ''),array("Name" => 'future_account_freeze', "message" => '')];
+
+                    // array_push index 5
+                    array_push($message_content,$message);
+                    // return $message_content;
+
+                    DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('account_unfrozen')) {
+                // return $req->input();
+                if (isset($message_content[5])) {
+                    // set the welcome client sms
+                    $messages = $message_content[5]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) { 
+                        if ($messages[$index]->Name == $req->input('account_unfrozen')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" => $req->input('account_unfrozen'), "message" => $req->input('message_contents'));
+                        array_push($message_content[5]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the std class
+                    $message = new stdClass();
+                    $message->Name = "account_freezing";
+                    $message->messages = [array("Name" => 'account_frozen', "message" => ''),array("Name" => $req->input('account_unfrozen'), "message" => $req->input('message_contents')),array("Name" => "future_account_freeze", "message" => "")];
+
+                    // array_push index 5
+                    array_push($message_content,$message);
+                    // return $message_content;
+
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }elseif ($req->input('future_account_freeze')) {
+                // return $req->input();
+                if (isset($message_content[5])) {
+                    // set the welcome client sms
+                    $messages = $message_content[5]->messages;
+                    $present = 0;
+                    for ($index=0; $index < count($messages); $index++) {
+                        if ($messages[$index]->Name == $req->input('future_account_freeze')) {
+                            $messages[$index]->message = $req->input('message_contents');
+                            $present = 1;
+                        }
+                    }
+                    if ($present == 1) {
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                    if ($present == 0) {
+                        // add the message to the messages list
+                        $data = array("Name" => $req->input('future_account_freeze'), "message" => $req->input('message_contents'));
+                        array_push($message_content[5]->messages,$data);
+                        // return $message_content;
+                        DB::connection("mysql2")->table('settings')
+                        ->where('keyword', 'Messages')
+                        ->update([
+                            'value' => $message_content,
+                            'date_changed' => date("YmdHis")
+                        ]);
+                        return redirect(route("customize_sms", [$organization_id]));
+                    }
+                }else{
+                    // create the std class
+                    // array("Name" => 'account_freezing', "message" => '');
+                    $message = new stdClass();
+                    $message->Name = "account_freezing";
+                    $message->messages = [array("Name" => 'account_frozen', "message" => ''),array("Name" => 'account_unfrozen', "message" => ''),array("Name" => $req->input('future_account_freeze'), "message" => $req->input('message_contents'))];
+
+                    // then add the rest
+                    array_push($message_content,$message);
+                    // return $message_content;
+
+                    DB::connection("mysql2")->table('settings')
+                    ->where('keyword', 'Messages')
+                    ->update([
+                        'value' => $message_content,
+                        'date_changed' => date("YmdHis")
+                    ]);
+                    return redirect(route("customize_sms", [$organization_id]));
+                }
+            }
+            // DO NOT ADD MORE FROM THESE AREA.
+            // YOU BETTER SELECT A CATEGORY TO ADD TO OR CHANGE HOW THE MESSAGES ARE GOING TO BE RETRIEVED
+            // OTHERWISE ITS GOING TO BE MESSY
+        }else{
+            // is we dont have any data we insert the data
+            return redirect(route("customize_sms", [$organization_id]));
+        }
+    }
+
     // save sms content
     function save_sms_content (Request $req, $organization_id){
         // organization_id

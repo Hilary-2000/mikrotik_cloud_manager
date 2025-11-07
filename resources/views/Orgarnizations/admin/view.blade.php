@@ -149,12 +149,30 @@ date_default_timezone_set('Africa/Nairobi');
                                                 Back to list</a>
                                         </div>
                                         <div class="col-md-6">
-                                            <button id="delete_user" class="btn btn-danger text-lg float-right"><i class="ft-trash-2"> Delete</i></button>
+                                            @php
+                                                $btnText = "<i class=\"ft-trash-2\"></i> Delete";
+                                                $otherClasses = "float-right";
+                                                $btn_id = "delete_user";
+                                                $btnSize="sm";
+                                                $type = "button";
+                                                $readonly = "";
+                                                $otherAttributes = "";
+                                            @endphp
+                                            <x-button toolTip="" btnType="danger" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                            {{-- <button id="delete_user" class="btn btn-danger text-lg float-right"><i class="ft-trash-2"> Delete</i></button> --}}
                                             <div class="container d-none mt-4" id="prompt_del_window">
                                                 <p class="text-secondary"><strong>Are you sure you want to permanently delete this user?</strong></p>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <a href="{{url()->route("delete_administrators",[$organization_details->organization_id, $admin_data[0]->admin_id])}}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+                                                        @php
+                                                            $btnText = "<i class=\"fas fa-trash\"></i> Delete";
+                                                            $otherClasses = "my-1 ";
+                                                            $btnLink = url()->route("delete_administrators",[$organization_details->organization_id, $admin_data[0]->admin_id]);
+                                                            $otherAttributes = "";
+                                                            $readonly = "";
+                                                        @endphp
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="danger" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                        {{-- <a href="{{url()->route("delete_administrators",[$organization_details->organization_id, $admin_data[0]->admin_id])}}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -162,7 +180,7 @@ date_default_timezone_set('Africa/Nairobi');
                                     </div>
                                     <h6><strong>Update Administrator</strong></h6>
                                     <p class="card-text">Fill all fields to add the Administrator.</p>
-                                    <form action="{{route("update_administrators",[$organization_details->organization_id])}}" method="post">
+                                    <form action="{{route("update_administrators",[$organization_details->organization_id])}}" method="post" onsubmit="return validateForm()">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4 form-group">
@@ -225,6 +243,34 @@ date_default_timezone_set('Africa/Nairobi');
                                                 if (isJson_report($admin_data[0]->priviledges)) {
                                                     $privileged = json_decode($admin_data[0]->priviledges);
                                                 }
+                                                function getDropdownChecked($privileged,$name,$option){
+                                                    $found = false;
+                                                    for ($ind=0; $ind < count($privileged); $ind++) { 
+                                                        if ($privileged[$ind]->option == $name && isset($privileged[$ind]->expiry)) {
+                                                            $found = true;
+                                                            if ($privileged[$ind]->expiry == $option) {
+                                                                return "selected";
+                                                            }
+                                                        }
+                                                    }
+
+                                                    if (!$found && $option == "indefinate_expiry") {
+                                                        return "selected";
+                                                    }
+                                                    return "";
+                                                }
+                                                function getDropdownCheckedDate($privileged,$name){
+                                                    $found = false;
+                                                    for ($ind=0; $ind < count($privileged); $ind++) {
+                                                        if ($privileged[$ind]->option == $name && isset($privileged[$ind]->expiry)) {
+                                                            $found = true;
+                                                            if ($privileged[$ind]->expiry == "definate_expiry") {
+                                                                return date("Y-m-d\TH:i", strtotime($privileged[$ind]->expiry_date));
+                                                            }
+                                                        }
+                                                    }
+                                                    return "";
+                                                }
                                                 function getChecked($privileged,$name,$option){
                                                     for ($ind=0; $ind < count($privileged); $ind++) { 
                                                         if ($privileged[$ind]->option == $name) {
@@ -270,6 +316,7 @@ date_default_timezone_set('Africa/Nairobi');
                                                 }
                                             @endphp
                                             <h6 class="text-center"><u>Assign Administrator Privileges</u></h6>
+                                            
                                             <div class="table-responsive">
                                                 <table class="table table-bordered mb-0">
                                                     <thead>
@@ -278,48 +325,176 @@ date_default_timezone_set('Africa/Nairobi');
                                                             <th>Menu</th>
                                                             <th>View <input type="checkbox" {{checkAllView($privileged)}} id="all_view"></th>
                                                             <th>Read-only <input {{checkAllReadonly($privileged)}} type="checkbox" id="all_readonly"></th>
+                                                            <th>Role Expiry</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th scope="row">1</th>
+                                                            <th rowspan="4" scope="row">1</th>
+                                                            <td><label for="my_clients_option" class="form-label"><b>Clients</b></label></td>
+                                                            <td><input class="" {{getChecked($privileged,"Clients","view")}}  type="checkbox" id="clients_option_view"></td>
+                                                            <td><input class="" {{getChecked($privileged,"Clients","readonly")}} type="checkbox" id="clients_option_readonly"></td>
+                                                        </tr>
+                                                        <tr>
                                                             <td><label for="my_clients_option" class="form-label"><b>My Clients</b></label></td>
-                                                            <td><input class="all_view" {{getChecked($privileged,"My Clients","view")}}  type="checkbox" id="my_clients_option_view"></td>
-                                                            <td><input class="all_readonly" {{getChecked($privileged,"My Clients","readonly")}} type="checkbox" id="my_clients_option_readonly"></td>
+                                                            <td><input class="all_view client_options" {{getChecked($privileged,"My Clients","view")}}  type="checkbox" id="my_clients_option_view"></td>
+                                                            <td><input class="all_readonly client_options_2" {{getChecked($privileged,"My Clients","readonly")}} type="checkbox" id="my_clients_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_1">
+                                                                    <select id="select_expiry_1" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"My Clients","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"My Clients","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_1">
+                                                                    <input type="hidden" id="menu_label_value_1" value="My Clients">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"My Clients")}}" id="select_date_time_1" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_1" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label for="my_clients_option" class="form-label"><b>Quick Register</b></label></td>
+                                                            <td><input class="all_view client_options" {{getChecked($privileged,"Quick Register","view")}}  type="checkbox" id="quick_register_view"></td>
+                                                            <td><input class="all_readonly client_options_2" {{getChecked($privileged,"Quick Register","readonly")}} type="checkbox" id="quick_register_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_2">
+                                                                    <select id="select_expiry_2" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Quick Register","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Quick Register","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_2">
+                                                                    <input type="hidden" id="menu_label_value_2" value="Quick Register">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"Quick Register")}}" id="select_date_time_2" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_2" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label for="my_clients_option" class="form-label"><b>Clients Issues</b></label></td>
+                                                            <td><input class="all_view client_options" {{getChecked($privileged,"Clients Issues","view")}}  type="checkbox" id="clients_issues_view"></td>
+                                                            <td><input class="all_readonly client_options_2" {{getChecked($privileged,"Clients Issues","readonly")}} type="checkbox" id="clients_issues_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_3">
+                                                                    <select id="select_expiry_3" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Clients Issues","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Clients Issues","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_3">
+                                                                    <input type="hidden" id="menu_label_value_3" value="Clients Issues">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"Clients Issues")}}" id="select_date_time_3" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_3" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th rowspan="3" scope="row">2</th>
                                                             <td ><label for="my_clients_option" class="form-label"><b>Accounts</b></label></td>
-                                                            <td><input class="all_view" type="checkbox" id="accounts_option_view"></td>
-                                                            <td><input class="all_readonly" type="checkbox" id="accounts_option_readonly"></td>
+                                                            <td><input class="" type="checkbox" id="accounts_option_view"></td>
+                                                            <td><input class="" type="checkbox" id="accounts_option_readonly"></td>
                                                         </tr>
                                                         <tr>
                                                             <td ><label for="my_clients_option" class="form-label"><b><i>Transactions</i></b></label></td>
                                                             <td><input class="all_view account_options" {{getChecked($privileged,"Transactions","view")}} type="checkbox" id="transactions_option_view"></td>
                                                             <td><input class="all_readonly account_options_2" {{getChecked($privileged,"Transactions","readonly")}} type="checkbox" id="transactions_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_4">
+                                                                    <select id="select_expiry_4" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Transactions","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Transactions","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_4">
+                                                                    <input type="hidden" id="menu_label_value_4" value="Transactions">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"Transactions")}}" id="select_date_time_4" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_4" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td ><label for="my_clients_option" class="form-label"><b><i>Expenses</i></b></label></td>
                                                             <td><input class="all_view account_options" {{getChecked($privileged,"Expenses","view")}} type="checkbox" id="expenses_option_view"></td>
                                                             <td><input class="all_readonly account_options_2"  {{getChecked($privileged,"Expenses","readonly")}} type="checkbox" id="expenses_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_5">
+                                                                    <select id="select_expiry_5" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Expenses","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Expenses","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_5">
+                                                                    <input type="hidden" id="menu_label_value_5" value="Expenses">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"Expenses")}}" id="select_date_time_5" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_5" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row">3</th>
                                                             <td ><label for="my_clients_option" class="form-label"><b>My Routers</b></label></td>
                                                             <td><input class="all_view" {{getChecked($privileged,"My Routers","view")}} type="checkbox" id="my_routers_option_view"></td>
                                                             <td><input class="all_readonly" {{getChecked($privileged,"My Routers","readonly")}} type="checkbox" id="my_routers_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_6">
+                                                                    <select id="select_expiry_6" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"My Routers","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"My Routers","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_6">
+                                                                    <input type="hidden" id="menu_label_value_6" value="My Routers">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"My Routers")}}" id="select_date_time_6" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_6" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row">4</th>
                                                             <td ><label for="my_clients_option" class="form-label"><b>SMS</b></label></td>
                                                             <td><input class="all_view" {{getChecked($privileged,"SMS","view")}} type="checkbox" id="sms_option_view"></td>
                                                             <td><input class="all_readonly" {{getChecked($privileged,"SMS","readonly")}} type="checkbox" id="sms_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_7">
+                                                                    <select id="select_expiry_7" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"SMS","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"SMS","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_7">
+                                                                    <input type="hidden" id="menu_label_value_7" value="SMS">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local" value="{{getDropdownCheckedDate($privileged,"SMS")}}" id="select_date_time_7" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_7" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row">5</th>
                                                             <td ><label for="my_clients_option" class="form-label"><b>Account & Profile</b></label></td>
                                                             <td><input class="all_view" {{getChecked($privileged,"Account and Profile","view")}} type="checkbox" id="account_profile_option_view"></td>
                                                             <td><input class="all_readonly" {{getChecked($privileged,"Account and Profile","readonly")}} type="checkbox" id="account_profile_option_readonly"></td>
+                                                            <td>
+                                                                <div class="container" id="dropdown_roles_8">
+                                                                    <select id="select_expiry_8" class="form-control dropdown_roles">
+                                                                        <option value="" hidden>Select Role Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Account and Profile","indefinate_expiry")}} value="indefinate_expiry">Indefinate Expiry</option>
+                                                                        <option {{getDropdownChecked($privileged,"Account and Profile","definate_expiry")}} value="definate_expiry">Definate Expiry</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="container hide" id="dropdown_date_8">
+                                                                    <input type="hidden" id="menu_label_value_8" value="Account and Profile">
+                                                                    <input class="form-control selected_date_time_roles" type="datetime-local"  value="{{getDropdownCheckedDate($privileged,"Account and Profile")}}" id="select_date_time_8" placeholder="Select date and time">
+                                                                    <p id="back_to_dropdown_8" style="width: fit-content;" class="back_to_dropdown text-primary mt-1" style="cursor:pointer;"><i class="fa fa-arrow-left"></i> back</p>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -327,8 +502,18 @@ date_default_timezone_set('Africa/Nairobi');
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button class="btn btn-primary" {{$readonly}} type="submit"><i
-                                                        class="ft-upload"></i> Update Administrator</button>
+                                                @php
+                                                    $btnText = "<i class=\"ft-upload\"></i> Update Administrator";
+                                                    $otherClasses = "";
+                                                    $btn_id = "";
+                                                    $btnSize="sm";
+                                                    $type = "submit";
+                                                    $readonly = "";
+                                                    $otherAttributes = "";
+                                                @endphp
+                                                <x-button toolTip="" btnType="primary" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
+                                                {{-- <button class="btn btn-primary" {{$readonly}} type="submit"><i
+                                                        class="ft-upload"></i> Update Administrator</button> --}}
                                             </div>
                                         </div>
                                         <hr>

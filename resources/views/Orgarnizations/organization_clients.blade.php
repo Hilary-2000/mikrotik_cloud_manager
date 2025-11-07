@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                             <div class="card-header">
-                                <a href="{{route("ViewOrganization", $organization_details->organization_id)}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back to Organization List</a>
+                                <a href="{{route("ViewOrganization", $organization_details->organization_id)}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back to Organization</a>
                                 {{-- @php
                                     $btnText = "<i class=\"fas fa-arrow-left\"></i> Back to Organization List";
                                     $otherClasses = "text-white";

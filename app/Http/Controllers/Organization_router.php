@@ -33,71 +33,6 @@ class Organization_router extends Controller
         return view("Orgarnizations.Routers.index",["organization_details" => $organization_details[0], 'router_data'=>$router_data]);
     }
 
-    // view_router_details
-    function view_router_details($organization_id, $router_id){
-        // organization id
-        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
-        if (count($organization_details) == 0) {
-            session()->flash("error","Invalid organization!");
-            return redirect(route("Organizations"));
-        }
-
-        // change_db
-        $change_db = new login();
-        $change_db->change_db($organization_details[0]->organization_database);
-        $database_name = $organization_details[0]->organization_database;
-
-        // check first if the router configuration is done
-        $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ?",[$router_id]);
-
-        if (count($router_data) == "0") {
-            session()->flash("error_router","Invalid router");
-            return redirect(url()->route("view_routers",[$organization_id]));
-        }
-        // return count($router_data);
-
-        // get all clients under that router
-        $client_details = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `client_tables` WHERE `router_name` = ?",[$router_id]);
-
-        // get the router details
-        $router_detail = [];
-
-        // connect to the router and get its details
-
-        // connect to the router and set the sstp client
-        $sstp_value = $this->getSSTPAddress($database_name);
-        if ($sstp_value == null) {
-            $error = "The SSTP server is not set, Contact your administrator!";
-            session()->flash("error_router",$error);
-            redirect(url()->route("view_routers",[$organization_id]));
-        }
-
-        // connect to the router and set the sstp client
-        $ip_address = $sstp_value->ip_address;
-        $user = $sstp_value->username;
-        $pass = $sstp_value->password;
-        $port = $sstp_value->port;
-
-        // check if the router is actively connected
-        $client_router_ip = $this->checkActive($ip_address,$user,$pass,$port,$router_data[0]->sstp_username);
-
-        $router_stats = [];
-        if ($client_router_ip) {
-            // get the router details
-            $API = new routeros_api();
-            $API->debug = false;
-            
-            $ip_address = $client_router_ip;
-            $user = $router_data[0]->sstp_username;
-            $pass = $router_data[0]->sstp_password;
-            $port = $router_data[0]->api_port;
-            if ($API->connect($ip_address, $user, $pass, $port)){
-                $router_stats = $API->comm("/system/resource/print");
-            }
-        }
-        return view("Orgarnizations.Routers.view",["organization_details" => $organization_details[0], "router_data" => $router_data, "router_stats" => $router_stats, "user_count" => $client_details,"router_detail" => $router_detail, "ip_address" => $ip_address]);
-    }
-
     function updateRouter(Request $request, $organization_id){
         // organization id
         $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
@@ -127,12 +62,153 @@ class Organization_router extends Controller
         // get the router details
         $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ?",[$router_id]);
         $router_name = count($router_data) > 0 ? $router_data[0]->router_name : "Null";
-
-        // log routers
-        $new_client = new Clients();
-        $txt = ":Router (".$router_name.") details updated successfully!";
-        // $new_client->log($txt);
         return redirect(url()->route("view_router_details",[$organization_id, $router_id]));
+    }
+    // connect router
+    function connect_router($organization_id, $router_id){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+        $database_name = $organization_details[0]->organization_database;
+
+        // check if the router is active
+        // check first if the router configuration is done
+        $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ?",[$router_id]);
+
+        if (count($router_data) == 0) {
+            session()->flash("error_router","Invalid router");
+            redirect(url()->route("view_router_cloud"));
+        }
+
+        // get all clients under that router
+        $client_details = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `client_tables` WHERE `router_name` = ?",[$router_id]);
+
+        // get the router details
+        $router_detail = [];
+
+        // connect to the router and get its details
+
+        // connect to the router and set the sstp client
+        $sstp_value = $this->getSSTPAddress($database_name);
+        if ($sstp_value == null) {
+            $error = "The SSTP server is not set, Contact your administrator!";
+            session()->flash("error_router",$error);
+            return redirect(url()->route("view_router_cloud"));
+        }
+
+        // connect to the router and set the sstp client
+        $ip_address = $sstp_value->ip_address;
+        $user = $sstp_value->username;
+        $pass = $sstp_value->password;
+        $port = $sstp_value->port;
+
+        // check if the router is actively connected
+        $client_router_ip = $this->checkActive($ip_address,$user,$pass,$port,$router_data[0]->sstp_username);
+
+        $router_stats = [];
+        if ($client_router_ip) {
+            // get the router details
+            $API = new routeros_api();
+            $API->debug = false;
+            
+            $ip_address = $client_router_ip;
+            $user = $router_data[0]->sstp_username;
+            $pass = $router_data[0]->sstp_password;
+            $port = $router_data[0]->api_port;
+            if ($API->connect($ip_address, $user, $pass, $port)){
+                $router_stats = $API->comm("/system/resource/print");
+            }else{
+                session()->flash("error_router","Cannot connect to router, ensure you have configured the router correctly!");
+                return redirect(url()->route("view_router_cloud",[$router_id]));
+            }
+        }else{
+            session()->flash("error_router","Cannot connect to router, ensure you have configured the router correctly!");
+            return redirect(url()->route("view_router_cloud",[$router_id]));
+        }
+        
+        // change the status from unconnected to connected
+        $update = DB::connection("mysql2")->update("UPDATE `remote_routers` SET `activated` = '1' WHERE `router_id` = ?",[$router_id]);
+
+        // return to the main page
+        return redirect(url()->route("view_router_cloud",[$router_id]));
+    }
+
+    // view_router_details
+    function view_router_details($organization_id, $router_id){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error","Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+        $database_name = $organization_details[0]->organization_database;
+
+        // change db
+        $change_db = new login();
+        $change_db->change_db();
+
+        // check first if the router configuration is done
+        $router_data = DB::connection("mysql2")->select("SELECT * FROM `remote_routers` WHERE `router_id` = ?",[$router_id]);
+
+        if (count($router_data) == 0) {
+            session()->flash("error_router","Invalid router");
+            redirect(url()->route("view_router_cloud"));
+        }
+
+        // get all clients under that router
+        $client_details = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'Total' FROM `client_tables` WHERE `router_name` = ?",[$router_id]);
+
+        // get the router details
+        $router_detail = [];
+
+        // connect to the router and get its details
+
+        // connect to the router and set the sstp client
+        $sstp_value = $this->getSSTPAddress($database_name);
+        if ($sstp_value == null) {
+            $error = "The SSTP server is not set, Contact your administrator!";
+            session()->flash("error_router",$error);
+            return redirect(url()->route("view_router_cloud"));
+        }
+
+        // connect to the router and set the sstp client
+        $ip_address = $sstp_value->ip_address;
+        $user = $sstp_value->username;
+        $pass = $sstp_value->password;
+        $port = $sstp_value->port;
+
+        // check if the router is actively connected
+        $client_router_ip = $this->checkActive($ip_address,$user,$pass,$port,$router_data[0]->sstp_username);
+
+        $router_stats = [];
+        if ($client_router_ip) {
+            // get the router details
+            $API = new routeros_api();
+            $API->debug = false;
+            
+            $ip_address = $client_router_ip;
+            $user = $router_data[0]->sstp_username;
+            $pass = $router_data[0]->sstp_password;
+            $port = $router_data[0]->api_port;
+            if ($API->connect($ip_address, $user, $pass, $port)){
+                $router_stats = $API->comm("/system/resource/print");
+            }
+        }
+        // return $router_stats;
+
+        return view("Orgarnizations.Routers.view",["organization_details" => $organization_details[0], "router_data" => $router_data, "router_stats" => $router_stats, "user_count" => $client_details,"router_detail" => $router_detail, "ip_address" => $ip_address]);
+        // return view("Orgarnizations.Routers.view",["organization_details" => $organization_details[0], "router_data" => $router_data, "router_stats" => $router_stats, "user_count" => $client_details,"router_detail" => $router_detail, "ip_address" => $ip_address]);
     }
 
     // connect router
