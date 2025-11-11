@@ -93,7 +93,7 @@
                                 <a href="{{route("Organizations")}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back
                                     to Organization List</a>
                                 <div class="card-body">
-                                    <h6 class="text-center"><b><u>View Organization "{{ucwords(strtolower($organization_details->organization_name))}}"</u></b></h6>
+                                    <h3 class="text-center"><b><u>View Organization "{{ucwords(strtolower($organization_details->organization_name))}}"</u></b></h3>
                                     <hr>
                                     @if (session('success'))
                                         <p class='text-success'>{{ session('success') }}</p>
@@ -309,7 +309,12 @@
                                         @endphp
                                         <x-button toolTip="" btnType="danger" :otherAttributes="$otherAttributes" :btnText="$btnText" :type="$type" :btnSize="$btnSize" :otherClasses="$otherClasses" :btnId="$btn_id" :readOnly="$readonly" />
                                         </div>
-                                        <table class="table table-border">
+                                        <table class="table table-bordered mb-0">
+                                            <tr>
+                                                <td colspan="2">
+                                                    <p style="width:fit-content;" data-toggle="tooltip" title="{{count($clients_monthly)." client(s) active in the last 3 months"}}"><b>Estimated Earnings on "{{date("dS M Y", strtotime($organization_details->expiry_date))}}"</b> : Kes {{number_format($monthly_payment)}}</p>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td>
                                                     <div class="col-md-6">
@@ -442,7 +447,7 @@
                                         </table>
                                     </div>
                                     <hr>
-                                    <p class="text-primary text-center"><u>Organization Details</u></p>
+                                    <h3 class="text-primary text-center"><u>Organization Details</u></h3>
                                     <hr>
                                     @if (session('success'))
                                         <p class='text-success'>{{ session('success') }}</p>

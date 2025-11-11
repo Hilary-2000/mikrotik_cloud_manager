@@ -157,7 +157,7 @@
                                                     <td>{{ucwords(strtolower($frozen_clients[$i]->client_name))}}</td>
                                                     <td>{{$frozen_clients[$i]->freeze_days_left}}</td>
                                                     <td>{{($frozen_clients[$i]->client_freeze_untill) == "00000000000000" ? "Indefinate" : date("D dS M Y",strtotime($frozen_clients[$i]->client_freeze_untill))}}</td>
-                                                    <td><a href="/Clients/View/{{$frozen_clients[$i]->client_id}}" class="btn btn-infor btn-sm p-0 my-0 disabled"><i class="fas fa-eye"></i> View</a></td>
+                                                    <td><a href="/Organization/ViewClient/{{$organization_details->organization_id}}/{{$frozen_clients[$i]->client_id}}" class="btn btn-infor btn-sm p-0 my-0"><i class="fas fa-eye"></i> View</a></td>
                                                 </tr>
                                             @endfor
                                         </tbody>
@@ -203,13 +203,13 @@
                                     $otherAttributes = ' title="Client`s Statistics"';
                                     $readonly = "";
                                 @endphp
-                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="md" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                 {{-- <span data-toggle="tooltip" title="Client`s Reports" class="btn btn-info" id="client_reports_btn"><i class="ft-file-text"></i></span> --}}
                                 @php
                                     $btnText = "<i class=\"ft-file-text\"></i>";
                                     $otherClasses = "";
                                     $btn_id = "client_reports_btn";
-                                    $btnSize="sm";
+                                    $btnSize="md";
                                     $type = "submit";
                                     $readonly = "";
                                     $otherAttributes = "";
@@ -425,41 +425,26 @@
                                         </div>
                                     </div>
                                     <div class="table-responsive" id="transDataReciever">
-                                        <div class="container text-center my-2">
+                                        <div class="container text-center my-2" id="loading_clients_data">
                                             <img class=" mx-auto fa-beat-fade"  width="100" alt="Your Logo Appear Here"
-                                                src="/theme-assets/images/logo.jpeg"/>
+                                                src="{{session("organization_logo") != null ? session("organization_logo") :'/theme-assets/images/logoplaceholder.svg'}}" />
                                         </div>
+                                        <table class="table table-striped table-bordered zero-configuration dataTable d-none" id="clients_table">
+                                            <thead>
+                                                <tr>
+                                                    <th><span>#</span></th>
+                                                    <th><span>Full Names</span></th>
+                                                    <th><span>Account Number</span></th>
+                                                    <th><span>Location</span></th>
+                                                    <th><span>Due Date</span></th>
+                                                    <th><span>Network &amp; Gateway</span></th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <nav aria-label="Page navigation example" id="tablefooter">
-                                        <ul class="pagination" id="datatable_paginate">
-                                            <li class="page-item"  id="tofirstNav">
-                                                <a class="page-link" href="#" aria-label="Fisrt">
-                                                    <span aria-hidden="true">&laquo; &laquo;</span>
-                                                    <span class="sr-only">First</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item" id="toprevNac">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">Previous</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item"><button disabled class="page-link" id="pagenumNav">Page: 1</button></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next" id="tonextNav">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Last Page"  id="tolastNav">
-                                                    <span aria-hidden="true">&raquo;&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <p class="card-text text-xxs">Showing from <span class="text-primary" id="startNo">1</span> to <span class="text-secondary"  id="finishNo">10</span> records of <span  id="tot_records">56</span></p>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
