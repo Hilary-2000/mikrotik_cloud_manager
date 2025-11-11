@@ -157,7 +157,7 @@
                                                             $otherAttributes = "";
                                                             // $readonly = "";
                                                         @endphp
-                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="md" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                                         {{-- <p class="text-success"><b>Assigned!</b></p> --}}
                                                     </div>
                                                 </div>
@@ -173,7 +173,7 @@
                                                             $otherAttributes = "";
                                                             // $readonly = "";
                                                         @endphp
-                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                                        <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="success" btnSize="md" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                                         {{-- <p class="text-danger"><b>Not-Assigned!</b></p> --}}
                                                     </div>
                                                 </div>

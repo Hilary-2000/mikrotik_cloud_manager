@@ -90,8 +90,7 @@
                                 </div>
                             </div>
                             <div class="card-content collapse show">
-                                <a href="{{route("Organizations")}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back
-                                    to Organization List</a>
+                                <a href="{{route("Organizations")}}" class="btn btn-infor"><i class="fas fa-arrow-left"></i> Back to Organization List</a>
                                 <div class="card-body">
                                     <h3 class="text-center"><b><u>View Organization "{{ucwords(strtolower($organization_details->organization_name))}}"</u></b></h3>
                                     <hr>
@@ -312,7 +311,7 @@
                                         <table class="table table-bordered mb-0">
                                             <tr>
                                                 <td colspan="2">
-                                                    <p style="width:fit-content;" data-toggle="tooltip" title="{{count($clients_monthly)." client(s) active in the last 3 months"}}"><b>Estimated Earnings on "{{date("dS M Y", strtotime($organization_details->expiry_date))}}"</b> : Kes {{number_format($monthly_payment)}}</p>
+                                                    <span style="width:fit-content;" class="badge bg-success text-dark" data-toggle="tooltip" title="{{$clients_monthly." client(s) active in the last 3 months"}}"><b>Estimated Earnings on "{{date("dS M Y", strtotime($organization_details->expiry_date))}}"</b> : Kes {{number_format($monthly_payment)}}</span>
                                                 </td>
                                             </tr>
                                             <tr>

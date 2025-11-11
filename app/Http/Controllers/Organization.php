@@ -22,6 +22,18 @@ class Organization extends Controller
     function get_organizations(){
         // select from organization.
         $organizations = DB::select("SELECT * FROM `organizations` ORDER BY `organization_id` DESC");
+        foreach ($organizations as $key => $value) {
+            // change db
+            $change_db = new login();
+            $change_db->change_db($value->organization_database);
+
+            // client monthly
+            $clients_monthly = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'total' FROM `client_tables` WHERE next_expiration_date > ?;",[date("Ym", strtotime("-3 months"))."010000"]);
+            $monthly_payment = count($clients_monthly) > 0 ? ($clients_monthly[0]->total <= 50 ? 1000 : $clients_monthly[0]->total*20) : 1000;
+            $client_count = count($clients_monthly) > 0 ? $clients_monthly[0]->total : 0;
+            $organizations[$key]->client_count = $client_count;
+            $organizations[$key]->monthly_payment = "Kes ".number_format($monthly_payment)." - <span data-toggle='tooltip' title='Last three months' class='badge bg-success text-dark'>".$client_count." Client(s)</span>";
+        }
         return view("Orgarnizations.index",["organizations" => $organizations]);
     }
 
@@ -564,9 +576,10 @@ class Organization extends Controller
         
         // get this months payment
         $clients_monthly = DB::connection("mysql2")->select("SELECT COUNT(*) AS 'total' FROM `client_tables` WHERE next_expiration_date > ?;",[date("Ym", strtotime("-3 months"))."010000"]);
-        $monthly_payment = count($clients_monthly) > 50 ? $clients_monthly[0]->total*20 : 1000;
+        $monthly_payment = count($clients_monthly) > 0 ? ($clients_monthly[0]->total <= 50 ? 1000 : $clients_monthly[0]->total*20) : 1000;
+        $client_count_3_months = count($clients_monthly) > 0 ? $clients_monthly[0]->total : 0;
 
-        return view("Orgarnizations.view",["clients_monthly" => $clients_monthly, "monthly_payment" => $monthly_payment, "administrator_count" => $administrator_count, "transaction_count" => $transaction_count, "routers_count" => $routers_count, "sms_count" => $sms_count, "client_count" => $client_count, "organization_details" => $organization_details[0], "account_users" => $account_users]);
+        return view("Orgarnizations.view",["clients_monthly" => $client_count_3_months, "monthly_payment" => $monthly_payment, "administrator_count" => $administrator_count, "transaction_count" => $transaction_count, "routers_count" => $routers_count, "sms_count" => $sms_count, "client_count" => $client_count, "organization_details" => $organization_details[0], "account_users" => $account_users]);
     }
 
     function getClientsDatatable(Request $request, $organization_id){
@@ -628,8 +641,8 @@ class Organization extends Controller
         (SELECT report_code FROM `client_reports` WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'ticket_number',
         (SELECT `status` FROM `client_reports` WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'report_status',
         (SELECT `report_id` FROM `client_reports` WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'report_id',
-        (SELECT (SELECT admin_tables.admin_fullname FROM ".session("database_name").".client_reports LEFT JOIN mikrotik_cloud_manager.admin_tables ON admin_tables.admin_id = client_reports.admin_reporter WHERE client_reports.report_id = CR.report_id LIMIT 1) AS admin_fullname FROM `client_reports` AS CR WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'opened_by',
-        (SELECT (SELECT admin_tables.admin_fullname FROM ".session("database_name").".client_reports LEFT JOIN mikrotik_cloud_manager.admin_tables ON admin_tables.admin_id = client_reports.closed_by WHERE client_reports.report_id = CR.report_id LIMIT 1) AS admin_fullname FROM `client_reports` AS CR WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'closed_by',
+        (SELECT (SELECT admin_tables.admin_fullname FROM ".$organization_details[0]->organization_database.".client_reports LEFT JOIN mikrotik_cloud_manager.admin_tables ON admin_tables.admin_id = client_reports.admin_reporter WHERE client_reports.report_id = CR.report_id LIMIT 1) AS admin_fullname FROM `client_reports` AS CR WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'opened_by',
+        (SELECT (SELECT admin_tables.admin_fullname FROM ".$organization_details[0]->organization_database.".client_reports LEFT JOIN mikrotik_cloud_manager.admin_tables ON admin_tables.admin_id = client_reports.closed_by WHERE client_reports.report_id = CR.report_id LIMIT 1) AS admin_fullname FROM `client_reports` AS CR WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'closed_by',
         (SELECT `admin_attender` FROM `client_reports` WHERE client_id = client_tables.client_id ORDER BY report_date DESC LIMIT 1) AS 'admin_attender',
         remote_routers.router_name
          FROM `client_tables`

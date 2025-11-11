@@ -176,14 +176,14 @@
                                     $otherAttributes = 'data-toggle="tooltip" title="Transaction`s Statistics"';
                                     $readonly = "";
                                 @endphp
-                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="sm" :otherClasses="$otherClasses" :readOnly="$readonly" />
+                                <x-button-link :otherAttributes="$otherAttributes"  :btnText="$btnText" :btnLink="$btnLink" btnType="secondary" btnSize="md" :otherClasses="$otherClasses" :readOnly="$readonly" />
                                 {{-- <a href="/Transactions/Statistics" data-toggle="tooltip" title="Transaction`s Statistics" class="btn btn-secondary"><i class="ft-bar-chart-2"></i></a> --}}
                                 {{-- <span data-toggle="tooltip" title="Transaction Reports" class="btn btn-info" id="transaction_reports_btn"><i class="ft-file-text"></i></span> --}}
                                 @php
                                     $btnText = "<i class=\"ft-file-text\"></i>";
                                     $otherClasses = "";
                                     $btn_id = "transaction_reports_btn";
-                                    $btnSize="sm";
+                                    $btnSize="md";
                                     $type = "submit";
                                     $readonly = "";
                                     $otherAttributes = "";

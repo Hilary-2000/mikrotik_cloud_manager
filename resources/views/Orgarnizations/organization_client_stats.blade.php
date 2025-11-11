@@ -206,40 +206,6 @@
                                         <div class="container p-1">
                                             <div class="table-responsive" id="transDataReciever">
                                                 <p class='sm-text text-danger text-bold text-center'><span style='font-size:40px;'><i class='fas fa-exclamation-triangle'></i></span> <br>Load the data before proceeding!</p>
-                                                {{-- <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Full Names</th>
-                                                            <th>Account Number</th>
-                                                            <th>Location</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Mark Otto <span class="badge badge-success"> </span></td>
-                                                            <td>0743551250</td>
-                                                            <td>Kigajo corner 3</td>
-                                                            <td><a href="#" class="btn btn-sm btn-primary text-bolder" data-toggle="tooltip" title="View this User"><i class="ft-eye"></i></a> <a href="#" class="btn btn-sm btn-secondary text-bolder" data-toggle="tooltip" title="Edit this User"><i class="ft-edit"></i></a>  <a href="#" class="btn btn-sm btn-warning text-bolder"  data-toggle="tooltip" title="Disable this User"><i class="ft-alert-octagon"></i></a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Jacob Thornton <span class="badge badge-danger"> </span></td>
-                                                            <td>0743551223</td>
-                                                            <td>Ruiru Bypass</td>
-                                                            <td><a href="#" class="btn btn-sm btn-primary text-bolder" data-toggle="tooltip" title="View this User"><i class="ft-eye"></i></a> <a href="#" class="btn btn-sm btn-secondary text-bolder" data-toggle="tooltip" title="Edit this User"><i class="ft-edit"></i></a>  <a href="#" class="btn btn-sm btn-warning text-bolder"  data-toggle="tooltip" title="Disable this User"><i class="ft-alert-octagon"></i></a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">3</th>
-                                                            <td>Larry the Bird <span class="badge badge-success"> </span></td>
-                                                            <td>0713620727</td>
-                                                            <td>Kijabe</td>
-                                                            <td><a href="#" class="btn btn-sm btn-primary text-bolder" data-toggle="tooltip" title="View this User"><i class="ft-eye"></i></a> <a href="#" class="btn btn-sm btn-secondary text-bolder" data-toggle="tooltip" title="Edit this User"><i class="ft-edit"></i></a> <a href="#" class="btn btn-sm btn-warning text-bolder"  data-toggle="tooltip" title="Disable this User"><i class="ft-alert-octagon"></i></a> </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table> --}}
                                             </div>
                                             <nav aria-label="Page navigation example" id="tablefooter">
                                                 <ul class="pagination" id="datatable_paginate">
