@@ -48,7 +48,6 @@ class Organization_Admin extends Controller
     }
 
     function add_administrators(Request $req, $organization_id){
-        return $req;
         // organization id
         $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
         if (count($organization_details) == 0) {

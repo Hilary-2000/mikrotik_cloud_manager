@@ -32,7 +32,7 @@ class Organization extends Controller
             $monthly_payment = count($clients_monthly) > 0 ? ($clients_monthly[0]->total <= 50 ? 1000 : $clients_monthly[0]->total*20) : 1000;
             $client_count = count($clients_monthly) > 0 ? $clients_monthly[0]->total : 0;
             $organizations[$key]->client_count = $client_count;
-            $organizations[$key]->monthly_payment = "Kes ".number_format($monthly_payment)." - <span data-toggle='tooltip' title='Last three months' class='badge bg-success text-dark'>".$client_count." Client(s)</span>";
+            $organizations[$key]->monthly_payment = "Kes ".number_format($monthly_payment)." - <a href='".route("getActiveClients", [$value->organization_id])."' target='_blank' data-toggle='tooltip' title='Click to display!' class='badge bg-success text-dark'>".$client_count." Client(s)</a>";
         }
         return view("Orgarnizations.index",["organizations" => $organizations]);
     }
@@ -580,6 +580,61 @@ class Organization extends Controller
         $client_count_3_months = count($clients_monthly) > 0 ? $clients_monthly[0]->total : 0;
 
         return view("Orgarnizations.view",["clients_monthly" => $client_count_3_months, "monthly_payment" => $monthly_payment, "administrator_count" => $administrator_count, "transaction_count" => $transaction_count, "routers_count" => $routers_count, "sms_count" => $sms_count, "client_count" => $client_count, "organization_details" => $organization_details[0], "account_users" => $account_users]);
+    }
+
+    function getActiveClients($organization_id){
+        // organization id
+        $organization_details = DB::select("SELECT * FROM `organizations` WHERE `organization_id` = ?",[$organization_id]);
+        if (count($organization_details) == 0) {
+            session()->flash("error", "Invalid organization!");
+            return redirect(route("Organizations"));
+        }
+
+        // change_db
+        $change_db = new login();
+        $change_db->change_db($organization_details[0]->organization_database);
+
+        // get the active clients in the last three months
+        $clients_monthly = DB::connection("mysql2")->select("SELECT * FROM `client_tables` WHERE next_expiration_date > ? ORDER BY next_expiration_date DESC;",[date("Ym", strtotime("-3 months"))."010000"]);
+        // return $clients_monthly;
+
+        $pdf = new PDF("P","mm","A4");
+        $title = "Client Active in the Last 3 Months";
+        $pdf->set_company_name($organization_details[0]->organization_name);
+        // $pdf->set_school_contact($organization_details[0]->organization_main_contact);
+        $pdf->set_document_title($title);
+        $pdf->AddPage();
+        $pdf->SetFont('Times', 'B', 10);
+        $pdf->SetMargins(10,10);
+        $pdf->SetFont('Helvetica', 'BU', 9);
+        $pdf->Cell(200,8,"Client Active in the Last 3 Months (".count($clients_monthly)." Clients)",0,1,"C",false);
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->Ln();
+        $pdf->SetFillColor(82, 170, 216);
+        $pdf->Cell(10,8,"No.","TBL",0,"L",true);
+        $pdf->Cell(40,8,"Name","TBL",0,"L",true);
+        $pdf->Cell(20,8,"Account","TBL",0,"L",true);
+        $pdf->Cell(30,8,"Phone","TBL",0,"L",true);
+        $pdf->Cell(20,8,"Monthly Bill","TBL",0,"L",true);
+        $pdf->Cell(35,8,"Registration date","TBL",0,"L",true);
+        $pdf->Cell(35,8,"Expiry date","TBLR",0,"L",true);
+        $pdf->Ln();
+
+        $pdf->SetFont('Helvetica', '', 8);
+        $fill = true;
+        $pdf->SetFillColor(204, 230, 244);
+        foreach ($clients_monthly as $key => $client_data) {
+            $fill = !$fill;
+            $pdf->Cell(10,7,($key+1),"TBL",0,"L",$fill);
+            $pdf->Cell(40,7,ucwords(strtolower($client_data->client_name)),"TBL",0,"L",$fill);
+            $pdf->Cell(20,7,$client_data->client_account,"TBL",0,"L",$fill);
+            $pdf->Cell(30,7,$client_data->clients_contacts,"TBL",0,"L",$fill);
+            $pdf->Cell(20,7,"Kes ".number_format($client_data->monthly_payment),"TBL",0,"L",$fill);
+            $pdf->Cell(35,7,date("dS/M/Y H:iA",strtotime($client_data->clients_reg_date)),"TBL",0,"L",$fill);
+            $pdf->Cell(35,7,date("dS/M/Y H:iA",strtotime($client_data->next_expiration_date)),"TBLR",0,"L",$fill);
+            $pdf->Ln();
+        }
+        $pdf->Output("I","active_clients_report_".date("Ymd").".pdf");
     }
 
     function getClientsDatatable(Request $request, $organization_id){

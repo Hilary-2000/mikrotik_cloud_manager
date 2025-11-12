@@ -11,7 +11,7 @@ class PDF extends FPDF
     protected $B = 0;
     public $company_logo = "/logo2.jpeg";
     protected $company_name = "Hypbits Enterprises";
-    public $company_contact = "0720268519 / 0717748569";
+    public $company_contact = "0720268519";
     public $company_document_title = "Hypbits Enterprises";
     public $website_name = "billing.hypbits.com";
     protected $company_header_position = 200;
@@ -63,9 +63,9 @@ class PDF extends FPDF
         // Title
         $this->Cell($this->company_header_position, 5, strtoupper($this->company_name), 0, 0, 'C');
         $this->Ln();
-        $this->SetFont('Arial', '', 8);
+        $this->SetFont('Arial', '', 10);
         $this->Cell($this->company_header_position, 5, "Contact Us: " . $this->company_contact, 0, 0, 'C');
-        $this->SetFont('Arial', 'BU', 8);
+        $this->SetFont('Arial', 'BU', 9);
         $this->Ln();
         $this->Cell($this->company_header_position, 5,
         /** "Report Title: " . **/
@@ -79,7 +79,7 @@ class PDF extends FPDF
             $this->Ln(10);
             $this->Cell(190, 0, "", 1);
         }
-        $this->Ln(10);
+        $this->Ln(5);
     }
 
     // Page footer

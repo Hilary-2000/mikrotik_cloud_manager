@@ -172,7 +172,7 @@ INSERT INTO settings VALUES ('8', 'Messages', '[{\"Name\":\"Remind_payment\",\"m
 INSERT INTO settings VALUES ('9', 'delete', '[{\"name\":\"delete_sms\",\"period\":\"never\"},{\"name\":\"delete_transaction\",\"period\":\"never\"}]', '1', '20231221075837', '0');
 INSERT INTO settings VALUES ('10', 'expenses', '[{\"name\":\"Daily Expense\",\"index\":0}]', '1', '20230320161856', '0');
 INSERT INTO settings VALUES ('14', 'repeat_value', '{\"date\":\"20230414\",\"repeat_value\":3}', '1', '20230414102333', '0');
-INSERT INTO settings VALUES ('15', 'sstp_server', '{\"username\":\"SJpdcxixj\",\"password\":\"ncUTdImrLQHQAErjxp\",\"ip_address\":\"3.14.249.167\",\"port\" : \"1982\"}', '1', '20230320161856', '0');
+INSERT INTO settings VALUES ('15', 'sstp_server', '{\"username\":\"SJpdcxixj\",\"password\":\"ncUTdImrLQHQAErjxp\",\"ip_address\":\"18.224.5.207\",\"port\" : \"1982\"}', '1', '20230320161856', '0');
 INSERT INTO settings VALUES ('16', 'sms_sender', 'celcom', '1', '20230320161856', '0');
 
 CREATE TABLE `sms_tables` (

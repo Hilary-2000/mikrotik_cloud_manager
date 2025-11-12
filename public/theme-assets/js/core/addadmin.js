@@ -48,6 +48,16 @@ function addListernerRoles() {
                     elems.selected = true;
                 }
             }
+
+            var roles = document.getElementsByClassName("selected_date_time_roles");
+            for (let index = 0; index < roles.length; index++) {
+                roles[index].dispatchEvent(new Event("change"));
+            }
+
+            var dropdown_roles = document.getElementsByClassName("dropdown_roles");
+            for (let index = 0; index < dropdown_roles.length; index++) {
+                dropdown_roles[index].dispatchEvent(new Event("change"));
+            }
         });
     }
 

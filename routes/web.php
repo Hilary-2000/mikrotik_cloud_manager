@@ -92,6 +92,7 @@ Route::get("/Organization/ActivateSMS/{organization_id}",[Organization::class,"A
 Route::get("/Organization/DeactivateSMS/{organization_id}",[Organization::class,"DeactivateSMS"])->name("DeactivateSMS");
 Route::get("/Organization/Delete/{delete_id}",[Organization::class,"DeleteOrganization"])->name("DeleteOrganization");
 Route::get("/Organization/Clients/datatable/{organization_id}", [Organization::class, 'getClientsDatatable'])->name("getClientsDatatable");
+Route::get("/Organization/Clients/Active/pdf/{organization_id}", [Organization::class, 'getActiveClients'])->name("getActiveClients");
 
 // save minimum payment
 Route::post("/Organization/Client/Update/MinimumPay/{organization_id}", [Organization::class, "updateMinPay"])->name("client.update.minimum_payment.static");

@@ -311,7 +311,7 @@
                                         <table class="table table-bordered mb-0">
                                             <tr>
                                                 <td colspan="2">
-                                                    <span style="width:fit-content;" class="badge bg-success text-dark" data-toggle="tooltip" title="{{$clients_monthly." client(s) active in the last 3 months"}}"><b>Estimated Earnings on "{{date("dS M Y", strtotime($organization_details->expiry_date))}}"</b> : Kes {{number_format($monthly_payment)}}</span>
+                                                    <a href="{{route("getActiveClients", [$organization_details->organization_id])}}" target="_blank" style="width:fit-content;" class="badge bg-success text-dark" data-toggle="tooltip" data-html="true" title="{{$clients_monthly." client(s) active in the last 3 months (Click to display)"}}"><b>Estimated Earnings on "{{date("dS M Y", strtotime($organization_details->expiry_date))}}"</b> : Kes {{number_format($monthly_payment)}}</a>
                                                 </td>
                                             </tr>
                                             <tr>
